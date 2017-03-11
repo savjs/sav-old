@@ -45,8 +45,15 @@ export function viewPlugin (ctx) {
           }
         }
         let engine = viewEngines[$view.viewFileExt] || $view.viewFileExt
-        if (typeof engine === 'string') {
+        let typeValue = typeof engine
+        if (typeValue === 'string') {
           engine = consolidate[engine]
+        } else if (typeValue === 'function') {
+          let ret = engine(context)
+          if (ret && ret.then) {
+            ret = await ret
+          }
+          engine = ret
         }
         if (!engine) {
           throw new Error(`[view] Engine not found for "${$view.absoluteViewFile}"`)

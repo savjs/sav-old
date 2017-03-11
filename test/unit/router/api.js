@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {Router, route, head, options, get, post, put, patch, del} from 'sav-router'
+import {Router, route, head, options, get, post, put, patch, del} from 'sav-core'
 
 test('api', (ava) => {
   expect(Router).to.be.a('function')

@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {matchRoute, matchRouter} from 'sav-router/matchs.js'
+import {matchRoute, matchRouter} from 'sav-core'
 
 test('matchRoute:basic', ava => {
   let params = {}

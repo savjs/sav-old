@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {prop, promise, state, propPlugin} from 'sav-prop'
+import {prop, promise, state, propPlugin} from 'sav-core'
 
 test('ensure prop export apis', ava => {
   expect(prop).to.be.a('function')

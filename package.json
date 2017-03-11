@@ -10,7 +10,7 @@
     "build": "rollup -c",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
-    "na": "nyc ava ./test",
+    "na": "nyc ava ./test/unit/decorator",
     "pretest": "npm run lint",
     "test": "npm run na",
     "prepare": "npm run build"
@@ -45,7 +45,10 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.0",
     "rollup-plugin-includepaths": "^0.1.8",
+    "rollup-plugin-json": "^2.1.0",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-re": "^1.0.1",
+    "rollup-plugin-vue2": "^0.8.0",
     "sav-schema": "0.0.8",
     "standard": "^9.0.1",
     "watch-cli": "^0.2.1"

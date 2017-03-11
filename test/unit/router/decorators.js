@@ -1,19 +1,18 @@
 import test from 'ava'
 import {expect} from 'chai'
-import {refer} from 'sav-decorator'
 
-import {route, head, options, get, post, put, patch, del} from 'sav-router/decorators.js'
+import {route, head, options, get, post, put, patch, del, refer} from 'sav-core'
 
 test('decorators#api', ava => {
   class Test {
     @route(['get', 'post']) route () {}
-    @head head () {}
-    @options options () {}
-    @get get () {}
-    @post post () {}
-    @put put () {}
-    @patch patch () {}
-    @del del () {}
+    @head() head () {}
+    @options() options () {}
+    @get() get () {}
+    @post() post () {}
+    @put() put () {}
+    @patch() patch () {}
+    @del() del () {}
   }
   expect(refer(Test)).to.deep.equal({
     route: [['route', ['GET', 'POST']]],
@@ -29,10 +28,10 @@ test('decorators#api', ava => {
 
 test('decorators', ava => {
   class Test {
-    @get
+    @get()
     test () {}
 
-    @del
+    @del()
     test2 () {}
 
     @post('a')

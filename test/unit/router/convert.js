@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {convertCase} from 'sav-router/caseconvert.js'
+import {convertCase} from 'sav-core'
 
 test('convertCase', ava => {
   function batchConvert (strs) {

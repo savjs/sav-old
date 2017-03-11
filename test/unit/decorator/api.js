@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {conf, refer, quickConf, impl, annotateMethod, gen, generator, props} from 'sav-decorator'
+import {conf, refer, quickConf, impl, annotateMethod, gen, generator, props} from 'sav-core'
 
 test('api', (ava) => {
   expect(conf).to.be.a('function')
@@ -36,7 +36,7 @@ test('multi conf', (ava) => {
   let prop = quickConf('prop')
   class Test {
     @prop()
-    @prop
+    @prop()
     say () {}
   }
   let props = refer(Test)
@@ -48,10 +48,11 @@ test('multi gen', (ava) => {
   @gen
   class Test {
     @prop()
-    @prop
+    @prop('a')
     say () {}
   }
-  expect(Test.actions.say.middleware).to.deep.equal([['prop'], ['prop']])
+  expect(Test.actions.say.props).to.deep.equal({prop: []})
+  expect(Test.actions.say.config).to.deep.equal([['prop', 'a'], ['prop']])
 })
 
 test('interface+impl', (ava) => {
@@ -64,14 +65,19 @@ test('interface+impl', (ava) => {
   class Test {
     test () {}
   }
-  expect(generator({auth: true})(Test)).to.deep.equal({
-    name: 'Test',
+  let ref
+  ref = generator({auth: true})(Test)
+  expect(ref.actions.test.method).to.eql(Test.prototype.test)
+  expect(JSON.parse(JSON.stringify(ref))).to.eql({
+    moduleName: 'Test',
     props: {auth: true},
     actions: {
       test: {
-        name: 'test',
-        method: Test.prototype.test,
-        middleware: [
+        actionName: 'test',
+        props: {
+          hello: ['world']
+        },
+        config: [
           ['hello', 'world']
         ]
       }
@@ -85,14 +91,16 @@ test('interface+impl', (ava) => {
     fail () {}
   }
 
-  expect(Test2).to.deep.equal({
-    name: 'Test2',
+  expect(Test2).to.eql({
+    moduleName: 'Test2',
     props: {},
     actions: {
       test: {
-        name: 'test',
-        method: undefined,
-        middleware: [
+        actionName: 'test',
+        props: {
+          hello: ['world']
+        },
+        config: [
           ['hello', 'world']
         ]
       }

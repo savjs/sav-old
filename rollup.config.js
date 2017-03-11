@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import includePaths from 'rollup-plugin-includepaths'
+import json from 'rollup-plugin-json'
 
 export default {
   entry: 'src/index.js',
@@ -12,11 +13,21 @@ export default {
   external: [
     'bluebird',
     'consolidate',
-    'koa-compose'
+    'koa-compose',
+    'vue',
+    'rollup',
+    'rollup-plugin-babel',
+    'rollup-plugin-node-resolve',
+    'rollup-plugin-commonjs',
+    'rollup-plugin-vue2',
+    'rollup-plugin-re'
   ],
   plugins: [
     includePaths({
       paths: ['src']
+    }),
+    json({
+      preferConst: false // Default: false
     }),
     babel({
       babelrc: false,
