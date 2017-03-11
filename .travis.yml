@@ -6,13 +6,4 @@ deploy:
   email: 86287344@qq.com
   skip_cleanup: true
   api_key:
-    secure: V8o3jriu8vL4USPBR58651aouxnw+0l1yzFgVuyDBQmnlGmIc2bglHWMPXHccu7FzMwFKMEL6KJ+15MMNBVtXEbNavaw/z9ty/dTIMQPpiJpj0UsWArzGDn3S8qKUDhsCxOMvH7tI55dlQ6Jrbv8LQyy3ko4VSxjs5CS9L3L19IllwsMpHuz2oYXX84eCSSHoFl8omW7Af47tjH6tASq8o5vNSz1nZaeSj6Vbk1DDzy6jBhP4fmJ/5WnCKRk+BBpKANsqGK70/ppLHu9f6hSpUwpRxUdclt1xah6OmmrlEEY/C5bzmTY4YDsDDRD/Es6CqxS/MG92BKxoBebenbnlXE0CxnF2VFqoyXPeGJ1wXPBkezawBsUFtgMHfV14SYcuukHCopT5PWWK90kA+VkFfGr9PRe7K73ISeoR96iO7ILEmRdIPRh2juTFCu+wMXlSvAUHUBUCav5PhgV/MMSMumwfi1pjuCQCbbZ5i9yjkQvWotxGSJUizov1Aw/mR/FQ+Bk2tTd+o8Q6tSCmBS2h3/z6WGCEQgaSJ+VHbPF13niMiSkz6MHmzPRxyZWfYyVB8NBl4ggd5QoJ4riMR+XApGQ3JsXIeU9RY3ylt9fsVHi7MD85ioJpHfs/MWaqpHZpqrFk9my99l+ExpwnFxM1BN50DTbyPwsyTorDBl0OH8=
-notifications:
-  webhooks:
-    urls:
-      - https://oapi.dingtalk.com/robot/send?access_token=dbc5ad0b26bd032ae6c092ae59bf46f5902ef62fc7b8feab78178be16915100c
-    on_success: change # default: always
-    on_failure: always # default: always
-    on_start: change   # default: never
-    on_cancel: always # default: always
-    on_error: always # default: always
+    secure: JRWooTuRlqQQBGyrhZUnJ4/HG+jsCh4l4k2hSUWiBpBKgo3aBK/e77GtOtl3zYq+sUa0xyXfCNjp2Lsa9tzFTMkZP9joURrfJx7IsWS0ZiB5H/3P3df8JJ2XIimsbZXWhc9cdGm721fyfQNgiTVZp/y0hSy/cevqPPSktgF+IjmjXsAWj9g3MxZi4CSjBzjjcrSuuNpoiF93rvnAzZxwINY/MhDuG5uyRyPHlyyoPbJygRdFz2m0NMztECNMWmn6J1J19fSwdJjgW28Re9Bl8XXORAAn+w0AQzk8+mK4uOYBM+v7J9sLEZGzNqCk5I0s65PL1Ut9fjjmeh2z/fbUvMovWQH3Q0zlwlyQjkS8uRF1BKqZQsFLK/dSSke+gVFDjywMJhT87wfr65s6w1FfQlAZu+5ibj38DB2AlgVr7pZcv7EPyqCkNS+Pv6fnnIszEt/z7Nhx01B4ARblMn0UGgKHGIr3dML4zqfC7mBUlmZ07Zg8z5E3oO0tnaq9fb3gT00t3bXlxthx7peyDAAA9xVLyqiTALev9eHXoTxtKe5WskcBomC+3FGuY6NCKB0IfWelGsxqTNqH9r/TUrclhNmJuXW1UKTzaXfxDbpq8J/th+hQvlx4WbnL4ppHNId67rMsaYg+so3BLcopsEpMrwvoScAUpLkRi/yKyL1P6M4=
