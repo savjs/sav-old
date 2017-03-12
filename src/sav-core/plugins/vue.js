@@ -1,4 +1,4 @@
-import {requireFromString} from './vue-builder.js'
+// import {requireFromString} from './vue-builder.js'
 import {quickConf} from '../decorator'
 import {isString} from '../utils/type'
 
@@ -15,48 +15,33 @@ export const vue = quickConf('vue')
 //   router
 // })
 
+class VueRenderer {
+  constructor (props) {
+    this.props = props
+    this.isCompiled = false
+  }
+  async render (context, state) {
+    if (!this.isCompiled) {
+      this.compile()
+    }
+  }
+  compile () {
+    let {module, action} = this.props
+    if (module) {
+      console.log('module', module.moduleName)
+    } else if (action) {
+      console.log('action', action.actionName)
+    } else {
+      console.log('global')
+    }
+  }
+}
+
 export function vuePlugin (ctx) {
   let vueOptions = ctx.config('vue')
 
-  let test = requireFromString('exports.xxx ="requireFromString"')
-  console.log(test.xxx)
-
   let createRender = (opts) => {
-    opts = Object.assign({}, vueOptions, opts)
-    if (opts.action) {
-
-    } else if (opts.module) {
-      createModuleRoutes(opts)
-    } else {
-
-    }
-    // let modules = ctx.modules
-    // let routes = []
-    // for (let moduleName in modules) {
-    //   let module = modules[moduleName]
-    //   let moduleRoute = module.route
-    //   let route = {
-    //     name: moduleName,
-    //     path: moduleRoute.relative,
-    //     children: []
-    //   }
-    //   routes.push(route)
-    //   let children = route.children
-    //   for (let actionName in module.actions) {
-    //     let action = module.actions[actionName]
-    //     let actionRoute = action.route
-    //     let childRoute = {
-    //       name: actionRoute.name,
-    //       path: actionRoute.relative
-    //     }
-    //     children.push(childRoute)
-    //   }
-    // }
-    // console.log(JSON.stringify(routes, null, 4))
-
-    return async function vueRender () {
-
-    }
+    return new VueRenderer(Object.assign({}, vueOptions, opts))
   }
 
   let defaultRender
@@ -76,25 +61,21 @@ export function vuePlugin (ctx) {
     },
     action (action) {
       let {module} = action
-      let vueProp = module.props.vue
+      let vueProp = action.props.vue
       if (vueProp) {
         action.isVueAction = true
         action.vueRender = createRender(Object.assign({action}, vueObject(vueProp[0])))
       } else if (module.vueRender) {
         action.isVueModule = true
-        action.vueRender = module.vueRender.bind(action)
+        action.vueRender = module.vueRender
       } else {
         return
       }
-      action.set('vue', (context) => {
-        context.vueRender = action.vueRender
+      action.set('vue', async (context) => {
+        await action.vueRender.render(context, context.state)
       })
     }
   })
-}
-
-function createModuleRoutes ({module}) {
-
 }
 
 function vueObject (vue) {
@@ -105,7 +86,10 @@ function vueObject (vue) {
 }
 
 export function vueRender (opts) {
-  return async (context) => {
-    return context.vueRender
+  return (context) => {
+    return async (vueFile, state) => {
+      console.log('bbb')
+      await context.vueRender.render(context, state)
+    }
   }
 }

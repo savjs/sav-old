@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {viewPlugin, Router, get, gen, props, vuePlugin, vueRender, vue} from 'sav-core'
+import {Router, get, gen, props, vuePlugin, vueRender, vue} from 'sav-core'
 
 test('api', (ava) => {
   expect(vuePlugin).to.be.a('function')
@@ -11,7 +11,6 @@ test('api', (ava) => {
 test('vue.view', async (ava) => {
   @gen
   @props({
-    viewLayout: 'fixtures/basic.vue',
     vue: true
   })
   class Test {
@@ -32,13 +31,9 @@ test('vue.view', async (ava) => {
   }
 
   let router = new Router({
-    viewRoot: __dirname,
-    viewEngines: {
-      vue: vueRender()
-    }
+    viewRoot: __dirname
   })
 
-  router.use(viewPlugin)
   router.use(vuePlugin)
   router.declare(Test)
 

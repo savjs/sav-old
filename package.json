@@ -10,7 +10,7 @@
     "build": "rollup -c",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
-    "na": "nyc ava ./test/unit",
+    "na": "nyc ava ./test/unit/vue",
     "pretest": "npm run lint",
     "test": "npm run na",
     "prepare": "npm run build"
