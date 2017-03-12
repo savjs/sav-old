@@ -1,10 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {viewPlugin, view} from 'sav-router-view'
-
-import {Router, get} from 'sav-router'
-import {gen, props} from 'sav-decorator'
+import {viewPlugin, view, Router, get, gen, props} from 'sav-core'
 import path from 'path'
 
 test('api', (ava) => {
@@ -18,7 +15,7 @@ test('module.view', (ava) => {
     view: true
   })
   class Test {
-    @view
+    @view()
     viewFile1 () {}
 
     @view(false)
@@ -31,23 +28,23 @@ test('module.view', (ava) => {
     viewFile6 () {}
 
     @view({
-      path: 'user-view'
+      file: 'user-view'
     })
     viewFile7 () {}
 
-    @get
+    @get()
     viewFile8 () {}
   }
 
   let router = new Router()
   router.use(viewPlugin)
   router.declare(Test)
-  expect(path.basename(Test.actions.viewFile1.relativeViewFile)).to.eql('view_file1')
-  expect(Test.actions.viewFile3.relativeViewFile).to.eql(undefined)
-  expect(path.basename(Test.actions.viewFile5.relativeViewFile)).to.eql('about-blank')
-  expect(path.basename(Test.actions.viewFile6.relativeViewFile)).to.eql('view_file6')
-  expect(path.basename(Test.actions.viewFile7.relativeViewFile)).to.eql('user-view')
-  expect(path.basename(Test.actions.viewFile8.relativeViewFile)).to.eql('view_file8')
+  expect(path.basename(Test.actions.viewFile1.view.relativeViewFile)).to.eql('view_file1')
+  expect(Test.actions.viewFile3.view).to.eql(undefined)
+  expect(path.basename(Test.actions.viewFile5.view.relativeViewFile)).to.eql('about-blank')
+  expect(path.basename(Test.actions.viewFile6.view.relativeViewFile)).to.eql('view_file6')
+  expect(path.basename(Test.actions.viewFile7.view.relativeViewFile)).to.eql('user-view')
+  expect(path.basename(Test.actions.viewFile8.view.relativeViewFile)).to.eql('view_file8')
 })
 
 test('module.view.string', (ava) => {
@@ -56,24 +53,24 @@ test('module.view.string', (ava) => {
     view: 'test'
   })
   class Test {
-    @view
+    @view()
     viewFile1 () {}
 
-    @get
+    @get()
     viewFile8 () {}
   }
 
   let router = new Router()
   router.use(viewPlugin)
   router.declare(Test)
-  expect(path.basename(Test.actions.viewFile1.relativeViewFile)).to.eql('view_file1')
-  expect(path.basename(Test.actions.viewFile8.relativeViewFile)).to.eql('view_file8')
+  expect(path.basename(Test.actions.viewFile1.view.relativeViewFile)).to.eql('view_file1')
+  expect(path.basename(Test.actions.viewFile8.view.relativeViewFile)).to.eql('view_file8')
 })
 
 test('action.view', (ava) => {
   @gen
   class Test {
-    @view
+    @view()
     viewFile1 () {}
 
     @view(false)
@@ -86,23 +83,23 @@ test('action.view', (ava) => {
     viewFile6 () {}
 
     @view({
-      path: 'user-view'
+      file: 'user-view'
     })
     viewFile7 () {}
 
-    @get
+    @get()
     viewFile8 () {}
   }
 
   let router = new Router()
   router.use(viewPlugin)
   router.declare(Test)
-  expect(path.basename(Test.actions.viewFile1.relativeViewFile)).to.eql('view_file1')
-  expect(Test.actions.viewFile3.relativeViewFile).to.eql(undefined)
-  expect(path.basename(Test.actions.viewFile5.relativeViewFile)).to.eql('about-blank')
-  expect(path.basename(Test.actions.viewFile6.relativeViewFile)).to.eql('view_file6')
-  expect(path.basename(Test.actions.viewFile7.relativeViewFile)).to.eql('user-view')
-  expect(Test.actions.viewFile8.relativeViewFile).to.eql(undefined)
+  expect(path.basename(Test.actions.viewFile1.view.relativeViewFile)).to.eql('view_file1')
+  expect(Test.actions.viewFile3.view).to.eql(undefined)
+  expect(path.basename(Test.actions.viewFile5.view.relativeViewFile)).to.eql('about-blank')
+  expect(path.basename(Test.actions.viewFile6.view.relativeViewFile)).to.eql('view_file6')
+  expect(path.basename(Test.actions.viewFile7.view.relativeViewFile)).to.eql('user-view')
+  expect(Test.actions.viewFile8.view).to.eql(undefined)
 })
 
 test('action.absoluteViewFile', (ava) => {
@@ -111,7 +108,7 @@ test('action.absoluteViewFile', (ava) => {
     view: 'fixtures'
   })
   class Test {
-    @get
+    @get()
     basic () {}
 
     @view('basic.hbs')
@@ -127,12 +124,12 @@ test('action.absoluteViewFile', (ava) => {
   router.use(viewPlugin)
   router.declare(Test)
 
-  expect(Test.actions.basic.absoluteViewFile).to.eql(path.resolve(__dirname, 'fixtures/basic.html'))
-  expect(Test.actions.basic.viewFileExt).to.eql('html')
+  expect(Test.actions.basic.view.absoluteViewFile).to.eql(path.resolve(__dirname, 'fixtures/basic.html'))
+  expect(Test.actions.basic.view.viewFileExt).to.eql('html')
 
-  expect(Test.actions.hbs.absoluteViewFile).to.eql(path.resolve(__dirname, 'fixtures/basic.hbs'))
-  expect(Test.actions.hbs.viewFileExt).to.eql('hbs')
+  expect(Test.actions.hbs.view.absoluteViewFile).to.eql(path.resolve(__dirname, 'fixtures/basic.hbs'))
+  expect(Test.actions.hbs.view.viewFileExt).to.eql('hbs')
 
-  expect(Test.actions.dir.absoluteViewFile).to.eql(path.resolve(__dirname, 'fixtures/index.html'))
-  expect(Test.actions.dir.viewFileExt).to.eql('html')
+  expect(Test.actions.dir.view.absoluteViewFile).to.eql(path.resolve(__dirname, 'fixtures/index.html'))
+  expect(Test.actions.dir.view.viewFileExt).to.eql('html')
 })

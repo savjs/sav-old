@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {prop, state, promise} from 'sav-prop'
+import {prop, state, promise} from 'sav-core'
 
 test('state api', ava => {
   let ctx = {}

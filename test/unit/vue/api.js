@@ -1,28 +1,32 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {viewPlugin} from 'sav-router-view'
-
-import {Router, get} from 'sav-router'
-import {gen, props} from 'sav-decorator'
-import {vuePlugin, vueRender} from 'sav-vue'
+import {viewPlugin, Router, get, gen, props, vuePlugin, vueRender, vue} from 'sav-core'
 
 test('api', (ava) => {
   expect(vuePlugin).to.be.a('function')
   expect(vueRender).to.be.a('function')
 })
 
-test('vue.view', (ava) => {
+test('vue.view', async (ava) => {
   @gen
   @props({
     viewLayout: 'fixtures/basic.vue',
     vue: true
   })
   class Test {
-    @get
+    @get()
     async basic (ctx) {
       ctx.state = {
         title: 'Basic Title'
+      }
+    }
+
+    @get()
+    @vue()
+    async single (ctx) {
+      ctx.state = {
+        title: 'Single vue'
       }
     }
   }
@@ -37,4 +41,11 @@ test('vue.view', (ava) => {
   router.use(viewPlugin)
   router.use(vuePlugin)
   router.declare(Test)
+
+  let ctx
+  ctx = {
+    path: '/Test/basic',
+    method: 'GET'
+  }
+  await router.route()(ctx)
 })

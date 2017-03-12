@@ -10,7 +10,7 @@
     "build": "rollup -c",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
-    "na": "nyc ava ./test/unit/decorator",
+    "na": "nyc ava ./test/unit",
     "pretest": "npm run lint",
     "test": "npm run na",
     "prepare": "npm run build"
@@ -50,7 +50,10 @@
     "rollup-plugin-re": "^1.0.1",
     "rollup-plugin-vue2": "^0.8.0",
     "sav-schema": "0.0.8",
+    "sav-util": "0.0.9",
     "standard": "^9.0.1",
+    "vue": "^2.2.2",
+    "vue-router": "^2.3.0",
     "watch-cli": "^0.2.1"
   },
   "dependencies": {
@@ -62,6 +65,9 @@
     "parser": "babel-eslint",
     "ignore": [
       "fixtures"
+    ],
+    "global": [
+      "AsyncFunction"
     ]
   },
   "nyc": {

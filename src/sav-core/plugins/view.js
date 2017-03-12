@@ -1,8 +1,9 @@
-import {quickConf} from 'sav-decorator'
-import {convertCase} from 'sav-router'
+import {quickConf} from '../decorator'
+import {convertCase} from '../utils/convert'
 import {resolve, extname, join} from 'path'
 import {existsSync, statSync} from 'fs'
 import consolidate from 'consolidate'
+import {isAsync, isPromise, isString, isFunction} from '../utils/type'
 
 export const view = quickConf('view')
 
@@ -45,13 +46,18 @@ export function viewPlugin (ctx) {
           }
         }
         let engine = viewEngines[$view.viewFileExt] || $view.viewFileExt
-        let typeValue = typeof engine
-        if (typeValue === 'string') {
+
+        if (isString(engine)) {
           engine = consolidate[engine]
-        } else if (typeValue === 'function') {
-          let ret = engine(context)
-          if (ret && ret.then) {
-            ret = await ret
+        } else if (isFunction(engine)) {
+          let ret
+          if (isAsync(engine)) {
+            ret = await engine(context)
+          } else {
+            ret = engine(context)
+            if (isPromise(ret)) {
+              ret = await ret
+            }
           }
           engine = ret
         }
@@ -73,96 +79,90 @@ export function viewPlugin (ctx) {
         await render()
       }
     },
-    module (module, {ctx}) {
-      let {view: viewPath, viewLayout, viewExtension: viewExt} = module.props
-
-      module.viewFileExt = viewExt || viewExtension
-
-      // calc module viewPath
-      if (viewPath) {
-        if (typeof viewPath !== 'string') {
-          viewPath = convertCase(viewCase, module.name)
+    module (module) {
+      // 生成module的view数据
+      let {view: viewDirectory, viewFile, viewExtension: viewExt} = module.props
+      let viewData = module.view = createViewData({
+        viewFileExt: viewExt || viewExtension
+      })
+      // calc module viewDirectory
+      if (viewDirectory) {
+        if (viewDirectory === true) { // 使用模块名称当作目录
+          viewDirectory = convertCase(viewCase, module.moduleName)
         }
-        module.viewPath = viewPath
+        viewData.viewDirectory = viewDirectory
       }
-      // calc module viewLayout
-      if (viewLayout) {
-        if (typeof viewLayout !== 'string') {
-          viewLayout = viewPath || convertCase(viewCase, module.name)
+      // calc module viewFile
+      if (viewFile) {
+        if (viewFile === true) { // 使用模块名称当作目录
+          viewFile = viewDirectory || convertCase(viewCase, module.moduleName)
         }
-        module.relativeViewFile = viewLayout
-        let file = accessFile(viewRoot, viewLayout, viewExt || viewExtension)
+        viewData.relativeViewFile = viewFile
+        let file = accessFile(viewRoot, viewFile, viewExt || viewExtension)
         if (file) {
-          module.absoluteViewFile = file.filePath
-          module.viewFileExt = file.fileExt
+          viewData.absoluteViewFile = file.filePath
+          viewData.viewFileExt = file.fileExt
         } else {
-          ctx.warn(`${ERR_ACCESS_FAIL} ${viewLayout}`)
+          ctx.warn(`${ERR_ACCESS_FAIL} ${viewFile}`)
         }
-        module.viewLayout = viewLayout
       }
-      if (viewPath || viewLayout) {
-        // auto append view middleware
-        for (let actionName in module.actions) {
-          let action = module.actions[actionName]
-          let found = false
-          for (let middleware of action.middleware) {
-            if (middleware[0] === 'view') {
-              found = true
-            }
-          }
-          if (!found) { // append as last
-            action.middleware.push(['view'])
-          }
-        }
+      if (viewDirectory || viewFile) {
+        viewData.ensure = true
       }
     },
-    middleware ({name, args}, {ctx, module, action, middlewares}) {
-      if (name !== 'view') {
+    action (action) {
+      let {module} = action
+      let moduleView = module.view
+      if (!(moduleView.ensure || action.props.view)) {
         return
       }
-      let viewPath = args[0]
-      if (viewPath === false) {
+      let args = action.props.view || []
+      let viewFile = args[0]
+      if (viewFile === false) {
         return
       }
       let viewOpts
-      if (viewPath === undefined) {
-        viewPath = convertCase(viewCase, action.name)
-      } else if (typeof viewPath === 'object') {
-        viewOpts = viewPath
-        viewPath = viewOpts.path || convertCase(viewCase, action.name)
+      if (viewFile === undefined) { // 默认文件
+        viewFile = convertCase(viewCase, action.actionName)
+      } else if (typeof viewFile === 'object') { // 使用对象方式
+        viewOpts = viewFile
+        viewFile = viewOpts.file || convertCase(viewCase, action.actionName)
       }
-      let $view
-      if (module.viewLayout) { // use layout to render
-        $view = {
+      let view
+      if (moduleView.relativeViewFile) { // module指定渲染文件
+        view = createViewData(Object.assign({}, moduleView, {ensure: true}, viewOpts))
+      } else { // action指定渲染文件
+        let relativeViewFile = join(moduleView.viewDirectory || '', viewFile)
+        view = {
           ensure: true,
-          relativeViewFile: module.relativeViewFile,
-          absoluteViewFile: module.absoluteViewFile,
-          viewFileExt: module.viewFileExt,
-          options: {...viewOpts}
+          relativeViewFile
         }
-      } else {
-        let relativeViewFile = join(module.viewPath || '', viewPath)
-        action.relativeViewFile = relativeViewFile
-        let file = accessFile(viewRoot, relativeViewFile, module.viewFileExt)
+        let file = accessFile(viewRoot, relativeViewFile, moduleView.viewFileExt)
         if (file) {
-          action.absoluteViewFile = file.filePath
-          action.viewFileExt = file.fileExt
+          view.absoluteViewFile = file.filePath
+          view.viewFileExt = file.fileExt
         } else {
           ctx.warn(`${ERR_ACCESS_FAIL} ${relativeViewFile}`)
         }
-        $view = {
-          ensure: true,
-          relativeViewFile,
-          absoluteViewFile: action.absoluteViewFile,
-          viewFileExt: action.viewFileExt,
-          options: {...viewOpts}
-        }
+        view = createViewData(Object.assign(view, viewOpts))
       }
-      middlewares.push(async (ctx) => {
-        ctx.$view = {...$view}
+      // 生成action的view数据
+      action.view = view
+      action.set('view', (ctx) => {
+        ctx.$view = {...action.view}
       })
     }
   })
+}
+
+function createViewData (props) {
+  return Object.assign({
+    ensure: false,          // 是否需要渲染view
+    viewFileExt: null,      // view的文件扩展名
+    viewDirectory: null,    // 目录
+    relativeViewFile: null, // 文件
+    absoluteViewFile: null  // 渲染文件的绝对路径
+  }, props)
 }
 
 function accessFile (viewRoot, relativeViewFile, viewExtension) {

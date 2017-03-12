@@ -1,10 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {viewPlugin, view} from 'sav-router-view'
-
-import {Router, get} from 'sav-router'
-import {gen, props} from 'sav-decorator'
+import {viewPlugin, view, Router, get, gen, props} from 'sav-core'
 
 test('render.template', async (ava) => {
   @gen
@@ -12,7 +9,7 @@ test('render.template', async (ava) => {
     view: 'fixtures'
   })
   class Test {
-    @get
+    @get()
     async basic (ctx) {
       ctx.state = {
         title: 'User List',
@@ -21,7 +18,7 @@ test('render.template', async (ava) => {
     }
 
     @view('basic.hbs')
-    @get
+    @get()
     async hbs (ctx) {
       ctx.state = {
         title: 'hbs'
@@ -63,22 +60,22 @@ test('render.nofount', async (ava) => {
     view: 'fixtures'
   })
   class Test {
-    @get
+    @get()
     async nofound () {}
 
-    @get
+    @get()
     async nofound2 (ctx) {
       ctx.state = {}
       ctx.view('fixtures/nofound')
     }
 
     @view('basic')
-    @get
+    @get()
     async noObjectBody (ctx) {
       ctx.state = '123'
     }
 
-    @get
+    @get()
     async noEngine (ctx) {
       ctx.state = {}
       ctx.view('fixtures/basic.hbs')
@@ -141,7 +138,7 @@ test('render.render', async (ava) => {
     view: 'fixtures'
   })
   class Test {
-    @get
+    @get()
     async test (ctx) {
       ctx.state = {
         title: 'User List',
@@ -170,10 +167,10 @@ test('render.render', async (ava) => {
 test('render.layout', async (ava) => {
   @gen
   @props({
-    viewLayout: 'fixtures/basic'
+    viewFile: 'fixtures/basic'
   })
   class Test {
-    @get
+    @get()
     async test (ctx) {
       ctx.state = {
         title: 'User List',
@@ -181,7 +178,7 @@ test('render.layout', async (ava) => {
       }
     }
 
-    @get
+    @get()
     async test2 (ctx) {
       ctx.state = {
         title: 'Users',
@@ -217,10 +214,10 @@ test('render.layout.default', async (ava) => {
   @gen
   @props({
     view: 'fixtures/basic',
-    viewLayout: true
+    viewFile: true
   })
   class Test {
-    @get
+    @get()
     async test (ctx) {
       ctx.state = {
         title: 'User List',
@@ -248,10 +245,10 @@ test('render.layout.default', async (ava) => {
 test('render.layout.default.nofound', async (ava) => {
   @gen
   @props({
-    viewLayout: true
+    viewFile: true
   })
   class Test {
-    @get
+    @get()
     async test (ctx) {
       ctx.state = {title: 'User List'}
     }
@@ -281,7 +278,7 @@ test('render.layout.default.nofound', async (ava) => {
 test('render no view module', async (ava) => {
   @gen
   class Test {
-    @get
+    @get()
     async test (ctx) {
       ctx.state = {title: 'User List'}
     }

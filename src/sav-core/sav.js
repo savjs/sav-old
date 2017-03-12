@@ -1,6 +1,7 @@
 import {EventEmitter} from 'events'
 import {routerPlugin} from './plugins'
 import compose from 'koa-compose'
+import {isPromise, isAsync} from './utils/type'
 
 export class Router extends EventEmitter {
   constructor (opts) {
@@ -15,6 +16,7 @@ export class Router extends EventEmitter {
       'route',
       'hres',
       'res',
+      'vue',
       'view'
     ]
     if (!this.opts.noRoute) {
@@ -29,8 +31,8 @@ export class Router extends EventEmitter {
       orderBy(name, opts.before, true, this.orders)
     }
   }
-  config (name) {
-    return this.opts[name]
+  config (name, dval) {
+    return name in this.opts ? this.opts[name] : dval
   }
   use (plugin) {
     if (typeof plugin === 'function') {
@@ -144,7 +146,14 @@ async function payloadEnd (ctx, next) {
     let [route, params] = matched
     ctx.params = params
     for (let middleware of route.middlewares) {
-      await middleware(ctx)
+      if (isAsync(ctx)) {
+        await middleware(ctx)
+      } else {
+        let ret = middleware(ctx)
+        if (ret && isPromise(ret)) {
+          await ret
+        }
+      }
     }
   } else {
     await next()

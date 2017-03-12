@@ -1,10 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {schemaPlugin, req, res} from 'sav-router-schema'
-
-import {Router, get} from 'sav-router'
-import {gen} from 'sav-decorator'
+import {schemaPlugin, req, res, Router, get, gen} from 'sav-core'
 
 import {Schema} from 'sav-schema'
 
@@ -22,9 +19,9 @@ function createRouterSchema () {
   router.use(schemaPlugin)
   @gen
   class Test {
-    @res
+    @res()
     @get('profile/:uid')
-    @req
+    @req()
     async profile (ctx) {
       ctx.state = {
         name: 'jetiny'
@@ -57,9 +54,9 @@ function createRouterSchema () {
       }
     }
 
-    @res
-    @get
-    @req
+    @res()
+    @get()
+    @req()
     async profileNull (ctx) {
 
     }

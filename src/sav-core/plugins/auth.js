@@ -1,3 +1,3 @@
-import {quickConf} from './decorator'
+import {quickConf} from '../decorator'
 
 export const auth = quickConf('auth')

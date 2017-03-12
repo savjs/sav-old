@@ -1,4 +1,4 @@
 export * from './utils'
-export * from './decorators'
+export * from './decorator'
 export * from './plugins'
 export * from './sav'
