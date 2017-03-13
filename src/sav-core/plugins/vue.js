@@ -1,6 +1,7 @@
 // import {requireFromString} from './vue-builder.js'
 import {quickConf} from '../decorator'
-import {isString} from '../utils/type'
+import {isObject} from '../utils/type'
+import {convertCase} from '../utils/convert'
 
 export const vue = quickConf('vue')
 
@@ -15,10 +16,16 @@ export const vue = quickConf('vue')
 //   router
 // })
 
+const RENDER_MODE_APP = 1
+const RENDER_MODE_MODULE = 2
+const RENDER_MODE_ACTION = 3
+
 class VueRenderer {
   constructor (props) {
     this.props = props
     this.isCompiled = false
+    this.modules = {}
+    this.mode = RENDER_MODE_APP
   }
   async render (context, state) {
     if (!this.isCompiled) {
@@ -26,22 +33,43 @@ class VueRenderer {
     }
   }
   compile () {
-    let {module, action} = this.props
-    if (module) {
-      console.log('module', module.moduleName)
-    } else if (action) {
-      console.log('action', action.actionName)
-    } else {
-      console.log('global')
+    console.log(JSON.stringify(this.modules, null, 4))
+  }
+  createRoute (action) {
+    let {actionName, vueProp, route, module} = action
+    let moduleName = module.moduleName
+    let name = convertCase(this.props.vueCase, `${moduleName}_${actionName}`)
+    let actionRoute = {
+      path: route.relative,
+      name,
+      component: name
     }
+    actionRoute = vueProp ? Object.assign({}, actionRoute, vueProp) : actionRoute
+    if (!this.modules[moduleName]) {
+      let {vueProp, route} = module
+      let name = convertCase(this.props.vueCase, moduleName)
+      let moduleRoute = {
+        path: route.relative,
+        name,
+        component: name,
+        children: []
+      }
+      this.modules[moduleName] = vueProp ? Object.assign({}, moduleRoute, vueProp) : moduleRoute
+    }
+    this.modules[moduleName].children.push(actionRoute)
   }
 }
 
 export function vuePlugin (ctx) {
-  let vueOptions = ctx.config('vue')
+  let vueRoot = ctx.config('vueRoot', '')
+  let vueCase = ctx.config('vueCase', 'pascal')
+  let vueOpts = {
+    vueRoot,
+    vueCase
+  }
 
   let createRender = (opts) => {
-    return new VueRenderer(Object.assign({}, vueOptions, opts))
+    return new VueRenderer(Object.assign({}, vueOpts, opts))
   }
 
   let defaultRender
@@ -50,46 +78,48 @@ export function vuePlugin (ctx) {
     module (module) {
       let vueProp = module.props.vue
       if (vueProp) {
-        if (vueProp === true) {
-          module.isVueApp = true
-          module.vueRender = defaultRender || (defaultRender = createRender())
-        } else {
-          module.isVueModule = true
-          module.vueRender = createRender(Object.assign({module}, vueObject(vueProp)))
+        let vueRender = defaultRender || (defaultRender = createRender())
+        if (isObject(vueProp)) {
+          if (vueProp.instance) {
+            vueRender = createRender(vueProp)
+            vueRender.mode = RENDER_MODE_MODULE
+          } else {
+            module.vueProp = vueProp
+          }
+          module.vueRender = vueRender
+        } else if (vueProp === true) {
+          module.vueRender = vueRender
         }
       }
     },
     action (action) {
       let {module} = action
       let vueProp = action.props.vue
+      let vueRender
       if (vueProp) {
-        action.isVueAction = true
-        action.vueRender = createRender(Object.assign({action}, vueObject(vueProp[0])))
+        vueProp = vueProp[0]
+        if (vueProp === false) {
+          return
+        }
+        if (vueProp === true) {
+          vueRender = module.vueRender
+        } else if (isObject(vueProp)) {
+          if (vueProp.instance) {
+            vueRender = createRender(vueProp)
+            vueRender.mode = RENDER_MODE_ACTION
+          } else {
+            action.vueProp = vueProp
+          }
+        }
       } else if (module.vueRender) {
-        action.isVueModule = true
-        action.vueRender = module.vueRender
+        vueRender = module.vueRender
       } else {
         return
       }
+      vueRender.createRoute(action)
       action.set('vue', async (context) => {
-        await action.vueRender.render(context, context.state)
+        await vueRender.render(context, context.state)
       })
     }
   })
-}
-
-function vueObject (vue) {
-  if (isString(vue)) {
-    return {file: vue}
-  }
-  return vue
-}
-
-export function vueRender (opts) {
-  return (context) => {
-    return async (vueFile, state) => {
-      console.log('bbb')
-      await context.vueRender.render(context, state)
-    }
-  }
 }

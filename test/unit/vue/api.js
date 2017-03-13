@@ -1,11 +1,11 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {Router, get, gen, props, vuePlugin, vueRender, vue} from 'sav-core'
+import {Router, get, gen, props, vuePlugin, vue} from 'sav-core'
 
 test('api', (ava) => {
   expect(vuePlugin).to.be.a('function')
-  expect(vueRender).to.be.a('function')
+  expect(vue).to.be.a('function')
 })
 
 test('vue.view', async (ava) => {
@@ -22,7 +22,14 @@ test('vue.view', async (ava) => {
     }
 
     @get()
-    @vue()
+    async profile (ctx) {
+      ctx.state = {
+        title: 'Profile Title'
+      }
+    }
+
+    @get()
+    @vue(false)
     async single (ctx) {
       ctx.state = {
         title: 'Single vue'
@@ -31,7 +38,7 @@ test('vue.view', async (ava) => {
   }
 
   let router = new Router({
-    viewRoot: __dirname
+    vueRoot: __dirname
   })
 
   router.use(vuePlugin)

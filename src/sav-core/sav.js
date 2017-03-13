@@ -58,6 +58,13 @@ export class Router extends EventEmitter {
     let payload = compose(payloads)
     return payload
   }
+  async exec (ctx) {
+    if (this._execute) {
+      return await this._execute(ctx)
+    }
+    this._execute = this.route()
+    return await this._execute(ctx)
+  }
   warn (...args) {
     this.emit('warn', ...args)
   }
