@@ -33,39 +33,58 @@ class VueRenderer {
     }
   }
   compile () {
-    console.log(JSON.stringify(this.modules, null, 4))
+    console.log(JSON.stringify(this.generateRoute(), null, 2))
   }
   createRoute (action) {
+    let {vueFileCase, vueCase} = this.props
     let {actionName, vueProp, route, module} = action
     let moduleName = module.moduleName
-    let name = convertCase(this.props.vueCase, `${moduleName}_${actionName}`)
+    let name = convertCase(vueCase, `${moduleName}_${actionName}`)
     let actionRoute = {
+      component: convertCase(vueFileCase, `${moduleName}/${moduleName}_${actionName}`),
       path: route.relative,
-      name,
-      component: name
+      name
     }
     actionRoute = vueProp ? Object.assign({}, actionRoute, vueProp) : actionRoute
+    let moduleRoute
     if (!this.modules[moduleName]) {
       let {vueProp, route} = module
-      let name = convertCase(this.props.vueCase, moduleName)
-      let moduleRoute = {
+      let name = convertCase(vueCase, moduleName)
+      moduleRoute = {
+        component: convertCase(vueFileCase, `${moduleName}/${moduleName}`),
         path: route.relative,
         name,
-        component: name,
         children: []
       }
       this.modules[moduleName] = vueProp ? Object.assign({}, moduleRoute, vueProp) : moduleRoute
     }
-    this.modules[moduleName].children.push(actionRoute)
+    moduleRoute = this.modules[moduleName]
+    moduleRoute.children.push(actionRoute)
+  }
+  generateRoute () {
+    let modules = this.modules
+    let dist = []
+    for (let moduleName in modules) {
+      if (this.mode === RENDER_MODE_APP) {
+        dist.push(modules[moduleName])
+      } else {
+        dist.push(modules[moduleName])
+        break
+      }
+    }
+    // "component":\s+"(\w+\/\w+)",
+    return dist
   }
 }
 
 export function vuePlugin (ctx) {
   let vueRoot = ctx.config('vueRoot', '')
   let vueCase = ctx.config('vueCase', 'pascal')
+  let vueFileCase = ctx.config('vueFileCase', 'pascal')
   let vueOpts = {
     vueRoot,
-    vueCase
+    vueCase,
+    vueFileCase
   }
 
   let createRender = (opts) => {

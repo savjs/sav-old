@@ -4,7 +4,7 @@ export function isAsync (func) {
 }
 
 export function isPromise (obj) {
-  return isObject(obj) && isFunction(obj.then)
+  return obj && isFunction(obj.then)
 }
 
 export function isObject (obj) {
