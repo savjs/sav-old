@@ -15,6 +15,8 @@ export default {
     'consolidate',
     'koa-compose',
     'vue',
+    'vue-router',
+    'vue-server-renderer',
     'rollup',
     'rollup-plugin-babel',
     'rollup-plugin-node-resolve',
