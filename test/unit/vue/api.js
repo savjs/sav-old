@@ -1,6 +1,6 @@
 import test from 'ava'
 import {expect} from 'chai'
-
+import {resolve} from 'path'
 import {Router, get, gen, props, vuePlugin, vue} from 'sav-core'
 
 test('api', (ava) => {
@@ -8,7 +8,7 @@ test('api', (ava) => {
   expect(vue).to.be.a('function')
 })
 
-test('vue.view', async (ava) => {
+test('vue.mode.app', async (ava) => {
   @gen
   @props({
     vue: true
@@ -38,7 +38,38 @@ test('vue.view', async (ava) => {
   }
 
   let router = new Router({
-    vueRoot: __dirname
+    vueRoot: resolve(__dirname, 'fixtures')
+  })
+
+  router.use(vuePlugin)
+  router.declare(Test)
+
+  let ctx
+  ctx = {
+    path: '/Test/basic',
+    method: 'GET'
+  }
+  await router.route()(ctx)
+})
+
+test('vue.mode.module', async (ava) => {
+  @gen
+  @props({
+    vue: {
+      instance: true
+    }
+  })
+  class Test {
+    @get()
+    async basic (ctx) {
+      ctx.state = {
+        title: 'Basic Title'
+      }
+    }
+  }
+
+  let router = new Router({
+    vueRoot: resolve(__dirname, 'fixtures')
   })
 
   router.use(vuePlugin)

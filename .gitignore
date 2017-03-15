@@ -37,3 +37,5 @@ jspm_packages
 .node_repl_history
 /dist
 .vscode/
+test/unit/vue/fixtures/Routes.js
+test/unit/vue/fixtures/TestRoutes.js

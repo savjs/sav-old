@@ -3,6 +3,12 @@ import {quickConf} from '../decorator'
 import {isObject} from '../utils/type'
 import {convertCase} from '../utils/convert'
 
+import {resolve} from 'path'
+import fs from 'fs'
+import {Promise} from 'bluebird'
+
+const {readFileAsync, writeFileAsync} = Promise.promisifyAll(fs)
+
 export const vue = quickConf('vue')
 
 // import VueRouter from 'vue-router'
@@ -29,11 +35,11 @@ class VueRenderer {
   }
   async render (context, state) {
     if (!this.isCompiled) {
-      this.compile()
+      await this.compile()
     }
   }
-  compile () {
-    console.log(JSON.stringify(this.generateRoute(), null, 2))
+  async compile () {
+    await this.compileVueRoute()
   }
   createRoute (action) {
     let {vueFileCase, vueCase} = this.props
@@ -63,27 +69,78 @@ class VueRenderer {
   }
   generateRoute () {
     let modules = this.modules
-    let dist = []
+    let comps = []
     for (let moduleName in modules) {
       if (this.mode === RENDER_MODE_APP) {
-        dist.push(modules[moduleName])
+        comps.push(modules[moduleName])
       } else {
-        dist.push(modules[moduleName])
+        comps.push(modules[moduleName])
         break
       }
     }
-    // "component":\s+"(\w+\/\w+)",
-    return dist
+    let routes = JSON.stringify(comps, null, 2)
+    let components = []
+    routes = routes.replace(/"component":\s+"((\w+)\/(\w+))"/g, (_, path, dir, name) => {
+      components.push(`import ${name} from './${path}'`)
+      let ret = `"component": ${name}`
+      return ret
+    })
+    components.push(`export default ${routes}`)
+    let content = components.join('\n')
+    return {
+      comps,
+      content
+    }
   }
+  compileVueRoute () {
+    let {comps, content} = this.generateRoute()
+    let routeName = 'route_' + randomId() + '.js'
+    switch (this.mode) {
+      case RENDER_MODE_APP:
+        routeName = 'Routes.js'
+        break
+      case RENDER_MODE_MODULE:
+        routeName = comps[0].name + 'Routes.js'
+        break
+      case RENDER_MODE_ACTION:
+        routeName = comps[0].children[0].name + 'Routes.js'
+        break
+    }
+    let routePath = resolve(this.props.vueRoot, routeName)
+    return syncFile(routePath, content)
+  }
+}
+
+function syncFile (path, data) {
+  return readFileAsync(path)
+    .then((text) => {
+      if (text.toString() !== data) {
+        return writeFileAsync(path, data)
+      }
+    })
+    .catch((err) => {
+      if (err.code === 'ENOENT') {
+        return writeFileAsync(path, data)
+      }
+      throw err
+    })
+}
+
+function randomId () {
+  var b = Math.random()
+  var a = (b + new Date().getTime())
+  return a.toString(16).replace('.', '')
 }
 
 export function vuePlugin (ctx) {
   let vueRoot = ctx.config('vueRoot', '')
+  let vueEntry = ctx.config('vueEntry', 'server-entry.js')
   let vueCase = ctx.config('vueCase', 'pascal')
   let vueFileCase = ctx.config('vueFileCase', 'pascal')
   let vueOpts = {
     vueRoot,
     vueCase,
+    vueEntry,
     vueFileCase
   }
 
