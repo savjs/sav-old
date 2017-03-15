@@ -1,4 +1,4 @@
-// import {requireFromString} from './vue-builder.js'
+import {compileImport, renderer} from './vue-builder.js'
 import {quickConf} from '../decorator'
 import {isObject} from '../utils/type'
 import {convertCase} from '../utils/convert'
@@ -9,18 +9,9 @@ import {Promise} from 'bluebird'
 
 const {readFileAsync, writeFileAsync} = Promise.promisifyAll(fs)
 
+const {renderToStringAsync} = Promise.promisifyAll(renderer)
+
 export const vue = quickConf('vue')
-
-// import VueRouter from 'vue-router'
-// import Vue from 'vue'
-
-// let router = new VueRouter({
-//   routes
-// })
-
-// let vm = new Vue({
-//   router
-// })
 
 const RENDER_MODE_APP = 1
 const RENDER_MODE_MODULE = 2
@@ -32,14 +23,29 @@ class VueRenderer {
     this.isCompiled = false
     this.modules = {}
     this.mode = RENDER_MODE_APP
+    this.vueInstance = null
   }
-  async render (context, state) {
+  async render (ctx, state) {
     if (!this.isCompiled) {
-      await this.compile()
+      await this.compileImport()
+    }
+    try {
+      let {vm, router} = this.vueInstance
+      let path = ctx.path || ctx.originalUrl
+      router.push(path)
+      // console.log(router.getMatchedComponents())
+      let text = await renderToStringAsync(vm)
+      ctx.end(text)
+    } catch (err) {
+      this.isCompiled = false
+      throw err
     }
   }
-  async compile () {
-    await this.compileVueRoute()
+  async compileImport () {
+    let factory = await this.compileVueInstance()
+    let routes = await this.compileVueRoute()
+    let ret = factory({routes})
+    this.vueInstance = ret
   }
   createRoute (action) {
     let {vueFileCase, vueCase} = this.props
@@ -58,7 +64,7 @@ class VueRenderer {
       let name = convertCase(vueCase, moduleName)
       moduleRoute = {
         component: convertCase(vueFileCase, `${moduleName}/${moduleName}`),
-        path: route.relative,
+        path: route.path,
         name,
         children: []
       }
@@ -81,7 +87,7 @@ class VueRenderer {
     let routes = JSON.stringify(comps, null, 2)
     let components = []
     routes = routes.replace(/"component":\s+"((\w+)\/(\w+))"/g, (_, path, dir, name) => {
-      components.push(`import ${name} from './${path}'`)
+      components.push(`import ${name} from './${path}.vue'`)
       let ret = `"component": ${name}`
       return ret
     })
@@ -92,9 +98,9 @@ class VueRenderer {
       content
     }
   }
-  compileVueRoute () {
+  saveVueRouter () {
     let {comps, content} = this.generateRoute()
-    let routeName = 'route_' + randomId() + '.js'
+    let routeName
     switch (this.mode) {
       case RENDER_MODE_APP:
         routeName = 'Routes.js'
@@ -107,7 +113,14 @@ class VueRenderer {
         break
     }
     let routePath = resolve(this.props.vueRoot, routeName)
-    return syncFile(routePath, content)
+    return syncFile(routePath, content).then(() => routePath)
+  }
+  compileVueRoute () {
+    return this.saveVueRouter().then(compileImport)
+  }
+  compileVueInstance () {
+    let entryFile = resolve(this.props.vueRoot, this.props.vueEntry)
+    return compileImport(entryFile).then()
   }
 }
 
@@ -124,12 +137,6 @@ function syncFile (path, data) {
       }
       throw err
     })
-}
-
-function randomId () {
-  var b = Math.random()
-  var a = (b + new Date().getTime())
-  return a.toString(16).replace('.', '')
 }
 
 export function vuePlugin (ctx) {

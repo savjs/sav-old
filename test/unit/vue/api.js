@@ -43,13 +43,22 @@ test('vue.mode.app', async (ava) => {
 
   router.use(vuePlugin)
   router.declare(Test)
-
-  let ctx
-  ctx = {
-    path: '/Test/basic',
-    method: 'GET'
+  {
+    let ctx = {
+      path: '/Test/basic',
+      method: 'GET'
+    }
+    await router.route()(ctx)
+    expect(!!~ctx.body.indexOf('TestBasic')).to.eql(true)
   }
-  await router.route()(ctx)
+  {
+    let ctx = {
+      path: '/Test/profile',
+      method: 'GET'
+    }
+    await router.route()(ctx)
+    expect(!!~ctx.body.indexOf('TestProfile')).to.eql(true)
+  }
 })
 
 test('vue.mode.module', async (ava) => {
@@ -75,10 +84,10 @@ test('vue.mode.module', async (ava) => {
   router.use(vuePlugin)
   router.declare(Test)
 
-  let ctx
-  ctx = {
+  let ctx = {
     path: '/Test/basic',
     method: 'GET'
   }
   await router.route()(ctx)
+  expect(!!~ctx.body.indexOf('TestBasic')).to.eql(true)
 })

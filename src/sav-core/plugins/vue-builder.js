@@ -5,10 +5,14 @@ import commonjs from 'rollup-plugin-commonjs'
 import re from 'rollup-plugin-re'
 import json from 'rollup-plugin-json'
 
-export {rollup} from 'rollup'
+import {rollup} from 'rollup'
 
 import Module from 'module'
 import path from 'path'
+
+import {createRenderer} from 'vue-server-renderer'
+
+export const renderer = createRenderer()
 
 export function requireFromString (code, filename, opts) {
   if (typeof filename === 'object') {
@@ -30,38 +34,59 @@ export function requireFromString (code, filename, opts) {
   return m.exports
 }
 
-export const config = {
-  entry: 'src/server-entry.js',
-  format: 'cjs',
-  dest: 'dist/server-entry.js',
-  external: [
-    'vue',
-    'vue-router',
-    'vue-server-renderer/build'
-  ],
-  plugins: [
-    re({
-      patterns: [
-        {
-          test: 'process.env.NODE_ENV',
-          replace: '"production"'
-        }
-      ]
-    }),
-    json({
-      preferConst: false // Default: false
-    }),
-    vue(),
-    babel({
-      babelrc: false,
-      exclude: 'node_modules/**',
-      'plugins': []
-    }),
-    resolve({
-      jsnext: true,
-      main: true,
-      browser: true
-    }),
-    commonjs()
-  ]
+export function mergeConfig (opts) {
+  let config = {
+    entry: 'src/server-entry.js',
+    format: 'cjs',
+    external: [
+      'vue',
+      'vue-router',
+      'vue-server-renderer/build'
+    ],
+    plugins: [
+      re({
+        patterns: [
+          {
+            test: 'process.env.NODE_ENV',
+            replace: '"production"'
+          }
+        ]
+      }),
+      json({
+        preferConst: false // Default: false
+      }),
+      vue(),
+      babel({
+        babelrc: false,
+        exclude: 'node_modules/**',
+        'plugins': []
+      }),
+      resolve({
+        jsnext: true,
+        main: true,
+        browser: true
+      }),
+      commonjs()
+    ]
+  }
+  return Object.assign(config, opts)
+}
+
+export function compile (src, opts) {
+  let configs = mergeConfig(Object.assign({
+    entry: src
+  }, opts))
+  return rollup(configs).then((bundle) => {
+    let result = bundle.generate({
+      format: 'cjs'
+    })
+    let code = result.code.toString()
+    return code
+  })
+}
+
+export function compileImport (src, opts) {
+  return compile(src, opts).then((str) => {
+    return requireFromString(str, src)
+  })
 }
