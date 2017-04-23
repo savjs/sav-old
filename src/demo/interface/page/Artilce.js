@@ -1,5 +1,7 @@
 
-@defPage()
+@defPage({
+  view: 'vue'
+})
 export default class Article {
   @get()
   list() {}
