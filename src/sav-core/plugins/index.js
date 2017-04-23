@@ -1,6 +1,0 @@
-export * from './prop'
-export * from './router'
-export * from './schema'
-export * from './view'
-export * from './auth'
-export * from './vue'

@@ -1,0 +1,17 @@
+{
+  "name": "@sav/util",
+  "version": "1.0.7",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/savjs/sav-util.git"
+  },
+  "author": {
+    "name": "jetiny",
+    "email": "86287344@qq.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/savjs/sav-util/issues"
+  },
+  "homepage": "https://github.com/savjs/sav-util#readme"
+}

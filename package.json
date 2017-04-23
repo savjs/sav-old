@@ -7,10 +7,10 @@
   "jsnext:main": "dist/sav.es.js",
   "scripts": {
     "start": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
-    "build": "rollup -c",
+    "build": "rollup -c && node .",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
-    "na": "nyc ava ./test/unit/vue",
+    "na": "nyc ava ./test/unit",
     "pretest": "npm run lint",
     "test": "npm run na",
     "prepare": "npm run build"
@@ -68,7 +68,8 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "fixtures"
+      "fixtures",
+      "package.json"
     ],
     "global": [
       "AsyncFunction"

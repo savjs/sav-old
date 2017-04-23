@@ -1,0 +1,17 @@
+{
+  "name": "@sav/decorator",
+  "version": "1.0.7",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/savjs/sav-decorator.git"
+  },
+  "author": {
+    "name": "jetiny",
+    "email": "86287344@qq.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/savjs/sav-decorator/issues"
+  },
+  "homepage": "https://github.com/savjs/sav-decorator#readme"
+}
