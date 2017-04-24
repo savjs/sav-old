@@ -1,0 +1,34 @@
+{
+  "id": "UserLayout",
+  "moduleName": "User",
+  "moduleType": "Layout",
+  "routes": [
+    {
+      "actionName": "copyRight",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    },
+    {
+      "actionName": "userInfo",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    },
+    {
+      "actionName": "userNavMenu",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    }
+  ]
+}

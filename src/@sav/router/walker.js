@@ -52,7 +52,7 @@ function createMiddlewares (action) {
 }
 
 export async function payloadStart (ctx, next) {
-  let prop = makeProp(ctx)
+  makeProp(ctx)
   // @TODO 注入state
   await next()
 }

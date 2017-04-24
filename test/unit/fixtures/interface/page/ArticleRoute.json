@@ -1,0 +1,45 @@
+{
+  "route": {
+    "moduleName": "Article",
+    "relative": "article",
+    "path": "/article"
+  },
+  "childs": [
+    {
+      "actionName": "list",
+      "path": "/article/list",
+      "methods": [
+        "GET"
+      ],
+      "relative": "list"
+    },
+    {
+      "actionName": "view",
+      "path": "/article/article/:aid",
+      "methods": [
+        "GET"
+      ],
+      "relative": "article/:aid"
+    }
+  ],
+  "ups": [
+    {
+      "moduleName": "Article",
+      "actionName": "modify",
+      "path": "/modify/:aid",
+      "methods": [
+        "GET"
+      ],
+      "relative": "/modify/:aid"
+    },
+    {
+      "moduleName": "Article",
+      "actionName": "update",
+      "path": "/update/:aid",
+      "methods": [
+        "POST"
+      ],
+      "relative": "update/:aid"
+    }
+  ]
+}

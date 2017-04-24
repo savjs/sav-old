@@ -1,0 +1,18 @@
+{
+  "route": {
+    "moduleName": "Article",
+    "relative": "article",
+    "path": "/article"
+  },
+  "childs": [
+    {
+      "actionName": "comment",
+      "path": "/article/comment/:aid",
+      "methods": [
+        "POST"
+      ],
+      "relative": "comment/:aid"
+    }
+  ],
+  "ups": []
+}

@@ -1,0 +1,68 @@
+{
+  "id": "ArticlePage",
+  "moduleName": "Article",
+  "moduleType": "Page",
+  "view": "vue",
+  "layout": "User",
+  "routes": [
+    {
+      "actionName": "list",
+      "plugins": [
+        "route"
+      ],
+      "props": {
+        "route": {
+          "methods": [
+            "GET"
+          ]
+        }
+      }
+    },
+    {
+      "actionName": "view",
+      "plugins": [
+        "route"
+      ],
+      "props": {
+        "route": {
+          "methods": [
+            "GET"
+          ],
+          "path": "article/:aid"
+        }
+      }
+    },
+    {
+      "actionName": "modify",
+      "plugins": [
+        "auth",
+        "route"
+      ],
+      "props": {
+        "auth": null,
+        "route": {
+          "methods": [
+            "GET"
+          ],
+          "path": "/modify/:aid"
+        }
+      }
+    },
+    {
+      "actionName": "update",
+      "plugins": [
+        "auth",
+        "route"
+      ],
+      "props": {
+        "auth": null,
+        "route": {
+          "methods": [
+            "POST"
+          ],
+          "path": "~update/:aid"
+        }
+      }
+    }
+  ]
+}

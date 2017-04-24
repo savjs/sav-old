@@ -17,7 +17,7 @@ function convertPath (path, caseType, name) {
 
 export function routePlugin (ctx) {
   let {config} = ctx
-  let prefix   = config.get(ROUTE_PREFIX, '/')
+  let prefix = config.get(ROUTE_PREFIX, '/')
   let caseType = config.get(CASE_TYPE, 'camel')
   let routers = ctx.routers
   let moduleMap = ctx.modules
@@ -55,6 +55,7 @@ export function routePlugin (ctx) {
       route.relative = route.path || ''
       let path = route.path
       if (path[0] === '/') { // absolute
+        route.absolute = true
         routers.unshift(route)
       } else if (path[0] === '~') { // relative to root
         route.path = prefix + (route.relative = path.substr(1, path.length))

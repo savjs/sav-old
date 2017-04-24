@@ -1,4 +1,4 @@
-import {prop, makeProp, isFunction} from '@sav/util'
+import {isFunction} from '@sav/util'
 
 const CONFIG_KEY = '_CONFIG'
 
@@ -58,7 +58,13 @@ export {generator as gen}
 function transform (opts) {
   return (target) => {
     let configs = refer(target)
-    let module = Object.assign({moduleName: target.name}, refer(target, true), opts)
+    let module = Object.assign({
+      id: target.name,
+      moduleName: target.name
+    }, refer(target, true), opts)
+    if (module.moduleType) {
+      module.id = module.moduleName + module.moduleType
+    }
     let routes = []
     for (let actionName in configs) {
       let plugins = []
@@ -78,9 +84,6 @@ function transform (opts) {
       }
       routes.push(action)
     }
-    if (isFunction(target)) {
-      prop(module, 'actions', convertToFunction(target))
-    }
     module.routes = routes
     return module
   }
@@ -91,7 +94,7 @@ export function convertToFunction (target) {
   if (isFunction(target)) {
     let proto = target.prototype
     return Object.getOwnPropertyNames(proto).reduce((tar, it) => {
-      if (!~skips.indexOf(it) && 'function' === typeof proto[it]) {
+      if (!~skips.indexOf(it) && typeof proto[it] === 'function') {
         tar[it] = () => {
           return tar.$dispatch(it, proto[it], tar)
         }
@@ -102,7 +105,7 @@ export function convertToFunction (target) {
     for (let name in target) {
       target[name] = ((func) => {
         return target.$dispatch(name, func, target)
-      })(target[it])
+      })(target[name])
     }
     return target
   }

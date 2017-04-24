@@ -1,0 +1,16 @@
+{
+  "id": "GuestLayout",
+  "moduleName": "Guest",
+  "moduleType": "Layout",
+  "routes": [
+    {
+      "actionName": "copyRight",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    }
+  ]
+}

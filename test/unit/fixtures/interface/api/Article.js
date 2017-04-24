@@ -1,5 +1,6 @@
+import {ApiInterface, post} from '@sav/decorator'
 
-@defApi()
+@ApiInterface()
 export default class Article {
   
   @post('comment/:aid')

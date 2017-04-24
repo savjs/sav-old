@@ -1,4 +1,6 @@
-Error.prototype.toJSON = function () {
+let proto = Error.prototype
+
+proto.toJSON = function () {
   return Object.assign({
     message: this.message,
     type: this.constructor.name,

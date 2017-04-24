@@ -1,7 +1,8 @@
+import {PageInterface, post, get, auth} from '@sav/decorator'
 
-@defPage({
+@PageInterface({
   view: 'vue',
-  group: 'UserGroup'
+  layout: 'User'
 })
 export default class Article {
   @get()
@@ -10,11 +11,11 @@ export default class Article {
   @get('article/:aid')
   view() {}
 
-  @get('modify/:aid')
+  @get('/modify/:aid')
   @auth()
   modify() {}
 
-  @post('update/:aid')
+  @post('~update/:aid')
   @auth()
   update() {}
 }

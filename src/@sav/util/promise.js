@@ -1,5 +1,3 @@
-import {isAsync, isPromise} from './type.js'
-
 let PROMISE = Promise
 let promise = {
   resolve: PROMISE.resolve.bind(PROMISE),

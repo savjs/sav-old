@@ -1,16 +1,17 @@
-import {props, quickConf} from './decorator'
+import {gen, quickConf} from './decorator'
 
-// 认证
 export const auth = quickConf('auth')
 
-// 控制器类型
-export const controller = (opts) => {
-  return props({moduleGroup: 'Controller', ...opts})
+export const invoke = quickConf('invoke')
+
+export const PageInterface = (opts) => {
+  return gen({moduleType: 'Page', ...opts})
 }
 
-export {controller as ctrl}
+export const ApiInterface = (opts) => {
+  return gen({moduleType: 'Api', ...opts})
+}
 
-// 接口类型
-export const api = (opts) => {
-  return props({moduleGroup: 'Api', ...opts})
+export const LayoutInterface = (opts) => {
+  return gen({moduleType: 'Layout', ...opts})
 }

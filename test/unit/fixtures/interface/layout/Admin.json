@@ -1,0 +1,34 @@
+{
+  "id": "AdminLayout",
+  "moduleName": "Admin",
+  "moduleType": "Layout",
+  "routes": [
+    {
+      "actionName": "copyRight",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    },
+    {
+      "actionName": "userInfo",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    },
+    {
+      "actionName": "adminNavMenu",
+      "plugins": [
+        "invoke"
+      ],
+      "props": {
+        "invoke": null
+      }
+    }
+  ]
+}

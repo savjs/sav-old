@@ -4,7 +4,6 @@ import {prop, isPromise, isFunction} from '@sav/util'
 
 // let modules = {}
 
-
 function proxyApi (entry) {
   return new Proxy(entry, {
     get (target, name) {
@@ -34,7 +33,7 @@ var modules = {
 }
 
 function ProxyModules (ctx, modules) {
-  for (let propName in modules ) {
+  for (let propName in modules) {
     let propValue = modules[propName]
     let cache = {} // need this ?
     let newValue = new Proxy(propValue, {
@@ -81,9 +80,3 @@ console.log('done')
 //     return proxy
 //   }
 // }
-
-
-
-
-
-

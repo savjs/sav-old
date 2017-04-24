@@ -9,8 +9,8 @@ export default class Account {
     this.test()
     Helper.test()
   }
-  update() {}
-  test() {
+  update () {}
+  test () {
     console.log('article.test')
   }
 }
