@@ -1,6 +1,7 @@
 
 @defPage({
-  view: 'vue'
+  view: 'vue',
+  layout: 'user'
 })
 export default class Article {
   @get()
