@@ -1,9 +1,10 @@
 {
-  "id": "GuestLayout",
   "moduleName": "Guest",
   "moduleType": "Layout",
+  "uri": "Layout/Guest",
   "routes": [
     {
+      "uri": "Layout/Guest/copyRight",
       "actionName": "copyRight",
       "plugins": [
         "invoke"

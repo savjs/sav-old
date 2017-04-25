@@ -2,7 +2,7 @@ import test from 'ava'
 import {expect} from 'chai'
 import {resolve} from 'path'
 import {writeFileSync, readFileSync} from 'fs'
-import {parseRoutes} from '@sav/router'
+import {convertRoute} from '@sav/router'
 
 import ArticleApi from './fixtures/interface/api/Article.js'
 import ArticlePage from './fixtures/interface/page/Article.js'
@@ -21,10 +21,10 @@ test('routeParser.compare|write', (ava) => {
   for (let name in maps) {
     if (write) {
       writeFileSync(resolve(__dirname, files[name]),
-        JSON.stringify(parseRoutes(maps[name]), null, 2))
+        JSON.stringify(convertRoute(maps[name]), null, 2))
     } else {
       expect(readFileSync(resolve(__dirname, files[name])).toString()).to
-        .eql(JSON.stringify(parseRoutes(maps[name]), null, 2))
+        .eql(JSON.stringify(convertRoute(maps[name]), null, 2))
     }
   }
 })

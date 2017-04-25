@@ -1,4 +1,4 @@
-import {PageInterface, post, get, auth} from '@sav/decorator'
+import {PageInterface, post, get, auth, vue} from '@sav/decorator'
 
 @PageInterface({
   view: 'vue',
@@ -8,14 +8,20 @@ export default class Article {
   @get()
   list() {}
 
-  @get('article/:aid')
+  @get('/articles/:aid')
   view() {}
 
-  @get('/modify/:aid')
+  @vue({
+    component: 'Article/ArticleModify'
+  })
+  @get('modify/:id?')
   @auth()
   modify() {}
 
-  @post('~update/:aid')
+  @vue({
+    component: 'Article/ArticleModify'
+  })
+  @post('update/:aid')
   @auth()
   update() {}
 }

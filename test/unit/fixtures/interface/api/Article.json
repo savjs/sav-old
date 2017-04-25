@@ -1,9 +1,10 @@
 {
-  "id": "ArticleApi",
   "moduleName": "Article",
   "moduleType": "Api",
+  "uri": "Api/Article",
   "routes": [
     {
+      "uri": "Api/Article/comment",
       "actionName": "comment",
       "plugins": [
         "route"

@@ -58,18 +58,14 @@ export {generator as gen}
 function transform (opts) {
   return (target) => {
     let configs = refer(target)
-    let module = Object.assign({
-      id: target.name,
-      moduleName: target.name
-    }, refer(target, true), opts)
-    if (module.moduleType) {
-      module.id = module.moduleName + module.moduleType
-    }
+    let module = Object.assign({moduleName: target.name}, refer(target, true), opts)
+    module.uri = `${module.moduleType}/${module.moduleName}`
     let routes = []
     for (let actionName in configs) {
       let plugins = []
       let props = {}
       let action = {
+        uri: `${module.uri}/${actionName}`,
         actionName,
         plugins,
         props

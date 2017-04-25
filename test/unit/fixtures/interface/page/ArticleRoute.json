@@ -1,45 +1,76 @@
 {
   "route": {
-    "moduleName": "Article",
-    "relative": "article",
+    "uri": "Page/Article",
     "path": "/article"
   },
   "childs": [
     {
-      "actionName": "list",
+      "uri": "Page/Article/list",
       "path": "/article/list",
       "methods": [
         "GET"
-      ],
-      "relative": "list"
+      ]
     },
     {
-      "actionName": "view",
-      "path": "/article/article/:aid",
+      "uri": "Page/Article/modify",
+      "path": "/article/modify/:id?",
       "methods": [
         "GET"
-      ],
-      "relative": "article/:aid"
-    }
-  ],
-  "ups": [
-    {
-      "moduleName": "Article",
-      "actionName": "modify",
-      "path": "/modify/:aid",
-      "methods": [
-        "GET"
-      ],
-      "relative": "/modify/:aid"
+      ]
     },
     {
-      "moduleName": "Article",
-      "actionName": "update",
-      "path": "/update/:aid",
+      "uri": "Page/Article/update",
+      "path": "/article/update/:aid",
       "methods": [
         "POST"
-      ],
-      "relative": "update/:aid"
+      ]
     }
-  ]
+  ],
+  "root": [
+    {
+      "uri": "Page/Article/view",
+      "path": "/articles/:aid",
+      "methods": [
+        "GET"
+      ]
+    }
+  ],
+  "VueComponent": {
+    "component": "Article/Article",
+    "path": "/article",
+    "children": [
+      {
+        "component": "Article/ArticleList",
+        "name": "ArticleList",
+        "path": "list",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Article/ArticleView",
+        "name": "ArticleView",
+        "path": "/articles/:aid",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Article/ArticleModify",
+        "name": "ArticleModify",
+        "path": "modify/:id?",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Article/ArticleModify",
+        "name": "ArticleUpdate",
+        "path": "update/:aid",
+        "methods": [
+          "POST"
+        ]
+      }
+    ]
+  }
 }

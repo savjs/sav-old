@@ -1,11 +1,12 @@
 {
-  "id": "ArticlePage",
   "moduleName": "Article",
   "moduleType": "Page",
   "view": "vue",
   "layout": "User",
+  "uri": "Page/Article",
   "routes": [
     {
+      "uri": "Page/Article/list",
       "actionName": "list",
       "plugins": [
         "route"
@@ -19,6 +20,7 @@
       }
     },
     {
+      "uri": "Page/Article/view",
       "actionName": "view",
       "plugins": [
         "route"
@@ -28,15 +30,17 @@
           "methods": [
             "GET"
           ],
-          "path": "article/:aid"
+          "path": "/articles/:aid"
         }
       }
     },
     {
+      "uri": "Page/Article/modify",
       "actionName": "modify",
       "plugins": [
         "auth",
-        "route"
+        "route",
+        "vue"
       ],
       "props": {
         "auth": null,
@@ -44,15 +48,20 @@
           "methods": [
             "GET"
           ],
-          "path": "/modify/:aid"
+          "path": "modify/:id?"
+        },
+        "vue": {
+          "component": "Article/ArticleModify"
         }
       }
     },
     {
+      "uri": "Page/Article/update",
       "actionName": "update",
       "plugins": [
         "auth",
-        "route"
+        "route",
+        "vue"
       ],
       "props": {
         "auth": null,
@@ -60,7 +69,10 @@
           "methods": [
             "POST"
           ],
-          "path": "~update/:aid"
+          "path": "update/:aid"
+        },
+        "vue": {
+          "component": "Article/ArticleModify"
         }
       }
     }

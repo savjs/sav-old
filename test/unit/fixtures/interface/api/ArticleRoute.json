@@ -1,18 +1,16 @@
 {
   "route": {
-    "moduleName": "Article",
-    "relative": "article",
+    "uri": "Api/Article",
     "path": "/article"
   },
   "childs": [
     {
-      "actionName": "comment",
+      "uri": "Api/Article/comment",
       "path": "/article/comment/:aid",
       "methods": [
         "POST"
-      ],
-      "relative": "comment/:aid"
+      ]
     }
   ],
-  "ups": []
+  "root": []
 }
