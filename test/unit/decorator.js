@@ -31,7 +31,7 @@ test('api', (ava) => {
   }
 })
 
-test('compare|write', (ava) => {
+test('decorator.compare|write', (ava) => {
   let write = true
   for (let name in maps) {
     if (write) {

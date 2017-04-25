@@ -1,6 +1,6 @@
 {
   "moduleName": "Guest",
-  "moduleType": "Layout",
+  "moduleGroup": "Layout",
   "uri": "Layout/Guest",
   "routes": [
     {

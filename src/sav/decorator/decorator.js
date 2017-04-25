@@ -1,4 +1,4 @@
-import {isFunction, isUndefined} from '@sav/util'
+import {isFunction, isUndefined} from '../util'
 
 const CONFIG_KEY = '_CONFIG'
 

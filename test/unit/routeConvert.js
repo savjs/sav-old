@@ -16,7 +16,7 @@ let files = {
   ArticlePage: './fixtures/interface/page/ArticleRoute.json'
 }
 
-test('routeParser.compare|write', (ava) => {
+test('convertRoute.compare|write', (ava) => {
   let write = true
   for (let name in maps) {
     if (write) {

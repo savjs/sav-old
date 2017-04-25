@@ -1,6 +1,6 @@
 {
   "moduleName": "Admin",
-  "moduleType": "Layout",
+  "moduleGroup": "Layout",
   "uri": "Layout/Admin",
   "routes": [
     {

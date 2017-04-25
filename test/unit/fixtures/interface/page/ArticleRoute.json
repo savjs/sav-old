@@ -24,6 +24,13 @@
       "methods": [
         "POST"
       ]
+    },
+    {
+      "uri": "Page/Article/comment",
+      "path": "/article/comment/:aid",
+      "methods": [
+        "POST"
+      ]
     }
   ],
   "root": [

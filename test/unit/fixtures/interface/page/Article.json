@@ -1,6 +1,6 @@
 {
   "moduleName": "Article",
-  "moduleType": "Page",
+  "moduleGroup": "Page",
   "view": "vue",
   "layout": "User",
   "uri": "Page/Article",
@@ -74,6 +74,23 @@
         "vue": {
           "component": "Article/ArticleModify"
         }
+      }
+    },
+    {
+      "uri": "Page/Article/comment",
+      "actionName": "comment",
+      "plugins": [
+        "route",
+        "vue"
+      ],
+      "props": {
+        "route": {
+          "methods": [
+            "POST"
+          ],
+          "path": "comment/:aid"
+        },
+        "vue": false
       }
     }
   ]

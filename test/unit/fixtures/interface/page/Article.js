@@ -24,4 +24,8 @@ export default class Article {
   @post('update/:aid')
   @auth()
   update() {}
+
+  @vue(false)
+  @post('comment/:aid')
+  comment(){}
 }

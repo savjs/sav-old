@@ -1,6 +1,6 @@
 {
   "moduleName": "Article",
-  "moduleType": "Api",
+  "moduleGroup": "Api",
   "uri": "Api/Article",
   "routes": [
     {

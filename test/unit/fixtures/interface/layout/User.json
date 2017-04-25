@@ -1,6 +1,6 @@
 {
   "moduleName": "User",
-  "moduleType": "Layout",
+  "moduleGroup": "Layout",
   "uri": "Layout/User",
   "routes": [
     {
