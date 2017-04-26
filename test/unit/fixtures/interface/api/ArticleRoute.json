@@ -1,9 +1,7 @@
 {
   "SavRoute": {
-    "route": {
-      "uri": "ArticleApi",
-      "path": "/article"
-    },
+    "uri": "ArticleApi",
+    "path": "/article",
     "childs": [
       {
         "uri": "ArticleApi.comment",

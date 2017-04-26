@@ -1,9 +1,7 @@
 {
   "SavRoute": {
-    "route": {
-      "uri": "ArticlePage",
-      "path": "/article"
-    },
+    "uri": "ArticlePage",
+    "path": "/article",
     "childs": [
       {
         "uri": "ArticlePage.list",

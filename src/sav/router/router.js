@@ -17,7 +17,6 @@ export class Router extends EventEmitter {
     this.moduleConfigs = {}       // 模块配置
     this.moduleActions = {}       // 模块动作
 
-    this.routes = []            // 顶级路由
     this.moduleRoutes = []      // 模块路由
   }
   use (plugin) {
@@ -66,9 +65,7 @@ function walkModules (router, modules) {
         Object.assign(module, routeInfo)
       }
     }
-    // 挂载模块
-    if (module.SavRoute) { // 服务端路由处理 VueRoute在这里不需要做吧?
-      this.routes = this.routes.concat(module.SavRoute.parents)
+    if (module.SavRoute) { // 服务端路由处理
       this.moduleRoutes.push(module.SavRoute)
     }
     if (module.actions) { // 模块方法表

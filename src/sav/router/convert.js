@@ -6,8 +6,8 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
   let moduleRoute = Object.assign({uri: module.uri}, props.route)
   let relative = convertPath(moduleRoute.path, caseType, moduleName)
   moduleRoute.path = prefix + relative
-  let childs = []
-  let parents = []
+  let childs = moduleRoute.childs = []
+  let parents = moduleRoute.parents = []
 
   let isVue = props.view === 'vue'
   let vueCase = 'pascal'
@@ -65,11 +65,7 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
     }
   }
   let ret = {
-    SavRoute: {
-      route: moduleRoute,
-      childs,
-      parents
-    }
+    SavRoute: moduleRoute
   }
   if (isVue) {
     ret.VueRoute = vueModule

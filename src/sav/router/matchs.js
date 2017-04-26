@@ -1,5 +1,9 @@
 import pathToRegexp from 'path-to-regexp'
 
+export function matchModulesRoute (routers, path, method) {
+
+}
+
 /**
   @typedef  {Object} Route
   @property {String} path         url expr
