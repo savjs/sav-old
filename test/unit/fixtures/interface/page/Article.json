@@ -23,15 +23,19 @@
       "uri": "Page/Article/view",
       "actionName": "view",
       "plugins": [
-        "route"
+        "req",
+        "route",
+        "res"
       ],
       "props": {
+        "req": null,
         "route": {
           "methods": [
             "GET"
           ],
           "path": "/articles/:aid"
-        }
+        },
+        "res": null
       }
     },
     {

@@ -1,4 +1,4 @@
-import {LayoutInterface, invoke} from '@sav/decorator'
+import {LayoutInterface, invoke} from 'sav/decorator'
 
 @LayoutInterface()
 export default class User {

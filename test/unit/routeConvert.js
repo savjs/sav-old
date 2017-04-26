@@ -2,7 +2,7 @@ import test from 'ava'
 import {expect} from 'chai'
 import {resolve} from 'path'
 import {writeFileSync, readFileSync} from 'fs'
-import {convertRoute} from '@sav/router'
+import {convertRoute} from 'sav/router'
 
 import ArticleApi from './fixtures/interface/api/Article.js'
 import ArticlePage from './fixtures/interface/page/Article.js'

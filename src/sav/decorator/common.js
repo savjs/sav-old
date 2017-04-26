@@ -16,3 +16,9 @@ export const ApiInterface = (opts) => {
 export const LayoutInterface = (opts) => {
   return gen({moduleGroup: 'Layout', ...opts})
 }
+
+export const requestSchema = quickConf('req')
+export const responseSchema = quickConf('res')
+
+export {requestSchema as req}
+export {responseSchema as res}

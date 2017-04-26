@@ -1,48 +1,50 @@
 {
-  "route": {
-    "uri": "Page/Article",
-    "path": "/article"
+  "SavRoute": {
+    "route": {
+      "uri": "Page/Article",
+      "path": "/article"
+    },
+    "childs": [
+      {
+        "uri": "Page/Article/list",
+        "path": "/article/list",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "uri": "Page/Article/modify",
+        "path": "/article/modify/:id?",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "uri": "Page/Article/update",
+        "path": "/article/update/:aid",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "uri": "Page/Article/comment",
+        "path": "/article/comment/:aid",
+        "methods": [
+          "POST"
+        ]
+      }
+    ],
+    "root": [
+      {
+        "uri": "Page/Article/view",
+        "path": "/articles/:aid",
+        "methods": [
+          "GET"
+        ]
+      }
+    ]
   },
-  "childs": [
-    {
-      "uri": "Page/Article/list",
-      "path": "/article/list",
-      "methods": [
-        "GET"
-      ]
-    },
-    {
-      "uri": "Page/Article/modify",
-      "path": "/article/modify/:id?",
-      "methods": [
-        "GET"
-      ]
-    },
-    {
-      "uri": "Page/Article/update",
-      "path": "/article/update/:aid",
-      "methods": [
-        "POST"
-      ]
-    },
-    {
-      "uri": "Page/Article/comment",
-      "path": "/article/comment/:aid",
-      "methods": [
-        "POST"
-      ]
-    }
-  ],
-  "root": [
-    {
-      "uri": "Page/Article/view",
-      "path": "/articles/:aid",
-      "methods": [
-        "GET"
-      ]
-    }
-  ],
-  "VueComponent": {
+  "VueRoute": {
     "component": "Article/Article",
     "path": "/article",
     "children": [

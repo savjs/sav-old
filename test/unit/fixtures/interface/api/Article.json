@@ -7,15 +7,19 @@
       "uri": "Api/Article/comment",
       "actionName": "comment",
       "plugins": [
-        "route"
+        "res",
+        "route",
+        "req"
       ],
       "props": {
+        "res": null,
         "route": {
           "methods": [
             "POST"
           ],
           "path": "comment/:aid"
-        }
+        },
+        "req": null
       }
     }
   ]

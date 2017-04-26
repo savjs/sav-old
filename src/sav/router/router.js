@@ -30,10 +30,7 @@ export class Router extends EventEmitter {
     return this
   }
   declare (modules) {
-    if (!isArray(modules)) {
-      modules = [modules]
-    }
-    walkModules(this, modules)
+    walkModules(this, isArray(modules) ? modules : [modules])
   }
   compose () {
     let payloads = [payloadStart.bind(this)].concat(this.payloads).concat([payloadEnd.bind(this)])

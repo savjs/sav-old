@@ -1,16 +1,18 @@
 {
-  "route": {
-    "uri": "Api/Article",
-    "path": "/article"
-  },
-  "childs": [
-    {
-      "uri": "Api/Article/comment",
-      "path": "/article/comment/:aid",
-      "methods": [
-        "POST"
-      ]
-    }
-  ],
-  "root": []
+  "SavRoute": {
+    "route": {
+      "uri": "Api/Article",
+      "path": "/article"
+    },
+    "childs": [
+      {
+        "uri": "Api/Article/comment",
+        "path": "/article/comment/:aid",
+        "methods": [
+          "POST"
+        ]
+      }
+    ],
+    "root": []
+  }
 }
