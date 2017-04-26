@@ -1,37 +1,38 @@
 {
   "moduleName": "Admin",
   "moduleGroup": "Layout",
-  "uri": "Layout/Admin",
+  "uri": "AdminLayout",
+  "props": {},
   "routes": [
     {
-      "uri": "Layout/Admin/copyRight",
       "actionName": "copyRight",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "AdminLayout.copyRight",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     },
     {
-      "uri": "Layout/Admin/userInfo",
       "actionName": "userInfo",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "AdminLayout.userInfo",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     },
     {
-      "uri": "Layout/Admin/adminNavMenu",
       "actionName": "adminNavMenu",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "AdminLayout.adminNavMenu",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     }
   ]
 }

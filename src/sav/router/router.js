@@ -3,6 +3,7 @@ import compose from 'koa-compose'
 
 import {isArray, isObject, isFunction, makeProp} from '../util'
 import {Config} from '../core/config'
+import {convertRoute} from './convert.js'
 
 export class Router extends EventEmitter {
   constructor (config) {
@@ -13,7 +14,11 @@ export class Router extends EventEmitter {
     this.config = config    // 配置
     this.executer = null    // 执行器
     this.payloads = []      // 插件
-    this.mounts = {}        // 挂载点 如 Api/Article/comment
+    this.moduleConfigs = {}       // 模块配置
+    this.moduleActions = {}       // 模块动作
+
+    this.routes = []            // 顶级路由
+    this.moduleRoutes = []      // 模块路由
   }
   use (plugin) {
     if (isFunction(plugin)) {
@@ -46,8 +51,35 @@ export class Router extends EventEmitter {
   }
 }
 
-function walkModules (router, modules) {
+let moduleTypes = ['Layout', 'Api', 'Page']
 
+function walkModules (router, modules) {
+  let {config} = router
+  for (let module of modules) {
+    let {uri, moduleGroup} = module
+    if (moduleTypes.indexOf(moduleGroup) > 0) { // Api 或 Page 类型的需要路由
+      // 路由部分可以提前生成, 减少加载编译时间
+      if (!module.SavRoute) { // 注入 SavRoute 和 VueRoute
+        let routeInfo = convertRoute(module,
+          config.get('caseType', 'camel'),
+          config.env('prefix', '/'))
+        Object.assign(module, routeInfo)
+      }
+    }
+    // 挂载模块
+    if (module.SavRoute) { // 服务端路由处理 VueRoute在这里不需要做吧?
+      this.routes = this.routes.concat(module.SavRoute.parents)
+      this.moduleRoutes.push(module.SavRoute)
+    }
+    if (module.actions) { // 模块方法表
+      this.moduleActions[uri] = module.actions
+    }
+    router.moduleConfigs[uri] = module
+    router.emit('module', module)
+    for (let action of module.routes) {
+      router.emit('action', action)
+    }
+  }
 }
 
 export async function payloadStart (ctx, next) {

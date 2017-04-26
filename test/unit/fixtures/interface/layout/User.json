@@ -1,37 +1,38 @@
 {
   "moduleName": "User",
   "moduleGroup": "Layout",
-  "uri": "Layout/User",
+  "uri": "UserLayout",
+  "props": {},
   "routes": [
     {
-      "uri": "Layout/User/copyRight",
       "actionName": "copyRight",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "UserLayout.copyRight",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     },
     {
-      "uri": "Layout/User/userInfo",
       "actionName": "userInfo",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "UserLayout.userInfo",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     },
     {
-      "uri": "Layout/User/userNavMenu",
       "actionName": "userNavMenu",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "UserLayout.userNavMenu",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     }
   ]
 }

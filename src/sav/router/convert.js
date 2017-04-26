@@ -1,15 +1,15 @@
 import {convertCase, isString} from '../util'
 
 export function convertRoute (module, caseType = 'camel', prefix = '/') {
-  let {moduleName} = module
+  let {props, moduleName} = module
   // 解析模块路由
-  let moduleRoute = Object.assign({uri: module.uri}, module.route)
+  let moduleRoute = Object.assign({uri: module.uri}, props.route)
   let relative = convertPath(moduleRoute.path, caseType, moduleName)
   moduleRoute.path = prefix + relative
   let childs = []
-  let root = []
+  let parents = []
 
-  let isVue = module.view === 'vue'
+  let isVue = props.view === 'vue'
   let vueCase = 'pascal'
   let vueModule
   if (isVue) {
@@ -22,9 +22,16 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
 
   // 解析子路由
   for (let action of module.routes) {
-    if (~action.plugins.indexOf('route')) {
+    let plugins = action.tasks.map((it) => it.name)
+    let getProps = (name) => {
+      let index = plugins.indexOf(name)
+      if (~index) {
+        return action.tasks[index].props
+      }
+    }
+    if (~plugins.indexOf('route')) {
       let {actionName} = action
-      let args = action.props.route
+      let args = getProps('route')
       let route = {
         uri: action.uri,
         path: convertPath(args.path, caseType, actionName),
@@ -34,16 +41,16 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
       relative = path || ''
       if (path[0] === '/') { // 相对于根的路由
         path = prefix + (relative = path)
-        root.push(route)
+        parents.push(route)
       // } else if (path[0] === '~') { // 绝对路由 (暂时先去掉吧)
-      //   root.push(route)
+      //   parents.push(route)
       } else { // 相对于模块的路由,即子路由
         path = moduleRoute.path + (path ? ('/' + path) : '')
         childs.push(route)
       }
       route.path = path.replace(/\/\//g, '/')
       if (isVue) {
-        let vueProp = action.props.vue
+        let vueProp = getProps('vue')
         if (vueProp !== false) {
           let vueRoute = {
             component: convertCase(vueCase, `${moduleName}/${moduleName}_${actionName}`),
@@ -61,7 +68,7 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
     SavRoute: {
       route: moduleRoute,
       childs,
-      root
+      parents
     }
   }
   if (isVue) {

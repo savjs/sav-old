@@ -1,18 +1,18 @@
 {
   "SavRoute": {
     "route": {
-      "uri": "Api/Article",
+      "uri": "ArticleApi",
       "path": "/article"
     },
     "childs": [
       {
-        "uri": "Api/Article/comment",
+        "uri": "ArticleApi.comment",
         "path": "/article/comment/:aid",
         "methods": [
           "POST"
         ]
       }
     ],
-    "root": []
+    "parents": []
   }
 }

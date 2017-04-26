@@ -1,17 +1,18 @@
 {
   "moduleName": "Guest",
   "moduleGroup": "Layout",
-  "uri": "Layout/Guest",
+  "uri": "GuestLayout",
+  "props": {},
   "routes": [
     {
-      "uri": "Layout/Guest/copyRight",
       "actionName": "copyRight",
-      "plugins": [
-        "invoke"
-      ],
-      "props": {
-        "invoke": null
-      }
+      "uri": "GuestLayout.copyRight",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        }
+      ]
     }
   ]
 }

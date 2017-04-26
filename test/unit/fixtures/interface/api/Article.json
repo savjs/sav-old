@@ -1,26 +1,31 @@
 {
   "moduleName": "Article",
   "moduleGroup": "Api",
-  "uri": "Api/Article",
+  "uri": "ArticleApi",
+  "props": {},
   "routes": [
     {
-      "uri": "Api/Article/comment",
       "actionName": "comment",
-      "plugins": [
-        "res",
-        "route",
-        "req"
-      ],
-      "props": {
-        "res": null,
-        "route": {
-          "methods": [
-            "POST"
-          ],
-          "path": "comment/:aid"
+      "uri": "ArticleApi.comment",
+      "tasks": [
+        {
+          "name": "res",
+          "props": null
         },
-        "req": null
-      }
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "POST"
+            ],
+            "path": "comment/:aid"
+          }
+        },
+        {
+          "name": "req",
+          "props": null
+        }
+      ]
     }
   ]
 }

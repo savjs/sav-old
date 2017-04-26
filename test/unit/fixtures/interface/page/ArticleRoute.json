@@ -1,42 +1,42 @@
 {
   "SavRoute": {
     "route": {
-      "uri": "Page/Article",
+      "uri": "ArticlePage",
       "path": "/article"
     },
     "childs": [
       {
-        "uri": "Page/Article/list",
+        "uri": "ArticlePage.list",
         "path": "/article/list",
         "methods": [
           "GET"
         ]
       },
       {
-        "uri": "Page/Article/modify",
+        "uri": "ArticlePage.modify",
         "path": "/article/modify/:id?",
         "methods": [
           "GET"
         ]
       },
       {
-        "uri": "Page/Article/update",
+        "uri": "ArticlePage.update",
         "path": "/article/update/:aid",
         "methods": [
           "POST"
         ]
       },
       {
-        "uri": "Page/Article/comment",
+        "uri": "ArticlePage.comment",
         "path": "/article/comment/:aid",
         "methods": [
           "POST"
         ]
       }
     ],
-    "root": [
+    "parents": [
       {
-        "uri": "Page/Article/view",
+        "uri": "ArticlePage.view",
         "path": "/articles/:aid",
         "methods": [
           "GET"

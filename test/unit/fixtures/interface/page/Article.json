@@ -1,101 +1,117 @@
 {
   "moduleName": "Article",
   "moduleGroup": "Page",
-  "view": "vue",
-  "layout": "User",
-  "uri": "Page/Article",
+  "uri": "ArticlePage",
+  "props": {
+    "view": "vue",
+    "layout": "User"
+  },
   "routes": [
     {
-      "uri": "Page/Article/list",
       "actionName": "list",
-      "plugins": [
-        "route"
-      ],
-      "props": {
-        "route": {
-          "methods": [
-            "GET"
-          ]
+      "uri": "ArticlePage.list",
+      "tasks": [
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ]
+          }
         }
-      }
+      ]
     },
     {
-      "uri": "Page/Article/view",
       "actionName": "view",
-      "plugins": [
-        "req",
-        "route",
-        "res"
-      ],
-      "props": {
-        "req": null,
-        "route": {
-          "methods": [
-            "GET"
-          ],
-          "path": "/articles/:aid"
+      "uri": "ArticlePage.view",
+      "tasks": [
+        {
+          "name": "req",
+          "props": null
         },
-        "res": null
-      }
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ],
+            "path": "/articles/:aid"
+          }
+        },
+        {
+          "name": "res",
+          "props": null
+        }
+      ]
     },
     {
-      "uri": "Page/Article/modify",
       "actionName": "modify",
-      "plugins": [
-        "auth",
-        "route",
-        "vue"
-      ],
-      "props": {
-        "auth": null,
-        "route": {
-          "methods": [
-            "GET"
-          ],
-          "path": "modify/:id?"
+      "uri": "ArticlePage.modify",
+      "tasks": [
+        {
+          "name": "auth",
+          "props": null
         },
-        "vue": {
-          "component": "Article/ArticleModify"
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ],
+            "path": "modify/:id?"
+          }
+        },
+        {
+          "name": "vue",
+          "props": {
+            "component": "Article/ArticleModify"
+          }
         }
-      }
+      ]
     },
     {
-      "uri": "Page/Article/update",
       "actionName": "update",
-      "plugins": [
-        "auth",
-        "route",
-        "vue"
-      ],
-      "props": {
-        "auth": null,
-        "route": {
-          "methods": [
-            "POST"
-          ],
-          "path": "update/:aid"
+      "uri": "ArticlePage.update",
+      "tasks": [
+        {
+          "name": "auth",
+          "props": null
         },
-        "vue": {
-          "component": "Article/ArticleModify"
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "POST"
+            ],
+            "path": "update/:aid"
+          }
+        },
+        {
+          "name": "vue",
+          "props": {
+            "component": "Article/ArticleModify"
+          }
         }
-      }
+      ]
     },
     {
-      "uri": "Page/Article/comment",
       "actionName": "comment",
-      "plugins": [
-        "route",
-        "vue"
-      ],
-      "props": {
-        "route": {
-          "methods": [
-            "POST"
-          ],
-          "path": "comment/:aid"
+      "uri": "ArticlePage.comment",
+      "tasks": [
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "POST"
+            ],
+            "path": "comment/:aid"
+          }
         },
-        "vue": false
-      }
+        {
+          "name": "vue",
+          "props": false
+        }
+      ]
     }
   ]
 }

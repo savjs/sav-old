@@ -1,4 +1,4 @@
-import {isFunction, isUndefined} from '../util'
+import {isFunction, isUndefined, prop} from '../util'
 
 const CONFIG_KEY = '_CONFIG'
 
@@ -42,40 +42,44 @@ export function impl (intf) {
   }
 }
 
-export function functional (target) {
-  return target ? convertToFunction(target) : (target) => convertToFunction(target)
+export function functional (intf) {
+  return (target) => {
+    prop(intf, 'actions', convertToFunction(target))
+    return intf
+  }
 }
 
-export function generator (opts) {
-  if (typeof opts === 'function') {
-    return transform({})(opts)
+export function generator (props, opts) {
+  if (typeof props === 'function') {
+    return transform({})(props, opts)
   }
-  return transform(opts || {})
+  return transform(props || {}, opts)
 }
 
 export {generator as gen}
 
-function transform (opts) {
+function transform (moduleProps, moduleOpts) {
   return (target) => {
     let configs = refer(target)
-    let module = Object.assign({moduleName: target.name}, refer(target, true), opts)
-    module.uri = `${module.moduleGroup}/${module.moduleName}`
+    let module = Object.assign({moduleName: target.name}, moduleOpts)
+    module.uri = `${module.moduleName}${module.moduleGroup}`
+    module.props = Object.assign({}, refer(target, true), moduleProps)
     let routes = []
     for (let actionName in configs) {
-      let plugins = []
-      let props = {}
+      let tasks = []
       let action = {
-        uri: `${module.uri}/${actionName}`,
         actionName,
-        plugins,
-        props
+        uri: `${module.uri}.${actionName}`,
+        tasks
       }
       let config = configs[actionName]
       for (let item of config) {
         let [name, value] = item
         if (name) {
-          props[name] = isUndefined(value) ? null : value
-          plugins.push(name)
+          tasks.push({
+            name,
+            props: isUndefined(value) ? null : value
+          })
         }
       }
       routes.push(action)
@@ -91,18 +95,11 @@ export function convertToFunction (target) {
     let proto = target.prototype
     return Object.getOwnPropertyNames(proto).reduce((tar, it) => {
       if (!~skips.indexOf(it) && typeof proto[it] === 'function') {
-        tar[it] = () => {
-          return tar.$dispatch(it, proto[it], tar)
-        }
+        tar[it] = proto[it]
       }
       return tar
     }, {})
   } else {
-    for (let name in target) {
-      target[name] = ((func) => {
-        return target.$dispatch(name, func, target)
-      })(target[name])
-    }
     return target
   }
 }
