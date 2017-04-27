@@ -5,7 +5,11 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
   // 解析模块路由
   let moduleRoute = Object.assign({uri: module.uri}, props.route)
   let relative = convertPath(moduleRoute.path, caseType, moduleName)
-  moduleRoute.path = prefix + relative
+  let routePrefix = props.routePrefix || ''
+  if (routePrefix.length) {
+    routePrefix = normalPath(routePrefix + '/')
+  }
+  moduleRoute.path = normalPath(prefix + routePrefix + relative)
   let childs = moduleRoute.childs = []
   let parents = moduleRoute.parents = []
 
@@ -48,7 +52,7 @@ export function convertRoute (module, caseType = 'camel', prefix = '/') {
         path = moduleRoute.path + (path ? ('/' + path) : '')
         childs.push(route)
       }
-      route.path = path.replace(/\/\//g, '/')
+      route.path = normalPath(path)
       if (isVue) {
         let vueProp = getProps('vue')
         if (vueProp !== false) {
@@ -78,6 +82,10 @@ function convertPath (path, caseType, name) {
     path = convertCase(caseType, name)
   }
   return path
+}
+
+function normalPath (path) {
+  return path.replace(/\/\//g, '/')
 }
 
 /*

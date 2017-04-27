@@ -2,7 +2,9 @@
   "moduleName": "Article",
   "moduleGroup": "Api",
   "uri": "ArticleApi",
-  "props": {},
+  "props": {
+    "routePrefix": "api"
+  },
   "routes": [
     {
       "actionName": "comment",

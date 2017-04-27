@@ -4,6 +4,7 @@ import compose from 'koa-compose'
 import {isArray, isObject, isFunction, makeProp} from '../util'
 import {Config} from '../core/config'
 import {convertRoute} from './convert.js'
+import {matchModulesRoute} from './matchs.js'
 
 export class Router extends EventEmitter {
   constructor (config) {
@@ -14,9 +15,8 @@ export class Router extends EventEmitter {
     this.config = config    // 配置
     this.executer = null    // 执行器
     this.payloads = []      // 插件
-    this.moduleConfigs = {}       // 模块配置
-    this.moduleActions = {}       // 模块动作
-
+    this.modules = {}       // 模块
+    this.moduleActions = {}     // 模块动作
     this.moduleRoutes = []      // 模块路由
   }
   use (plugin) {
@@ -48,6 +48,9 @@ export class Router extends EventEmitter {
     this.executer = this.compose()
     return await this.executer(ctx)
   }
+  matchRoute (path, method) {
+    return matchModulesRoute(this.moduleRoutes, path, method)
+  }
 }
 
 let moduleTypes = ['Layout', 'Api', 'Page']
@@ -66,12 +69,12 @@ function walkModules (router, modules) {
       }
     }
     if (module.SavRoute) { // 服务端路由处理
-      this.moduleRoutes.push(module.SavRoute)
+      router.moduleRoutes.push(module.SavRoute)
     }
     if (module.actions) { // 模块方法表
-      this.moduleActions[uri] = module.actions
+      router.moduleActions[uri] = module.actions
     }
-    router.moduleConfigs[uri] = module
+    router.modules[uri] = module
     router.emit('module', module)
     for (let action of module.routes) {
       router.emit('action', action)

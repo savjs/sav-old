@@ -1,6 +1,8 @@
 import {ApiInterface, post, requestSchema, responseSchema} from 'sav/decorator'
 
-@ApiInterface()
+@ApiInterface({
+  routePrefix: 'api'
+})
 export default class Article {
   
   @requestSchema()

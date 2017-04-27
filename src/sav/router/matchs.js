@@ -1,7 +1,19 @@
 import pathToRegexp from 'path-to-regexp'
 
-export function matchModulesRoute (routers, path, method) {
-
+export function matchModulesRoute (moduleRoutes, path, method) {
+  let ret
+  for (let moduleRoute of moduleRoutes) {
+    if (moduleRoute.parents.length) {
+      ret = matchRouter(moduleRoute.parents, path, method)
+      if (ret) {
+        return ret
+      }
+    }
+  }
+  ret = matchRouter(moduleRoutes, path, method)
+  if (ret) {
+    return matchRouter(ret[0].childs, path, method)
+  }
 }
 
 /**
