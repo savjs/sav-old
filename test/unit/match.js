@@ -17,3 +17,15 @@ test('match.pages', (ava) => {
   router.declare(pages)
   expect(router.matchRoute('/article/comment/123', 'POST')).to.be.a('array')
 })
+
+test('match.apis', async (ava) => {
+  let router = new Router()
+  router.declare(apis)
+  let ctx = {
+    path: '/api/article/comment/123',
+    method: 'POST'
+  }
+  router._proxyModuleActions(ctx)
+  await ctx.sav.ArticleApi.comment()
+  console.log(ctx.comments)
+})

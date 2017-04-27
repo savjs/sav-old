@@ -9,7 +9,7 @@ test('Api', (ava) => {
   expect(apis).to.be.a('array')
   let api = apis[0]
   expect(api.actions).to.be.a('object')
-  expect(api.actions.comment).to.be.a('function')
+  expect(typeof api.actions.comment).to.eql('function')
 })
 
 test('Page', (ava) => {

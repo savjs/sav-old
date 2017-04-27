@@ -51,6 +51,14 @@ export class Router extends EventEmitter {
   matchRoute (path, method) {
     return matchModulesRoute(this.moduleRoutes, path, method)
   }
+  _matchContextRoute (ctx) {
+    let method = ctx.method.toUpperCase()
+    let path = ctx.path || ctx.originalUrl
+    return this.matchRoute(path, method)
+  }
+  _proxyModuleActions (ctx) {
+    proxyModuleActions(ctx, 'sav', this.moduleActions)
+  }
 }
 
 let moduleTypes = ['Layout', 'Api', 'Page']
@@ -84,25 +92,57 @@ function walkModules (router, modules) {
 
 export async function payloadStart (ctx, next) {
   makeProp(ctx)
+  proxyModuleActions(ctx, this.moduleActions)
   await next()
 }
 
 export async function payloadEnd (ctx, next) {
-  let method = ctx.method.toUpperCase()
-  let path = ctx.path || ctx.originalUrl
-  let matched = this.matchRoute(path, method)
+  let matched = this._matchContextRoute(ctx)
   if (matched) {
-    let [route, params] = matched
-    let action = route.action
-    ctx.prop({params, route, action})
     // 路由中间件
-    await executeMiddlewares(action.middlewares)
-    // @TODO 渲染
+    // await executeMiddlewares(action.middlewares)
+    // 渲染模块
   } else {
     await next()
   }
 }
 
-function executeMiddlewares (router, middlewares) {
+// function executeMiddlewares (router, middlewares) {
 
+// }
+
+function proxyModuleActions (ctx, name, modules) {
+  let cache = {}
+  let proxy = new Proxy(modules, {
+    get (target, moduleName) {
+      if (target.hasOwnProperty(moduleName)) {
+        let module = target[moduleName]
+        if (cache[moduleName]) {
+          return cache[moduleName]
+        }
+        let proxyModule = new Proxy(module, {
+          get (target, actionName) {
+            if (target.hasOwnProperty(actionName)) {
+              let cacheName = `${moduleName}.${actionName}`
+              if (cache[cacheName]) {
+                return cache[cacheName]
+              }
+              let fn = target[actionName]
+              if (isFunction(fn)) {
+                let proxyAction = cache[cacheName] = async () => {
+                  let args = [].slice.call(arguments)
+                  args.unshift(ctx)
+                  return fn.apply(proxyModule, args)
+                }
+                return proxyAction
+              }
+            }
+          }
+        })
+        cache[moduleName] = proxyModule
+        return proxyModule
+      }
+    }
+  })
+  ctx[name] = proxy
 }
