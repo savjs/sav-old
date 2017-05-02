@@ -174,9 +174,8 @@ export function makeState (ctx) {
 }
 
 export function makePromise (ctx, Promiser) {
-  let prop = ctx.prop
   Promiser || (Promiser = Promise)
-  prop({
+  ctx.prop({
     resolve: Promiser.resolve.bind(Promiser),
     reject: Promiser.reject.bind(Promiser),
     all: Promiser.all.bind(Promiser),
