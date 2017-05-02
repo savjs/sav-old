@@ -25,7 +25,7 @@ test('match.apis', async (ava) => {
     path: '/api/article/comment/123',
     method: 'POST'
   }
-  router._proxyModuleActions(ctx)
+  router.payload(ctx)
   await ctx.sav.ArticleApi.comment()
   console.log(ctx.comments)
 })

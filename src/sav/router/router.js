@@ -51,12 +51,15 @@ export class Router extends EventEmitter {
   matchRoute (path, method) {
     return matchModulesRoute(this.moduleRoutes, path, method)
   }
-  _matchContextRoute (ctx) {
+  matchCtxRoute (ctx) {
     let method = ctx.method.toUpperCase()
     let path = ctx.path || ctx.originalUrl
     return this.matchRoute(path, method)
   }
-  _proxyModuleActions (ctx) {
+  payload (ctx) {
+    makeProp(ctx)
+    makeState(ctx)
+    makePromise(ctx)
     proxyModuleActions(ctx, 'sav', this.moduleActions)
   }
 }
@@ -91,13 +94,12 @@ function walkModules (router, modules) {
 }
 
 export async function payloadStart (ctx, next) {
-  makeProp(ctx)
-  proxyModuleActions(ctx, this.moduleActions)
+  this.payload(ctx)
   await next()
 }
 
 export async function payloadEnd (ctx, next) {
-  let matched = this._matchContextRoute(ctx)
+  let matched = this.matchCtxRoute(ctx)
   if (matched) {
     // 路由中间件
     // await executeMiddlewares(action.middlewares)
@@ -145,4 +147,41 @@ function proxyModuleActions (ctx, name, modules) {
     }
   })
   ctx[name] = proxy
+}
+
+function makeState (ctx) {
+  let prop = ctx.prop
+  let state = {}
+  prop.getter('state', () => state)
+  prop('setState', (...args) => {
+    let len = args.length
+    if (len < 1) {
+      return
+    } else if (len === 1) {
+      if (Array.isArray(args[0])) {
+        args = args[0]
+      } else {
+        state = {...state, ...args[0]}
+        return
+      }
+    }
+    args.unshift(state)
+    state = Object.assign.apply(state, args)
+  })
+  prop('replaceState', (newState) => {
+    state = newState || {}
+  })
+}
+
+function makePromise (ctx, Promiser) {
+  let prop = ctx.prop
+  Promiser || (Promiser = Promise)
+  prop({
+    resolve: Promiser.resolve.bind(Promiser),
+    reject: Promiser.reject.bind(Promiser),
+    all: Promiser.all.bind(Promiser),
+    then: (fn, fail) => {
+      return new Promiser(fn, fail)
+    }
+  })
 }
