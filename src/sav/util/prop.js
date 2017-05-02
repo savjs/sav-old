@@ -11,7 +11,11 @@ function makePropFunc (target, propName) {
         Object.defineProperty(target, name, {[`${propName}`]: key[name], writable: true})
       }
     } else {
-      Object.defineProperty(target, key, {[`${propName}`]: value, writable: true})
+      let descriptor = {[`${propName}`]: value}
+      if (propName === 'value') {
+        descriptor.writable = true
+      }
+      Object.defineProperty(target, key, descriptor)
     }
   }
 }

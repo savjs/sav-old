@@ -51,7 +51,7 @@ export class Router extends EventEmitter {
   matchRoute (path, method) {
     return matchModulesRoute(this.moduleRoutes, path, method)
   }
-  matchCtxRoute (ctx) {
+  matchContextRoute (ctx) {
     let method = ctx.method.toUpperCase()
     let path = ctx.path || ctx.originalUrl
     return this.matchRoute(path, method)
@@ -99,7 +99,7 @@ export async function payloadStart (ctx, next) {
 }
 
 export async function payloadEnd (ctx, next) {
-  let matched = this.matchCtxRoute(ctx)
+  let matched = this.matchContextRoute(ctx)
   if (matched) {
     // 路由中间件
     // await executeMiddlewares(action.middlewares)
@@ -149,7 +149,7 @@ function proxyModuleActions (ctx, name, modules) {
   ctx[name] = proxy
 }
 
-function makeState (ctx) {
+export function makeState (ctx) {
   let prop = ctx.prop
   let state = {}
   prop.getter('state', () => state)
@@ -173,7 +173,7 @@ function makeState (ctx) {
   })
 }
 
-function makePromise (ctx, Promiser) {
+export function makePromise (ctx, Promiser) {
   let prop = ctx.prop
   Promiser || (Promiser = Promise)
   prop({
