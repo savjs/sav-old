@@ -60,6 +60,7 @@ export class Router extends EventEmitter {
     makeProp(ctx)
     makeState(ctx)
     makePromise(ctx)
+    makeRender(ctx)
     proxyModuleActions(ctx, 'sav', this.moduleActions)
   }
 }
@@ -88,6 +89,15 @@ function walkModules (router, modules) {
     router.modules[uri] = module
     router.emit('module', module)
     for (let action of module.routes) {
+      let middlewares = []
+      makeProp(action, false)({
+        middlewares,
+        props: action.tasks.reduce((obj, it) => {
+          obj[it.name] = it
+          middlewares.push(it)
+          return obj
+        }, {})
+      })
       router.emit('action', action)
     }
   }
@@ -103,7 +113,8 @@ export async function payloadEnd (ctx, next) {
   if (matched) {
     // 路由中间件
     // await executeMiddlewares(action.middlewares)
-    // 渲染模块
+    // 渲染
+    await ctx.render()
   } else {
     await next()
   }
@@ -182,5 +193,24 @@ export function makePromise (ctx, Promiser) {
     then: (fn, fail) => {
       return new Promiser(fn, fail)
     }
+  })
+}
+
+export function makeRender (ctx) {
+  ctx.prop({
+    renderEngine: '',
+    renderer: null,
+    renderOptions: null,
+    setViewEngine: (renderer, type, opts) => {
+      ctx.renderer = renderer
+      ctx.renderEngine = type || renderer.name
+      ctx.renderOptions = opts
+    },
+    async render () {
+      return ctx.renderer(ctx, ctx.renderOptions)
+    }
+  })
+  ctx.setViewEngine('json', (ctx) => {
+    ctx.body = ctx.state
   })
 }
