@@ -1,10 +1,12 @@
 import {EventEmitter} from 'events'
 import compose from 'koa-compose'
 
-import {isArray, isObject, isFunction, makeProp} from '../util'
+import {isArray, isObject, isFunction, makeProp, prop} from '../util'
 import {Config} from '../core/config'
-import {convertRoute} from './convert.js'
+import {Exception} from '../core/exception.js'
 import {matchModulesRoute} from './matchs.js'
+import {executeMiddlewares} from './executer.js'
+import {routePlugin} from '../plugins/route.js'
 
 export class Router extends EventEmitter {
   constructor (config) {
@@ -18,6 +20,8 @@ export class Router extends EventEmitter {
     this.modules = {}       // 模块
     this.moduleActions = {}     // 模块动作
     this.moduleRoutes = []      // 模块路由
+    this.routes = {}            // 模块路由
+    this.use(routePlugin)
   }
   use (plugin) {
     if (isFunction(plugin)) {
@@ -39,7 +43,14 @@ export class Router extends EventEmitter {
   compose () {
     let payloads = [payloadStart.bind(this)].concat(this.payloads).concat([payloadEnd.bind(this)])
     let payload = compose(payloads)
-    return payload
+    return async (ctx, next) => {
+      try {
+        await payload(ctx)
+      } catch (e) {
+        throw new Exception(e)
+      }
+      return next()
+    }
   }
   async exec (ctx) {
     if (this.executer) {
@@ -49,36 +60,52 @@ export class Router extends EventEmitter {
     return await this.executer(ctx)
   }
   matchRoute (path, method) {
-    return matchModulesRoute(this.moduleRoutes, path, method)
+    let ret = matchModulesRoute(this.moduleRoutes, path, method)
+    return ret && JSON.parse(JSON.stringify(ret))
   }
   matchContextRoute (ctx) {
     let method = ctx.method.toUpperCase()
     let path = ctx.path || ctx.originalUrl
-    return this.matchRoute(path, method)
+    let matched = this.matchRoute(path, method)
+    if (matched) {
+      let [route, params] = matched
+      ctx.route = route
+      ctx.params = params
+    }
+    return matched
   }
   payload (ctx) {
     makeProp(ctx)
     makeState(ctx)
     makePromise(ctx)
     makeRender(ctx)
-    proxyModuleActions(ctx, 'sav', this.moduleActions)
+    makeSav(ctx, this)
   }
 }
 
-let moduleTypes = ['Layout', 'Api', 'Page']
-
 function walkModules (router, modules) {
-  let {config} = router
   for (let module of modules) {
-    let {uri, moduleGroup} = module
-    if (moduleTypes.indexOf(moduleGroup) > 0) { // Api 或 Page 类型的需要路由
-      // 路由部分可以提前生成, 减少加载编译时间
-      if (!module.SavRoute) { // 注入 SavRoute 和 VueRoute
-        let routeInfo = convertRoute(module,
-          config.get('caseType', 'camel'),
-          config.env('prefix', '/'))
-        Object.assign(module, routeInfo)
-      }
+    let {uri} = module
+    makeProp(module, false)
+    for (let route of module.routes) {
+      let middlewares = []
+      makeProp(route, false)({
+        middlewares,
+        props: route.tasks.reduce((obj, it) => {
+          prop(it, 'setMiddleware', (middleware) => {
+            it.middleware = middleware
+          })
+          obj[it.name] = it
+          middlewares.push(it)
+          return obj
+        }, {})
+      })
+      router.routes[route.uri] = route
+    }
+    router.modules[uri] = module
+    router.emit('module', module)
+    for (let route of module.routes) {
+      router.emit('route', route)
     }
     if (module.SavRoute) { // 服务端路由处理
       router.moduleRoutes.push(module.SavRoute)
@@ -86,45 +113,29 @@ function walkModules (router, modules) {
     if (module.actions) { // 模块方法表
       router.moduleActions[uri] = module.actions
     }
-    router.modules[uri] = module
-    router.emit('module', module)
-    for (let action of module.routes) {
-      let middlewares = []
-      makeProp(action, false)({
-        middlewares,
-        props: action.tasks.reduce((obj, it) => {
-          obj[it.name] = it
-          middlewares.push(it)
-          return obj
-        }, {})
-      })
-      router.emit('action', action)
-    }
   }
 }
 
 export async function payloadStart (ctx, next) {
   this.payload(ctx)
+  // 匹配路由
+  this.matchContextRoute(ctx)
   await next()
 }
 
-export async function payloadEnd (ctx, next) {
-  let matched = this.matchContextRoute(ctx)
-  if (matched) {
-    // 路由中间件
-    // await executeMiddlewares(action.middlewares)
-    // 渲染
-    await ctx.render()
-  } else {
-    await next()
+class NotRoutedException extends Exception {}
+
+export async function payloadEnd (ctx) {
+  if (!ctx.route) {
+    throw new NotRoutedException('Not routed')
   }
+  // 路由中间件
+  await executeMiddlewares(this.routes[ctx.route.uri].middlewares, ctx)
+  // 渲染
+  await ctx.render()
 }
 
-// function executeMiddlewares (router, middlewares) {
-
-// }
-
-function proxyModuleActions (ctx, name, modules) {
+function proxyModuleActions (ctx, modules) {
   let cache = {}
   let proxy = new Proxy(modules, {
     get (target, moduleName) {
@@ -157,7 +168,16 @@ function proxyModuleActions (ctx, name, modules) {
       }
     }
   })
-  ctx[name] = proxy
+  return proxy
+}
+
+function makeSav (ctx, router) {
+  ctx.prop({
+    sav: proxyModuleActions(ctx, router.moduleActions),
+    async dispatch (uri) {
+      return ctx.sav[(uri = uri.split('.')).shift()][uri.shift()]()
+    }
+  })
 }
 
 export function makeState (ctx) {
@@ -169,7 +189,7 @@ export function makeState (ctx) {
     if (len < 1) {
       return
     } else if (len === 1) {
-      if (Array.isArray(args[0])) {
+      if (Array.isArray(args[0])) { // for Promise.all
         args = args[0]
       } else {
         state = {...state, ...args[0]}
@@ -197,9 +217,15 @@ export function makePromise (ctx, Promiser) {
 }
 
 export function makeRender (ctx) {
+  let renderers = {
+    json (ctx) {
+      ctx.body = ctx.state
+    }
+  }
   ctx.prop({
-    renderEngine: '',
-    renderer: null,
+    renderEngine: 'json',
+    renderer: renderers.json,
+    renderers,
     renderOptions: null,
     setViewEngine: (renderer, type, opts) => {
       ctx.renderer = renderer
@@ -209,8 +235,5 @@ export function makeRender (ctx) {
     async render () {
       return ctx.renderer(ctx, ctx.renderOptions)
     }
-  })
-  ctx.setViewEngine('json', (ctx) => {
-    ctx.body = ctx.state
   })
 }

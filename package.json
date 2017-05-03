@@ -6,7 +6,7 @@
   "module": "dist/sav.es.js",
   "jsnext:main": "dist/sav.es.js",
   "scripts": {
-    "start": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
+    "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
     "build": "rollup -c && node .",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",

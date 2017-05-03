@@ -5,8 +5,8 @@ import {ApiInterface, post, requestSchema, responseSchema} from 'sav/decorator'
 })
 export default class Article {
   
-  @requestSchema()
-  @post('comment/:aid')
   @responseSchema()
+  @post('comment/:aid')
+  @requestSchema()
   comment() {}
 }

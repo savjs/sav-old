@@ -20,3 +20,5 @@ export class Exception extends Error {
     }
   }
 }
+
+export class NotImplementedException extends Exception {}

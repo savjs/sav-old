@@ -1,4 +1,5 @@
-import {Exception, isPromise, isFunction} from '@sav/util'
+import {Exception} from '../core/exception'
+import {isPromise, isFunction} from '../util'
 
 export class ExecuterException extends Exception {
   constructor (message, step) {
@@ -10,13 +11,11 @@ export class ExecuterException extends Exception {
 export async function executeMiddlewares (queues, ctx) {
   for (let it of queues) {
     let {name, middleware} = it
-    if (isFunction(it)) {
-      middleware = it
-    }
     if (isFunction(middleware)) {
       try {
+        // console.log('exec', name, ctx.path)
         let ret = middleware(ctx)
-        if (ret && isPromise(ret)) {
+        if (isPromise(ret)) {
           ret = await ret
         }
       } catch (err) {
@@ -24,5 +23,4 @@ export async function executeMiddlewares (queues, ctx) {
       }
     }
   }
-  return ctx
 }

@@ -12,11 +12,40 @@
       "uri": "ArticlePage.list",
       "tasks": [
         {
+          "name": "meta",
+          "props": {
+            "keywords": "关键字列表",
+            "description": "页面描述"
+          }
+        },
+        {
+          "name": "title",
+          "props": "文章列表"
+        },
+        {
           "name": "route",
           "props": {
             "methods": [
               "GET"
             ]
+          }
+        },
+        {
+          "name": "res",
+          "props": {
+            "props": {
+              "articles": "Array<ArticleItem>"
+            },
+            "refs": {
+              "ArticleItem": {
+                "name": "ArticleItem",
+                "props": {
+                  "id": "Number",
+                  "title": "String",
+                  "content": "String"
+                }
+              }
+            }
           }
         }
       ]
@@ -27,7 +56,11 @@
       "tasks": [
         {
           "name": "req",
-          "props": null
+          "props": {
+            "props": {
+              "aid": "String"
+            }
+          }
         },
         {
           "name": "route",
@@ -40,7 +73,11 @@
         },
         {
           "name": "res",
-          "props": null
+          "props": {
+            "props": {
+              "article": "ArticleItem"
+            }
+          }
         }
       ]
     },
@@ -48,6 +85,12 @@
       "actionName": "modify",
       "uri": "ArticlePage.modify",
       "tasks": [
+        {
+          "name": "vue",
+          "props": {
+            "component": "Article/ArticleModify"
+          }
+        },
         {
           "name": "auth",
           "props": null
@@ -60,12 +103,6 @@
             ],
             "path": "modify/:id?"
           }
-        },
-        {
-          "name": "vue",
-          "props": {
-            "component": "Article/ArticleModify"
-          }
         }
       ]
     },
@@ -73,6 +110,12 @@
       "actionName": "update",
       "uri": "ArticlePage.update",
       "tasks": [
+        {
+          "name": "vue",
+          "props": {
+            "component": "Article/ArticleModify"
+          }
+        },
         {
           "name": "auth",
           "props": null
@@ -85,12 +128,6 @@
             ],
             "path": "update/:aid"
           }
-        },
-        {
-          "name": "vue",
-          "props": {
-            "component": "Article/ArticleModify"
-          }
         }
       ]
     },
@@ -99,6 +136,10 @@
       "uri": "ArticlePage.comment",
       "tasks": [
         {
+          "name": "vue",
+          "props": false
+        },
+        {
           "name": "route",
           "props": {
             "methods": [
@@ -106,10 +147,6 @@
             ],
             "path": "comment/:aid"
           }
-        },
-        {
-          "name": "vue",
-          "props": false
         }
       ]
     }

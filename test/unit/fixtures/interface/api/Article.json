@@ -11,7 +11,7 @@
       "uri": "ArticleApi.comment",
       "tasks": [
         {
-          "name": "res",
+          "name": "req",
           "props": null
         },
         {
@@ -24,7 +24,7 @@
           }
         },
         {
-          "name": "req",
+          "name": "res",
           "props": null
         }
       ]
