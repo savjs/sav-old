@@ -4,16 +4,16 @@ import {resolve} from 'path'
 import {writeFileSync, readFileSync} from 'fs'
 import {convertRoute} from 'sav/router'
 
-import ArticleApi from './fixtures/interface/api/Article.js'
-import ArticlePage from './fixtures/interface/page/Article.js'
+import ArticleApi from '../fixtures/interface/api/Article.js'
+import ArticlePage from '../fixtures/interface/page/Article.js'
 
 let maps = {
   ArticleApi,
   ArticlePage
 }
 let files = {
-  ArticleApi: './fixtures/interface/api/ArticleRoute.json',
-  ArticlePage: './fixtures/interface/page/ArticleRoute.json'
+  ArticleApi: '../fixtures/interface/api/ArticleRoute.json',
+  ArticlePage: '../fixtures/interface/page/ArticleRoute.json'
 }
 
 test('convertRoute.compare|write', (ava) => {

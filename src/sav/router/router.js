@@ -1,7 +1,7 @@
 import {EventEmitter} from 'events'
 import compose from 'koa-compose'
 
-import {isArray, isObject, isFunction, makeProp, prop} from '../util'
+import {isArray, isObject, isFunction, makeProp, prop, promise} from '../util'
 import {Config} from '../core/config'
 import {Exception} from '../core/exception.js'
 import {matchModulesRoute} from './matchs.js'
@@ -41,6 +41,7 @@ export class Router extends EventEmitter {
     walkModules(this, isArray(modules) ? modules : [modules])
   }
   compose () {
+    // @TODO 异常处理 渲染引擎
     let payloads = [payloadStart.bind(this)].concat(this.payloads).concat([payloadEnd.bind(this)])
     let payload = compose(payloads)
     return payload
@@ -52,28 +53,19 @@ export class Router extends EventEmitter {
     this.executer = this.compose()
     return await this.executer(ctx)
   }
-  matchRoute (path, method) {
-    let ret = matchModulesRoute(this.moduleRoutes, path, method)
-    return ret && JSON.parse(JSON.stringify(ret))
+}
+
+export function matchContextRoute (ctx, router) {
+  let method = ctx.method.toUpperCase()
+  let path = ctx.path || ctx.originalUrl
+  let matched = matchModulesRoute(router.moduleRoutes, path, method)
+  if (matched) {
+    matched = JSON.parse(JSON.stringify(matched))
+    let [route, params] = matched
+    ctx.route = route
+    ctx.params = params
   }
-  matchContextRoute (ctx) {
-    let method = ctx.method.toUpperCase()
-    let path = ctx.path || ctx.originalUrl
-    let matched = this.matchRoute(path, method)
-    if (matched) {
-      let [route, params] = matched
-      ctx.route = route
-      ctx.params = params
-    }
-    return matched
-  }
-  payload (ctx) {
-    makeProp(ctx)
-    makeState(ctx)
-    makePromise(ctx)
-    makeRender(ctx)
-    makeSav(ctx, this)
-  }
+  return matched
 }
 
 function walkModules (router, modules) {
@@ -106,11 +98,11 @@ function walkModules (router, modules) {
     if (module.actions) { // 模块方法表
       router.moduleActions[uri] = module.actions
     }
-    // 合并layout中间件
     if (module.moduleGroup === 'Layout') {
+      // 合并layout模块下的invoke中间件
       let middlewares = module.routes.reduce((ret, route) => {
         let arr = route.middlewares.reduce((queue, item) => {
-          if (item.name === 'invoke') {
+          if (item.name === 'invoke') { // 只处理invoke之后的中间件, 目前也只有schema
             queue.push(0)
           } else if (queue.length) {
             if (isFunction(item.middleware)) {
@@ -130,10 +122,16 @@ function walkModules (router, modules) {
   }
 }
 
+export function initSav (ctx, router) {
+  makeProp(ctx)
+  makeSav(ctx, router)
+  makeRender(ctx)
+}
+
 export async function payloadStart (ctx, next) {
-  this.payload(ctx)
+  initSav(ctx, this)
   // 匹配路由
-  this.matchContextRoute(ctx)
+  matchContextRoute(ctx, this)
   await next()
 }
 
@@ -202,48 +200,34 @@ function proxyModuleActions (ctx, modules) {
 }
 
 function makeSav (ctx, router) {
-  ctx.prop({
-    sav: proxyModuleActions(ctx, router.moduleActions),
-    async dispatch (uri) {
-      return ctx.sav[(uri = uri.split('.')).shift()][uri.shift()]()
-    }
-  })
-}
-
-export function makeState (ctx) {
+  // 注入 state promise sav 等
   let prop = ctx.prop
   let state = {}
   prop.getter('state', () => state)
-  prop('setState', (...args) => {
-    let len = args.length
-    if (len < 1) {
-      return
-    } else if (len === 1) {
-      if (Array.isArray(args[0])) { // for Promise.all
-        args = args[0]
-      } else {
-        state = {...state, ...args[0]}
+  prop(Object.assign({
+    sav: proxyModuleActions(ctx, router.moduleActions),
+    async dispatch (uri) {
+      return ctx.sav[(uri = uri.split('.')).shift()][uri.shift()]()
+    },
+    setState (...args) {
+      let len = args.length
+      if (len < 1) {
         return
+      } else if (len === 1) {
+        if (Array.isArray(args[0])) { // for Promise.all
+          args = args[0]
+        } else {
+          state = {...state, ...args[0]}
+          return
+        }
       }
+      args.unshift(state)
+      state = Object.assign.apply(state, args)
+    },
+    replaceState (newState) {
+      state = newState || {}
     }
-    args.unshift(state)
-    state = Object.assign.apply(state, args)
-  })
-  prop('replaceState', (newState) => {
-    state = newState || {}
-  })
-}
-
-export function makePromise (ctx, Promiser) {
-  Promiser || (Promiser = Promise)
-  ctx.prop({
-    resolve: Promiser.resolve.bind(Promiser),
-    reject: Promiser.reject.bind(Promiser),
-    all: Promiser.all.bind(Promiser),
-    then: (fn, fail) => {
-      return new Promiser(fn, fail)
-    }
-  })
+  }, promise))
 }
 
 export function makeRender (ctx) {

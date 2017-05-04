@@ -13,7 +13,11 @@ export default {
   external: [
     'bluebird',
     'consolidate',
-    'koa-compose',
+
+    // 'koa-compose',
+    // 'sav-schema',
+    // 'path-to-regexp',
+
     'vue',
     'vue-router',
     'vue-server-renderer',

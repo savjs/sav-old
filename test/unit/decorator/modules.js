@@ -1,9 +1,9 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import apis from './fixtures/implements/api/index.js'
-import pages from './fixtures/implements/page/index.js'
-import layouts from './fixtures/implements/layout/index.js'
+import apis from '../fixtures/implements/api/index.js'
+import pages from '../fixtures/implements/page/index.js'
+import layouts from '../fixtures/implements/layout/index.js'
 
 test('Api', (ava) => {
   expect(apis).to.be.a('array')

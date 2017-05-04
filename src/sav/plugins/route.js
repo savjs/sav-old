@@ -18,7 +18,7 @@ export function routePlugin (sav) {
     },
     route ({props: {route}}) {
       if (route) {
-        route.setMiddleware(async (ctx) => {
+        route.setMiddleware((ctx) => {
           return ctx.dispatch(ctx.route.uri)
         })
       }

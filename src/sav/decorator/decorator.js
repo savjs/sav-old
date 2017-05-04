@@ -62,7 +62,7 @@ function transform (moduleProps, moduleOpts) {
   return (target) => {
     let configs = refer(target)
     let module = Object.assign({moduleName: target.name}, moduleOpts)
-    module.uri = `${module.moduleName}${module.moduleGroup}`
+    module.uri = module.moduleName + (module.moduleGroup || '')
     module.props = Object.assign({}, refer(target, true), moduleProps)
     let routes = []
     for (let actionName in configs) {
