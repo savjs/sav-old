@@ -2,47 +2,51 @@ import test from 'ava'
 import {expect} from 'chai'
 import {Router, Exception, authPlugin, auth, get, Api, ApiInterface} from 'sav/index.js'
 
+@ApiInterface()
+class Test {
+  @get()
+  @auth()
+  test () {}
+
+  @get()
+  noop () {}
+}
+
 function createRouter (config) {
   let router = new Router(config)
   router.use(authPlugin)
-  @ApiInterface()
-  class TestIntf {
-    @get()
-    @auth()
-    test () {}
 
-    @get()
-    noop () {}
-  }
-  @Api(TestIntf)
-  class Test {
+  class TestApi {
     test () {}
     noop () {}
   }
-  router.declare(Test)
+  let mod = Api(JSON.parse(JSON.stringify(Test)))(TestApi)
+  router.declare(mod)
   return router
 }
 
 test('no auth', async (ava) => {
   let router = createRouter()
-  router.exec({
-    path: '/Test/test',
-    method: 'GET'
-  }).then(() => {
-    throw new Error('error')
-  }).catch((err) => {
+  try {
+    await router.exec({
+      path: '/test/test',
+      method: 'GET'
+    })
+  } catch (err) {
     expect(err instanceof Exception).to.eql(true)
+  }
+  await router.exec({
+    path: '/test/noop',
+    method: 'GET'
   })
 })
 
 test('pass auth', async (ava) => {
-  let router = createRouter()
+  let router = createRouter({
+    auth () {}
+  })
   await router.exec({
-    path: '/Test/test',
+    path: '/test/test',
     method: 'GET'
   })
-  // await router.exec({
-  //   path: '/Test/noop',
-  //   method: 'GET'
-  // })
 })

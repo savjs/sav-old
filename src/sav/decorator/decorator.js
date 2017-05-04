@@ -56,6 +56,14 @@ export function generator (props, opts) {
   return transform(props || {}, opts)
 }
 
+export function DeclareModule (factory) {
+  return (props) => {
+    return (target) => {
+      return functional(factory(props)(target))(target)
+    }
+  }
+}
+
 export {generator as gen}
 
 function transform (moduleProps, moduleOpts) {

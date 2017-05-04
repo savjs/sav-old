@@ -1,4 +1,4 @@
-import {gen, quickConf, functional} from './decorator'
+import {gen, quickConf, functional, DeclareModule} from './decorator'
 
 export const auth = quickConf('auth')
 export const vue = quickConf('vue')
@@ -28,3 +28,7 @@ export {responseSchema as res}
 export {functional as Api}
 export {functional as Page}
 export {functional as Layout}
+
+export const ApiModule = DeclareModule(ApiInterface)
+export const PageModule = DeclareModule(PageInterface)
+export const LayoutModule = DeclareModule(LayoutInterface)

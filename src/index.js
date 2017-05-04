@@ -9,7 +9,8 @@ import {
   conf, quickConf, props,
   route, head, options, get, post, put, patch, del,
   auth, vue, invoke, title, meta, req, res,
-  PageInterface, ApiInterface, LayoutInterface
+  PageInterface, ApiInterface, LayoutInterface,
+  PageModule, ApiModule, LayoutModule
 } from './sav/decorator'
 
 let decorators = {
@@ -36,7 +37,10 @@ let decorators = {
   res,
   PageInterface,
   ApiInterface,
-  LayoutInterface
+  LayoutInterface,
+  PageModule,
+  ApiModule,
+  LayoutModule
 }
 
 export {decorators}
@@ -44,5 +48,9 @@ export {decorators}
 export {Api}
 export {Page}
 export {Layout}
+
+export {ApiModule}
+export {PageModule}
+export {LayoutModule}
 
 export {props}

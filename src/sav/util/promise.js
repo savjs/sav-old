@@ -3,9 +3,7 @@ let promise = {
   resolve: PROMISE.resolve.bind(PROMISE),
   reject: PROMISE.reject.bind(PROMISE),
   all: PROMISE.all.bind(PROMISE),
-  then: (fn, reject) => {
-    return new PROMISE(fn, reject)
-  }
+  promise: (fn, cancelFn) => { return new Promise(fn, cancelFn) }
 }
 
 export {promise}

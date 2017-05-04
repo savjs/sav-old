@@ -47,11 +47,9 @@ export class Router extends EventEmitter {
     return payload
   }
   async exec (ctx) {
-    if (this.executer) {
-      return await this.executer(ctx)
-    }
-    this.executer = this.compose()
-    return await this.executer(ctx)
+    this.executer || (this.executer = this.compose())
+    await this.executer(ctx)
+    return ctx
   }
 }
 

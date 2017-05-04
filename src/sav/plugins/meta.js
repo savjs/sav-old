@@ -17,7 +17,7 @@ export function metaPlugin (sav) {
     },
     route ({props: {meta}}) {
       meta && meta.setMiddleware((ctx) => {
-        ctx.setMeta({[`${metaKey}`]: meta.props})
+        ctx.setMeta(meta.props)
       })
     }
   })
