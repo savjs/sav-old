@@ -11,6 +11,10 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": "ResCopyRight"
         }
       ]
     },
@@ -21,6 +25,10 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": "ResUserInfo"
         }
       ]
     },
@@ -31,6 +39,10 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": "ResNavMenu"
         }
       ]
     }

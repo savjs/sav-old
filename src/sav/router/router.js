@@ -43,14 +43,7 @@ export class Router extends EventEmitter {
   compose () {
     let payloads = [payloadStart.bind(this)].concat(this.payloads).concat([payloadEnd.bind(this)])
     let payload = compose(payloads)
-    return async (ctx, next) => {
-      try {
-        await payload(ctx)
-      } catch (e) {
-        throw new Exception(e)
-      }
-      return next()
-    }
+    return payload
   }
   async exec (ctx) {
     if (this.executer) {
@@ -113,6 +106,27 @@ function walkModules (router, modules) {
     if (module.actions) { // 模块方法表
       router.moduleActions[uri] = module.actions
     }
+    // 合并layout中间件
+    if (module.moduleGroup === 'Layout') {
+      let middlewares = module.routes.reduce((ret, route) => {
+        let arr = route.middlewares.reduce((queue, item) => {
+          if (item.name === 'invoke') {
+            queue.push(0)
+          } else if (queue.length) {
+            if (isFunction(item.middleware)) {
+              queue.push(item)
+            }
+          }
+          return queue
+        }, [])
+        arr.shift()
+        if (arr.length) {
+          return ret.concat(arr)
+        }
+        return ret
+      }, [])
+      module.middlewares = middlewares
+    }
   }
 }
 
@@ -129,10 +143,26 @@ export async function payloadEnd (ctx) {
   if (!ctx.route) {
     throw new NotRoutedException('Not routed')
   }
-  // 路由中间件
-  await executeMiddlewares(this.routes[ctx.route.uri].middlewares, ctx)
+  await Promise.all([
+    // 路由
+    executeMiddlewares(this.routes[ctx.route.uri].middlewares, ctx),
+    // 布局并行
+    executeModuleLayout(ctx, this)
+  ])
   // 渲染
   await ctx.render()
+}
+
+async function executeModuleLayout (ctx, router) {
+  let moduleName = ctx.route.uri.split('.').shift()
+  let module = router.modules[moduleName]
+  if (module && module.props.layout) {
+    let layout = router.modules[module.props.layout]
+    if (layout) {
+      await ctx.sav[module.props.layout].invoke()
+      return executeMiddlewares(layout.middlewares, ctx)
+    }
+  }
 }
 
 function proxyModuleActions (ctx, modules) {

@@ -11,6 +11,10 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": "ResCopyRight"
         }
       ]
     },
@@ -21,6 +25,41 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": {
+            "name": "ResUserInfo",
+            "props": {
+              "userInfo": "UserInfo"
+            },
+            "refs": {
+              "Role": {
+                "name": "Role",
+                "enums": [
+                  {
+                    "key": "user",
+                    "value": "user"
+                  },
+                  {
+                    "key": "guest",
+                    "value": "guest"
+                  },
+                  {
+                    "key": "admin",
+                    "value": "admin"
+                  }
+                ]
+              },
+              "UserInfo": {
+                "props": {
+                  "name": "String",
+                  "id": "Number",
+                  "role": "Role"
+                }
+              }
+            }
+          }
         }
       ]
     },
@@ -31,6 +70,23 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": {
+            "name": "ResNavMenu",
+            "props": {
+              "menus": "Array<NavMenuItem>"
+            },
+            "refs": {
+              "NavMenuItem": {
+                "props": {
+                  "title": "String",
+                  "url": "String"
+                }
+              }
+            }
+          }
         }
       ]
     }

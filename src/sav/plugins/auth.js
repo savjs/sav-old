@@ -1,4 +1,3 @@
-import {convertCase} from '../util'
 import {NotImplementedException} from '../core/exception.js'
 
 export function authPlugin (sav) {

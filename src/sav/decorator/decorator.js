@@ -90,7 +90,7 @@ function transform (moduleProps, moduleOpts) {
 }
 
 let skips = ['constructor']
-export function convertToFunction (target) {
+function convertToFunction (target) {
   if (isFunction(target)) {
     let proto = target.prototype
     return Object.getOwnPropertyNames(proto).reduce((tar, it) => {

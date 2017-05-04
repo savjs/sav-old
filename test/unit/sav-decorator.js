@@ -28,14 +28,11 @@ test('Layout', (ava) => {
   let admin = layouts[0]
   expect(admin.actions).to.be.a('object')
   expect(admin.actions.invoke).to.be.a('function')
-  expect(admin.actions.copyRight).to.be.a('function')
-  expect(admin.actions.userInfo).to.be.a('function')
   expect(admin.actions.adminNavMenu).to.be.a('function')
 
   let user = layouts[1]
   expect(user.actions).to.be.a('object')
   expect(user.actions.invoke).to.be.a('function')
-  expect(user.actions.copyRight).to.be.a('function')
   expect(user.actions.userInfo).to.be.a('function')
   expect(user.actions.userNavMenu).to.be.a('function')
 

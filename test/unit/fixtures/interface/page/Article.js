@@ -2,7 +2,7 @@ import {PageInterface, post, get, auth, vue, req, res, meta, title} from 'sav/de
 
 @PageInterface({
   view: 'vue',
-  layout: 'User'
+  layout: 'UserLayout'
 })
 export default class Article {
   @res({

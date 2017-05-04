@@ -11,6 +11,22 @@
         {
           "name": "invoke",
           "props": null
+        },
+        {
+          "name": "res",
+          "props": {
+            "name": "ResCopyRight",
+            "props": {
+              "copyright": "CopyRight"
+            },
+            "refs": {
+              "CopyRight": {
+                "props": {
+                  "company": "String"
+                }
+              }
+            }
+          }
         }
       ]
     }

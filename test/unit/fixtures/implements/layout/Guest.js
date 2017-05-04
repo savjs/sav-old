@@ -3,7 +3,17 @@ import {Layout} from 'sav/decorator'
 
 @Layout(GuestLayoutInterface)
 export default class Guest {
-  invoke () {}
+  invoke ({all}) {
+    return all([
+      this.copyRight()
+    ])
+  }
 
-  copyRight () {}
+  copyRight ({setState}) {
+    setState({
+      copyright: {
+        company: 'sav.inc'
+      }
+    })
+  }
 }

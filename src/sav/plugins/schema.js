@@ -57,6 +57,7 @@ function createSchemaMiddleware (route, uri, schema) {
         ctx.input = await struct.extractThen(argv)
       } else if (name === 'res') {
         // console.log('res', struct.extractThen(ctx.state))
+        // console.log('res', Object.keys(ctx.state))
         ctx.setState(await struct.extractThen(ctx.state))
       }
     }

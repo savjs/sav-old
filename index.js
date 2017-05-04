@@ -1,5 +1,6 @@
 import apis from './test/unit/fixtures/implements/api/index.js'
 import pages from './test/unit/fixtures/implements/page/index.js'
+import layouts from './test/unit/fixtures/implements/layout/index.js'
 import {Router} from 'sav/index.js'
 
 import {schemaPlugin, titlePlugin, metaPlugin, authPlugin} from 'sav/plugins'
@@ -15,7 +16,7 @@ router.use(titlePlugin)
 router.use(metaPlugin)
 router.use(authPlugin)
 
-router.declare([].concat(apis).concat(pages))
+router.declare([].concat(apis).concat(pages).concat(layouts))
 
 async function testArticleApiComment () {
   let ctx = {
@@ -35,7 +36,7 @@ async function testArticlePageList () {
 
 async function testArticlePageView () {
   let ctx = {
-    path: '/articlesx/1002',
+    path: '/articles/1002',
     method: 'GET'
   }
   return router.exec(ctx).then(() => ctx.state)

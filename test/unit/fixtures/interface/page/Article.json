@@ -4,7 +4,7 @@
   "uri": "ArticlePage",
   "props": {
     "view": "vue",
-    "layout": "User"
+    "layout": "UserLayout"
   },
   "routes": [
     {
@@ -54,6 +54,10 @@
       "actionName": "view",
       "uri": "ArticlePage.view",
       "tasks": [
+        {
+          "name": "auth",
+          "props": null
+        },
         {
           "name": "req",
           "props": {
