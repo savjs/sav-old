@@ -22,4 +22,8 @@ export class Exception extends Error {
   }
 }
 
+// 功能尚未实现
 export class NotImplementedException extends Exception {}
+
+// 没有匹配到路由
+export class NotRoutedException extends Exception {}

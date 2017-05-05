@@ -22,4 +22,9 @@ test('match.pages', (ava) => {
     path: '/article/comment/123',
     method: 'POST'
   }, router)).to.be.a('array')
+
+  expect(matchContextRoute({
+    path: '/articles/123',
+    method: 'GET'
+  }, router)).to.be.a('array')
 })

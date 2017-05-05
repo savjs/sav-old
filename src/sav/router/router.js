@@ -3,9 +3,10 @@ import compose from 'koa-compose'
 
 import {isArray, isObject, isFunction, makeProp, prop, promise} from '../util'
 import {Config} from '../core/config'
-import {Exception} from '../core/exception.js'
+import {NotRoutedException} from '../core/exception.js'
 import {matchModulesRoute} from './matchs.js'
 import {executeMiddlewares} from './executer.js'
+import {proxyModuleActions} from './proxy.js'
 import {routePlugin} from '../plugins/route.js'
 
 export class Router extends EventEmitter {
@@ -133,8 +134,6 @@ export async function payloadStart (ctx, next) {
   await next()
 }
 
-class NotRoutedException extends Exception {}
-
 export async function payloadEnd (ctx) {
   if (!ctx.route) {
     throw new NotRoutedException('Not routed')
@@ -159,42 +158,6 @@ async function executeModuleLayout (ctx, router) {
       return executeMiddlewares(layout.middlewares, ctx)
     }
   }
-}
-
-function proxyModuleActions (ctx, modules) {
-  let cache = {}
-  let proxy = new Proxy(modules, {
-    get (target, moduleName) {
-      if (target.hasOwnProperty(moduleName)) {
-        let module = target[moduleName]
-        if (cache[moduleName]) {
-          return cache[moduleName]
-        }
-        let proxyModule = new Proxy(module, {
-          get (target, actionName) {
-            if (target.hasOwnProperty(actionName)) {
-              let cacheName = `${moduleName}.${actionName}`
-              if (cache[cacheName]) {
-                return cache[cacheName]
-              }
-              let fn = target[actionName]
-              if (isFunction(fn)) {
-                let proxyAction = cache[cacheName] = async () => {
-                  let args = [].slice.call(arguments)
-                  args.unshift(ctx)
-                  return fn.apply(proxyModule, args)
-                }
-                return proxyAction
-              }
-            }
-          }
-        })
-        cache[moduleName] = proxyModule
-        return proxyModule
-      }
-    }
-  })
-  return proxy
 }
 
 function makeSav (ctx, router) {
