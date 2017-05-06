@@ -45,12 +45,32 @@ export class Router extends EventEmitter {
     // @TODO 异常处理 渲染引擎
     let payloads = [payloadStart.bind(this)].concat(this.payloads).concat([payloadEnd.bind(this)])
     let payload = compose(payloads)
-    return payload
+    return async (ctx, next) => {
+      let exp = false
+      try {
+        await payload(ctx)
+      } catch (err) {
+        exp = err
+        if (this.isExecuteMode) {
+          throw err
+        }
+        await this.render(ctx, err)
+      }
+      if (!exp) {
+        await this.render(ctx)
+      }
+    }
   }
   async exec (ctx) {
     this.executer || (this.executer = this.compose())
     await this.executer(ctx)
     return ctx
+  }
+  async render (ctx, err) {
+    return ctx.render(err)
+  }
+  get isExecuteMode () {
+    return !!this.executer
   }
 }
 
@@ -131,21 +151,19 @@ export async function payloadStart (ctx, next) {
   initSav(ctx, this)
   // 匹配路由
   matchContextRoute(ctx, this)
+  if (!ctx.route) {
+    throw new NotRoutedException('Not routed')
+  }
   await next()
 }
 
 export async function payloadEnd (ctx) {
-  if (!ctx.route) {
-    throw new NotRoutedException('Not routed')
-  }
   await Promise.all([
     // 路由
     executeMiddlewares(this.routes[ctx.route.uri].middlewares, ctx),
     // 布局并行
     executeModuleLayout(ctx, this)
   ])
-  // 渲染
-  await ctx.render()
 }
 
 async function executeModuleLayout (ctx, router) {

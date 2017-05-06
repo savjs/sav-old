@@ -36,7 +36,7 @@ async function testArticlePageList () {
 
 async function testArticlePageView () {
   let ctx = {
-    path: '/articles/1002',
+    path: '/articlesx/1002',
     method: 'GET'
   }
   return router.exec(ctx).then(() => ctx.state)
