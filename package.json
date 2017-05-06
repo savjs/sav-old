@@ -7,15 +7,20 @@
   "jsnext:main": "dist/sav.es.js",
   "scripts": {
     "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
-    "ws": "watch -p \"+(src)/**/*.js\" -c \"npm run fix && npm start\"",
+    "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run cli\"",
     "start": "node ./server",
-    "build": "rollup -c && rollup -c scripts/rollup.cli.js",
+    "build": "rollup -c",
+    "build-cli": "rollup -c scripts/rollup.cli.js",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
+    "cli": "node ./dist/sav-cli",
     "na": "nyc ava ./test/unit",
     "pretest": "npm run lint",
     "test": "npm run na",
     "prepare": "npm run build"
+  },
+  "bin": {
+    "sav-cli": "bin/sav-cli"
   },
   "repository": {
     "type": "git",
@@ -41,7 +46,9 @@
     "bluebird": "^3.5.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "commander": "^2.9.0",
     "eslint-plugin-standard": "^2.0.1",
+    "fs-extra": "^3.0.1",
     "handlebars": "^4.0.6",
     "koa-compose": "^3.2.1",
     "nyc": "^10.0.0",

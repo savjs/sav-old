@@ -1,0 +1,87 @@
+{
+  "moduleName": "Home",
+  "moduleGroup": "Page",
+  "uri": "HomePage",
+  "props": {
+    "view": "vue",
+    "layout": "UserLayout",
+    "route": {
+      "path": ""
+    }
+  },
+  "routes": [
+    {
+      "actionName": "index",
+      "uri": "HomePage.index",
+      "tasks": [
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ],
+            "path": "~"
+          }
+        }
+      ]
+    },
+    {
+      "actionName": "about",
+      "uri": "HomePage.about",
+      "tasks": [
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ],
+            "path": "about"
+          }
+        }
+      ]
+    }
+  ],
+  "SavRoute": {
+    "uri": "HomePage",
+    "path": "/",
+    "childs": [
+      {
+        "uri": "HomePage.index",
+        "path": "/~",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "uri": "HomePage.about",
+        "path": "/about",
+        "methods": [
+          "GET"
+        ]
+      }
+    ],
+    "parents": []
+  },
+  "VueRoute": {
+    "component": "Home/Home",
+    "path": "/",
+    "children": [
+      {
+        "component": "Home/HomeIndex",
+        "name": "HomeIndex",
+        "path": "~",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Home/HomeAbout",
+        "name": "HomeAbout",
+        "path": "about",
+        "methods": [
+          "GET"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "moduleName": "User",
+  "moduleGroup": "Layout",
+  "uri": "UserLayout",
+  "props": {},
+  "routes": [
+    {
+      "actionName": "copyRight",
+      "uri": "UserLayout.copyRight",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        },
+        {
+          "name": "res",
+          "props": {
+            "props": {
+              "copyright": "String"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "actionName": "userInfo",
+      "uri": "UserLayout.userInfo",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        },
+        {
+          "name": "res",
+          "props": {
+            "props": {
+              "userInfo": "UserInfo"
+            },
+            "refs": {
+              "Role": {
+                "name": "Role",
+                "enums": [
+                  {
+                    "key": "user",
+                    "value": "user"
+                  },
+                  {
+                    "key": "guest",
+                    "value": "guest"
+                  },
+                  {
+                    "key": "admin",
+                    "value": "admin"
+                  }
+                ]
+              },
+              "UserInfo": {
+                "props": {
+                  "name": "String",
+                  "id": "Number",
+                  "role": "Role"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "actionName": "userNavMenu",
+      "uri": "UserLayout.userNavMenu",
+      "tasks": [
+        {
+          "name": "invoke",
+          "props": null
+        },
+        {
+          "name": "res",
+          "props": {
+            "props": {
+              "menus": "Array<NavMenuItem>"
+            },
+            "refs": {
+              "NavMenuItem": {
+                "props": {
+                  "title": "String",
+                  "url": "String"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

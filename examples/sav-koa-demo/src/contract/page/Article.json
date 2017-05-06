@@ -1,0 +1,209 @@
+{
+  "moduleName": "Article",
+  "moduleGroup": "Page",
+  "uri": "ArticlePage",
+  "props": {
+    "view": "vue",
+    "layout": "UserLayout"
+  },
+  "routes": [
+    {
+      "actionName": "list",
+      "uri": "ArticlePage.list",
+      "tasks": [
+        {
+          "name": "meta",
+          "props": {
+            "keywords": "关键字列表",
+            "description": "页面描述"
+          }
+        },
+        {
+          "name": "title",
+          "props": "文章列表"
+        },
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ]
+          }
+        },
+        {
+          "name": "res",
+          "props": {
+            "props": {
+              "articles": "Array<ArticleItem>"
+            },
+            "refs": {
+              "ArticleItem": {
+                "name": "ArticleItem",
+                "props": {
+                  "id": "Number",
+                  "title": "String",
+                  "content": "String"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "actionName": "view",
+      "uri": "ArticlePage.view",
+      "tasks": [
+        {
+          "name": "req",
+          "props": {
+            "props": {
+              "aid": "String"
+            }
+          }
+        },
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ],
+            "path": "/articles/:aid"
+          }
+        },
+        {
+          "name": "res",
+          "props": {
+            "props": {
+              "article": "ArticleItem"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "actionName": "modify",
+      "uri": "ArticlePage.modify",
+      "tasks": [
+        {
+          "name": "vue",
+          "props": {
+            "component": "Article/ArticleModify"
+          }
+        },
+        {
+          "name": "auth",
+          "props": null
+        },
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "GET"
+            ],
+            "path": "modify/:id?"
+          }
+        }
+      ]
+    },
+    {
+      "actionName": "update",
+      "uri": "ArticlePage.update",
+      "tasks": [
+        {
+          "name": "vue",
+          "props": {
+            "component": "Article/ArticleModify"
+          }
+        },
+        {
+          "name": "auth",
+          "props": null
+        },
+        {
+          "name": "route",
+          "props": {
+            "methods": [
+              "POST"
+            ],
+            "path": "update/:aid"
+          }
+        }
+      ]
+    }
+  ],
+  "SavRoute": {
+    "uri": "ArticlePage",
+    "path": "/article",
+    "childs": [
+      {
+        "uri": "ArticlePage.list",
+        "path": "/article/list",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "uri": "ArticlePage.modify",
+        "path": "/article/modify/:id?",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "uri": "ArticlePage.update",
+        "path": "/article/update/:aid",
+        "methods": [
+          "POST"
+        ]
+      }
+    ],
+    "parents": [
+      {
+        "uri": "ArticlePage.view",
+        "path": "/articles/:aid",
+        "methods": [
+          "GET"
+        ]
+      }
+    ]
+  },
+  "VueRoute": {
+    "component": "Article/Article",
+    "path": "/article",
+    "children": [
+      {
+        "component": "Article/ArticleList",
+        "name": "ArticleList",
+        "path": "list",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Article/ArticleView",
+        "name": "ArticleView",
+        "path": "/articles/:aid",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Article/ArticleModify",
+        "name": "ArticleModify",
+        "path": "modify/:id?",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "component": "Article/ArticleModify",
+        "name": "ArticleUpdate",
+        "path": "update/:aid",
+        "methods": [
+          "POST"
+        ]
+      }
+    ]
+  }
+}
