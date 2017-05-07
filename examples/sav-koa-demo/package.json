@@ -4,8 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cv": "node ../../dist/sav-cli.js -p ./src/interface -d ./src/contract"
+    "cv": "node ../../dist/sav-cli.js -p ./src/interface -d ./src/contract -v ./src/views"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "koa": "^2.2.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^2.0.1",
+    "koa-static-cache": "^5.0.1",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-vue2": "^0.8.0",
+    "sav-flux": "0.0.12",
+    "sav-util": "^1.0.16",
+    "vue": "^2.3.2",
+    "vue-router": "^2.5.3"
+  }
 }

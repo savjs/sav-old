@@ -88,9 +88,54 @@ function normalPath (path) {
   return path.replace(/\/\//g, '/')
 }
 
-/*
-  prefix moduleRoute actionRoute
-  /api   /account
-  actionRoute 生成的后端路由
-    article/:id  => /api/account/article/:id // 全部
- */
+function unique (arr) {
+  return arr.filter((it, index) => arr.indexOf(it) === index)
+}
+
+export function createVueRoutes (modules, fromGroup) {
+  let comps = []
+  if (fromGroup) {
+    for (let moduleGroup in modules) {
+      let group = modules[moduleGroup]
+      for (let moduleName in group) {
+        let modal = group[moduleName]
+        if (modal.VueRoute) {
+          comps.push(modal.VueRoute)
+        }
+      }
+    }
+  } else {
+    for (let moduleName in modules) {
+      let modal = modules[moduleName]
+      if (modal.VueRoute) {
+        comps.push(modal.VueRoute)
+      }
+    }
+  }
+  let routes = JSON.stringify(comps, null, 2)
+  let components = []
+  let names = []
+  let files = []
+  routes = routes.replace(/"component":\s+"((\w+)\/(\w+))"/g, (_, path, dir, name) => {
+    let file = `./${path}.vue`
+    components.push(`import ${name} from '${file}'`)
+    names.push(name)
+    files.push(file)
+    let ret = `"component": ${name}`
+    return ret
+  })
+  // 去重
+  files = unique(files)
+  components = unique(components)
+  names = unique(names)
+  let arr = [].concat(components).concat([''])
+    .concat(names.map((it) => `${it}.name='${it}'`)).concat([''])
+    .concat(`export default ${routes}`)
+  let content = arr.join('\n')
+  return {
+    content,
+    components,
+    names,
+    files
+  }
+}

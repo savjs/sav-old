@@ -7,8 +7,7 @@ import json from 'rollup-plugin-json'
 export default {
   entry: 'src/index.js',
   targets: [
-    { dest: 'dist/sav.cjs.js', format: 'cjs' },
-    { dest: 'dist/sav.es.js', format: 'es' }
+    { dest: 'dist/sav.cjs.js', format: 'cjs' }
   ],
   external: [
     'bluebird',
@@ -49,10 +48,12 @@ export default {
   ],
   onwarn (err) {
     if (err) {
-      if (err.code !== 'UNRESOLVED_IMPORT') {
+      if (!~skips.indexOf(err.code)) {
         console.log(err.code, err.message)
         console.dir(err)
       }
     }
   }
 }
+
+let skips = ['UNRESOLVED_IMPORT', 'UNUSED_EXTERNAL_IMPORT']

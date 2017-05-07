@@ -6,6 +6,7 @@ const {PageInterface, post, get, auth, vue, req, res, meta, title} = SavDecorato
 })
 export default class Article {
   @res({
+    name: 'ResArticleList',
     props: {
       articles: 'Array<ArticleItem>'
     },
@@ -29,11 +30,12 @@ export default class Article {
   list() {}
 
   @res({
+    name: 'ResArtilceView',
     props: {
       article: 'ArticleItem'
     }
   })
-  @get('/articles/:aid')
+  @get('view/:aid')
   @req({
     props: {
       aid: 'String'

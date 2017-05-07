@@ -1,13 +1,15 @@
 import {EventEmitter} from 'events'
 import compose from 'koa-compose'
 
-import {isArray, isObject, isFunction, makeProp, prop, promise} from '../util'
+import {isArray, isObject, isFunction, makeProp, delProps, prop, promise, ucfirst} from '../util'
 import {Config} from '../core/config'
 import {NotRoutedException} from '../core/exception.js'
 import {matchModulesRoute} from './matchs.js'
 import {executeMiddlewares} from './executer.js'
 import {proxyModuleActions} from './proxy.js'
 import {routePlugin} from '../plugins/route.js'
+import {koaPlugin} from '../plugins/koa.js'
+import {koaRenderer} from '../renders/koa.js'
 
 export class Router extends EventEmitter {
   constructor (config) {
@@ -18,11 +20,15 @@ export class Router extends EventEmitter {
     this.config = config    // 配置
     this.executer = null    // 执行器
     this.payloads = []      // 插件
+    this.renders = {}       // 渲染器
     this.modules = {}       // 模块
     this.moduleActions = {}     // 模块动作
     this.moduleRoutes = []      // 模块路由
     this.routes = {}            // 模块路由
+
+    this.use(koaPlugin)
     this.use(routePlugin)
+    this.use(koaRenderer)
   }
   use (plugin) {
     if (isFunction(plugin)) {
@@ -42,23 +48,32 @@ export class Router extends EventEmitter {
     walkModules(this, isArray(modules) ? modules : [modules])
   }
   compose () {
-    // @TODO 异常处理 渲染引擎
     let payloads = [payloadStart.bind(this)].concat(this.payloads).concat([payloadEnd.bind(this)])
     let payload = compose(payloads)
     return async (ctx, next) => {
+      if (!matchContextRoute(ctx, this)) {
+        // 404 skip
+        if (this.isExecMode) {
+          throw new NotRoutedException('Not routed')
+        } else {
+          return await next()
+        }
+      }
+      // handle
       let exp = false
       try {
         await payload(ctx)
       } catch (err) {
         exp = err
-        if (this.isExecuteMode) {
+        if (this.isExecMode) {
           throw err
         }
-        await this.render(ctx, err)
+        await this.render(ctx, ctx.renderType, ctx.renderData, err)
       }
       if (!exp) {
-        await this.render(ctx)
+        await this.render(ctx, ctx.renderType, ctx.renderData)
       }
+      delProps(ctx)
     }
   }
   async exec (ctx) {
@@ -66,11 +81,22 @@ export class Router extends EventEmitter {
     await this.executer(ctx)
     return ctx
   }
-  async render (ctx, err) {
-    return ctx.render(err)
+  async render (ctx, renderType, renderData, err) {
+    let renderer = this.renders[renderType]
+    await renderer(ctx, renderData, err)
   }
-  get isExecuteMode () {
+  get isExecMode () {
     return !!this.executer
+  }
+  setRender (type, renderer) {
+    if (isObject(type)) {
+      Object.assign(this.renders, type)
+    } else {
+      this.renders[type] = renderer
+    }
+  }
+  getRender (type) {
+    return this.renders[type]
   }
 }
 
@@ -94,7 +120,19 @@ function walkModules (router, modules) {
     for (let route of module.routes) {
       let middlewares = []
       makeProp(route, false)({
+        module,
         middlewares,
+        appendMiddleware (name, middleware, prepend) {
+          let it = {
+            name,
+            middleware
+          }
+          if (prepend) {
+            middlewares.unshift(it)
+          } else {
+            middlewares.push(it)
+          }
+        },
         props: route.tasks.reduce((obj, it) => {
           prop(it, 'setMiddleware', (middleware) => {
             it.middleware = middleware
@@ -141,19 +179,8 @@ function walkModules (router, modules) {
   }
 }
 
-export function initSav (ctx, router) {
-  makeProp(ctx)
-  makeSav(ctx, router)
-  makeRender(ctx)
-}
-
 export async function payloadStart (ctx, next) {
-  initSav(ctx, this)
-  // 匹配路由
-  matchContextRoute(ctx, this)
-  if (!ctx.route) {
-    throw new NotRoutedException('Not routed')
-  }
+  makeSav(ctx, this)
   await next()
 }
 
@@ -179,15 +206,26 @@ async function executeModuleLayout (ctx, router) {
 }
 
 function makeSav (ctx, router) {
-  // 注入 state promise sav 等
-  let prop = ctx.prop
-  let state = {}
-  prop.getter('state', () => state)
-  prop(Object.assign({
+  // inject state promise sav etc.
+  let foundation = ucfirst(router.config.get('foundation', 'Koa'))
+  makeProp(ctx)(Object.assign({
+    [`is${foundation}`]: true,
     sav: proxyModuleActions(ctx, router.moduleActions),
     async dispatch (uri) {
-      return ctx.sav[(uri = uri.split('.')).shift()][uri.shift()]()
-    },
+      uri = uri.split('.')
+      let mod = uri.shift()
+      let act = uri.shift()
+      await ctx.sav[mod][act]()
+    }
+  }, promise))
+  makeState(ctx)
+  makeRender(ctx)
+}
+
+function makeState ({prop}) {
+  let state = {}
+  prop.getter('state', () => state)
+  prop({
     setState (...args) {
       let len = args.length
       if (len < 1) {
@@ -195,38 +233,35 @@ function makeSav (ctx, router) {
       } else if (len === 1) {
         if (Array.isArray(args[0])) { // for Promise.all
           args = args[0]
-        } else {
-          state = {...state, ...args[0]}
-          return
         }
       }
       args.unshift(state)
-      state = Object.assign.apply(state, args)
+      Object.assign.apply(state, args)
     },
     replaceState (newState) {
       state = newState || {}
     }
-  }, promise))
+  })
 }
 
-export function makeRender (ctx) {
-  let renderers = {
-    json (ctx) {
-      ctx.body = ctx.state
-    }
-  }
-  ctx.prop({
-    renderEngine: 'json',
-    renderer: renderers.json,
-    renderers,
-    renderOptions: null,
-    setViewEngine: (renderer, type, opts) => {
-      ctx.renderer = renderer
-      ctx.renderEngine = type || renderer.name
-      ctx.renderOptions = opts
+function makeRender ({ctx, prop}) {
+  prop({
+    renderType: 'json',
+    renderData: null,
+    setRenderType (renderType, data) {
+      ctx.renderType = renderType
+      if (data !== undefined) {
+        ctx.renderData = data
+      }
     },
-    async render () {
-      return ctx.renderer(ctx, ctx.renderOptions)
+    setJson (data) {
+      ctx.setRenderType('json', data)
+    },
+    setView (data) {
+      ctx.setRenderType('view', data)
+    },
+    setVue (data) {
+      ctx.setRenderType('vue', data)
     }
   })
 }

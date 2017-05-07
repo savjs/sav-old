@@ -34,4 +34,7 @@ export class Config {
     }
     return this.get(key, defaultValue)
   }
+  get prod () {
+    return this.env('NODE_ENV') === 'production'
+  }
 }

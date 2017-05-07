@@ -8,6 +8,7 @@
   "scripts": {
     "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
     "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run cli\"",
+    "wb": "watch -p \"+(src)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
     "build": "rollup -c",
     "build-cli": "rollup -c scripts/rollup.cli.js",

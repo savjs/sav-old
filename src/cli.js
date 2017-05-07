@@ -1,5 +1,5 @@
 import * as decorators from './sav/decorator'
-import {convertRoute} from './sav/router/convert.js'
+import {convertRoute, createVueRoutes} from './sav/router/convert.js'
 
 import babel from 'babel-standalone'
 import Module from 'module'
@@ -11,12 +11,14 @@ program
   .version('0.0.1')
   .option('-p, --path [path]', 'convart root path')
   .option('-d, --dest [dest]', 'dest dir')
+  .option('-v, --view [view]', 'view dir')
   .option('-u, --use [plugins]', 'plugins to use')
   .parse(process.argv)
 
 program.path = 'path' in program ? resolve(program.path || '.', '') : false
-program.dest =  'dest' in program ? resolve(program.dest) : false
-program.plugins =  'plugins' in program ? (program.plugins.split(',').map((it) => it.trim())) : false
+program.dest = 'dest' in program ? resolve(program.dest) : false
+program.view = 'view' in program ? resolve(program.view) : false
+program.plugins = 'plugins' in program ? (program.plugins.split(',').map((it) => it.trim())) : false
 
 function requireFromString (code, filename, opts) {
   if (typeof filename === 'object') {
@@ -42,7 +44,7 @@ function readDirModules (path) {
   let modules = {}
   fs.readdirSync(path).map((dirName) => {
     let modal = {}
-    let files = fs.readdirSync(resolve(path, dirName)).forEach((name) => {
+    fs.readdirSync(resolve(path, dirName)).forEach((name) => {
       let file = resolve(path, dirName, name)
       let ext = extname(name)
       let baseName = basename(name, ext)
@@ -69,6 +71,12 @@ function readFileAsync (file) {
   })
 }
 
+function fileExistsAsync (file) {
+  return new Promise((resolve) => {
+    fs.exists(file, resolve)
+  })
+}
+
 function writeFileAsync (file, data) {
   return new Promise((resolve, reject) => {
     fs.writeFile(file, data, (err, data) => {
@@ -78,9 +86,9 @@ function writeFileAsync (file, data) {
 }
 
 // 创建所有目录
-function mkdirs(dirpath, mode, callback) {
-  fs.exists(dirpath, function(exists) {
-    if(exists) {
+function mkdirs (dirpath, mode, callback) {
+  fs.exists(dirpath, function (exists) {
+    if (exists) {
       if (callback) {
         callback(null, dirpath)
       }
@@ -124,13 +132,15 @@ function transformFileAsync (file) {
         'transform-decorators-legacy',
         ['transform-object-rest-spread', { 'useBuiltIns': true }],
         'transform-es2015-modules-commonjs'
-    ]}).code
+      ]}).code
     return requireFromString(code, file)
   })
 }
 
+let routed = ['api', 'page']
+
 function convertFile ({moduleGroup, moduleName, modal, dest}) {
-  return Promise.resolve().then(async ()=> {
+  return Promise.resolve().then(async () => {
     console.log('convertFile: ', modal.js || modal.json)
     let content
     if (modal.js) { // 装饰器转成JSON
@@ -139,8 +149,11 @@ function convertFile ({moduleGroup, moduleName, modal, dest}) {
       content = JSON.parse(await readFileAsync(modal.json))
     }
     let data = content
-    if (!(content.SavRoute) && (moduleGroup === 'api' || moduleGroup === 'page')) {
+    if (!(content.SavRoute) && (routed.indexOf(moduleGroup.toLowerCase()) !== -1)) {
       data = Object.assign(content, convertRoute(content))
+    }
+    if (data.VueRoute) {
+      modal.VueRoute = data.VueRoute
     }
     let dir = resolve(dest, moduleGroup)
     modal.dist = resolve(dir, moduleName + '.json')
@@ -151,16 +164,74 @@ function convertFile ({moduleGroup, moduleName, modal, dest}) {
 }
 
 function createIndex (moduleGroup, group, dest) {
-  return Promise.resolve().then(async ()=> {
+  return Promise.resolve().then(async () => {
     let dir = resolve(dest, moduleGroup)
     let dist = resolve(dir, 'index.js')
     console.log('createFile: ', dist)
-    let reqs = Object.keys(group).map((name) => `  ${name}: require('./${name}.json')`).join('\n,')
+    let reqs = Object.keys(group).map((name) => `  ${name}: require('./${name}.json')`).join(',\n')
     let str = `module.exports = {\n${reqs}\n}`
     await mkdirAsync(dir)
     await writeFileAsync(dist, str)
     console.log('createDone: ', dist)
   })
+}
+
+function createRoot (modules, dest) {
+  return Promise.resolve().then(async () => {
+    let dist = resolve(dest, 'index.js')
+    console.log('createRoot: ', dist)
+    let reqs = Object.keys(modules).map((name) => `  ${name}: require('./${name}')`).join(',\n')
+    let str = `module.exports = {\n${reqs}\n}`
+    await writeFileAsync(dist, str)
+    console.log('createDone: ', dist)
+  })
+}
+
+let vueTemplate = `<template>
+  <div>
+    <router-view></router-view>
+  </div>
+</template>
+<script>
+  export default {
+  }
+</script>
+`
+
+let appTemplate = `<template>
+  <div id="app">
+    <router-view class="view"></router-view>
+  </div>
+</template>
+<script>
+  export default {
+  }
+</script>
+`
+
+async function createVueFiles (modules, dest) {
+  let {content, files} = createVueRoutes(modules, true)
+  await mkdirAsync(dest)
+  await writeFileAsync(resolve(dest, 'routes.js'), content)
+  let appVue = resolve(dest, 'App.vue')
+  if (!await fileExistsAsync(appVue)) {
+    console.log('createVueFile:', appVue)
+    await writeFileAsync(appVue, appTemplate)
+  }
+  await Promise.all(files.map(async (file) => {
+    file = resolve(dest, file)
+    if (!await fileExistsAsync(file)) {
+      let baseName = basename(file, '.vue')
+      let dirName = basename(dirname(file))
+      let template = vueTemplate
+      if (baseName !== dirName) {
+        template = vueTemplate.replace('<router-view></router-view>', baseName)
+      }
+      console.log('createVueFile:', file)
+      await mkdirAsync(dirname(file))
+      await writeFileAsync(file, template)
+    }
+  }))
 }
 
 async function convert ({path, dest, plugins}) {
@@ -187,7 +258,9 @@ async function convert ({path, dest, plugins}) {
     }
     createIndex(moduleGroup, group, dest)
   }
-  return Promise.all(tasks)
+  return Promise.all(tasks.concat(createRoot(modules, dest))).then(() => {
+    return modules
+  })
   // console.log(modules)
   // @TODO 暂时不管插件的部分
   // if (plugins && plugins.length) {
@@ -203,25 +276,28 @@ export function findPlugins (root, name) {
   return findWithExtension(root, name, ['node_modules'])
 }
 
-function findWithExtension(dir, subdir, dirs, extensions) {
-  let cur, it, noext = !!extname(subdir), allDir = ['.'].concat(dirs);
+function findWithExtension (dir, subdir, dirs, extensions) {
+  let cur
+  let it
+  let noext = !!extname(subdir)
+  let allDir = ['.'].concat(dirs)
   do {
-      cur = resolve(dir);
-      for (let m=0, n= allDir.length; m <n; ++m) {
+    cur = resolve(dir)
+    for (let m = 0, n = allDir.length; m < n; ++m) {
         // console.log(cur, allDir[m] +'/'+ subdir);
-        if (fs.existsSync(it = resolve(cur, allDir[m] +'/'+ subdir))) {
-            return it;
-        }
-        if (noext && extensions) {
-            for(let i=0, l= extensions.length; i < l; ++i) {
-                if (fs.existsSync(it = resolve(cur, allDir[m] +'/'+ subdir + extensions[i] ))) {
-                    return it;
-                }
-            }
+      if (fs.existsSync(it = resolve(cur, allDir[m] + '/' + subdir))) {
+        return it
+      }
+      if (noext && extensions) {
+        for (let i = 0, l = extensions.length; i < l; ++i) {
+          if (fs.existsSync(it = resolve(cur, allDir[m] + '/' + subdir + extensions[i]))) {
+            return it
+          }
         }
       }
-      dir = dirname(cur);
-  } while (cur != dir);
+    }
+    dir = dirname(cur)
+  } while (cur !== dir)
 }
 
 // program.path = resolve('E:\\tmp\\decorators\\interface')
@@ -232,9 +308,17 @@ if (!program.path) {
   process.exit(0)
 }
 
-convert(program).catch((err) => {
+function halt (err) {
   console.error(err)
   process.exit(1)
-}).then(() => {
+}
+
+function done () {
   console.log('done')
-})
+}
+
+convert(program).catch(halt).then((modules) => {
+  if (program.view) {
+    return createVueFiles(modules, program.view)
+  }
+}).catch(halt).then(done)

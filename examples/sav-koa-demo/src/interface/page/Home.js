@@ -8,7 +8,8 @@ const {PageInterface, post, get, auth, vue, req, res, meta, title} = SavDecorato
   }
 })
 export default class Home {
-  @get('~')
+  @get('')
+  @title('主页')
   index () {}
 
   @get('about')

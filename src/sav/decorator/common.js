@@ -32,3 +32,35 @@ export {functional as Layout}
 export const ApiModule = DeclareModule(ApiInterface)
 export const PageModule = DeclareModule(PageInterface)
 export const LayoutModule = DeclareModule(LayoutInterface)
+
+const maps = {
+  api: ApiModule,
+  page: PageModule,
+  layout: LayoutModule
+}
+
+export function Composer (contracts, actions) {
+  let ret = []
+  for (let moduleGroup in contracts) {
+    if (actions[moduleGroup]) {
+      let group = contracts[moduleGroup]
+      let mods = []
+      let acts = actions[moduleGroup].reduce((ret, mod) => {
+        let moduleName = mod.name
+        if (maps[moduleGroup] && group[moduleName]) {
+          let actions = maps[moduleGroup]()(mod).actions
+          ret[moduleName] = Object.assign(group[moduleName], {actions})
+          mods.push(group[moduleName])
+        }
+        return ret
+      }, {})
+      for (let moduleName in group) {
+        if (!acts[moduleName]) {
+          mods.push(group[moduleName])
+        }
+      }
+      ret = ret.concat(mods)
+    }
+  }
+  return ret
+}

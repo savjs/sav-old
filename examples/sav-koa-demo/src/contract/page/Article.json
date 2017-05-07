@@ -33,6 +33,7 @@
         {
           "name": "res",
           "props": {
+            "name": "ResArticleList",
             "props": {
               "articles": "Array<ArticleItem>"
             },
@@ -68,12 +69,13 @@
             "methods": [
               "GET"
             ],
-            "path": "/articles/:aid"
+            "path": "view/:aid"
           }
         },
         {
           "name": "res",
           "props": {
+            "name": "ResArtilceView",
             "props": {
               "article": "ArticleItem"
             }
@@ -144,6 +146,13 @@
         ]
       },
       {
+        "uri": "ArticlePage.view",
+        "path": "/article/view/:aid",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
         "uri": "ArticlePage.modify",
         "path": "/article/modify/:id?",
         "methods": [
@@ -158,15 +167,7 @@
         ]
       }
     ],
-    "parents": [
-      {
-        "uri": "ArticlePage.view",
-        "path": "/articles/:aid",
-        "methods": [
-          "GET"
-        ]
-      }
-    ]
+    "parents": []
   },
   "VueRoute": {
     "component": "Article/Article",
@@ -183,7 +184,7 @@
       {
         "component": "Article/ArticleView",
         "name": "ArticleView",
-        "path": "/articles/:aid",
+        "path": "view/:aid",
         "methods": [
           "GET"
         ]

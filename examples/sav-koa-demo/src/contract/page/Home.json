@@ -15,12 +15,16 @@
       "uri": "HomePage.index",
       "tasks": [
         {
+          "name": "title",
+          "props": "主页"
+        },
+        {
           "name": "route",
           "props": {
             "methods": [
               "GET"
             ],
-            "path": "~"
+            "path": ""
           }
         }
       ]
@@ -47,7 +51,7 @@
     "childs": [
       {
         "uri": "HomePage.index",
-        "path": "/~",
+        "path": "/",
         "methods": [
           "GET"
         ]
@@ -69,7 +73,7 @@
       {
         "component": "Home/HomeIndex",
         "name": "HomeIndex",
-        "path": "~",
+        "path": "",
         "methods": [
           "GET"
         ]
