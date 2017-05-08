@@ -1,6 +1,6 @@
 <template>
   <div>
-    ArticleList
+    ArticlePosts
   </div>
 </template>
 <script>

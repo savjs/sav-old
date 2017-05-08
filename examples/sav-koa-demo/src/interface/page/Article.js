@@ -27,7 +27,7 @@ export default class Article {
     keywords: '关键字列表',
     description: '页面描述',
   })
-  list() {}
+  posts() {}
 
   @res({
     name: 'ResArtilceView',

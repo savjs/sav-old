@@ -2,7 +2,7 @@ import Account from './Account/Account.vue'
 import AccountLogin from './Account/AccountLogin.vue'
 import AccountRegister from './Account/AccountRegister.vue'
 import Article from './Article/Article.vue'
-import ArticleList from './Article/ArticleList.vue'
+import ArticlePosts from './Article/ArticlePosts.vue'
 import ArticleView from './Article/ArticleView.vue'
 import ArticleModify from './Article/ArticleModify.vue'
 import Home from './Home/Home.vue'
@@ -13,7 +13,7 @@ Account.name='Account'
 AccountLogin.name='AccountLogin'
 AccountRegister.name='AccountRegister'
 Article.name='Article'
-ArticleList.name='ArticleList'
+ArticlePosts.name='ArticlePosts'
 ArticleView.name='ArticleView'
 ArticleModify.name='ArticleModify'
 Home.name='Home'
@@ -64,9 +64,9 @@ export default [
     "path": "/article",
     "children": [
       {
-        "component": ArticleList,
-        "name": "ArticleList",
-        "path": "list",
+        "component": ArticlePosts,
+        "name": "ArticlePosts",
+        "path": "posts",
         "methods": [
           "GET"
         ]

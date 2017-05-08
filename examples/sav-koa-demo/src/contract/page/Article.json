@@ -8,8 +8,8 @@
   },
   "routes": [
     {
-      "actionName": "list",
-      "uri": "ArticlePage.list",
+      "actionName": "posts",
+      "uri": "ArticlePage.posts",
       "tasks": [
         {
           "name": "meta",
@@ -139,8 +139,8 @@
     "path": "/article",
     "childs": [
       {
-        "uri": "ArticlePage.list",
-        "path": "/article/list",
+        "uri": "ArticlePage.posts",
+        "path": "/article/posts",
         "methods": [
           "GET"
         ]
@@ -174,9 +174,9 @@
     "path": "/article",
     "children": [
       {
-        "component": "Article/ArticleList",
-        "name": "ArticleList",
-        "path": "list",
+        "component": "Article/ArticlePosts",
+        "name": "ArticlePosts",
+        "path": "posts",
         "methods": [
           "GET"
         ]

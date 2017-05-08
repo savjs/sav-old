@@ -30,14 +30,18 @@ export function koaRenderer (sav) {
           if (!vueFileData) {
             vueFileData = (await readFileAsync(vueTemplate)).toString()
           }
-          let state = composeState(data, ctx.state, err)
-          let stateText = JSON.stringify(state)
-          let stateScript = `
-          <script type="text/javascript">
-            window.INIT_STATE = ${stateText}
-          </script>
-          `
-          ctx.body = vueFileData.replace('<!-- INIT_STATE -->', stateScript)
+          let html = vueFileData
+          if (vueFileData.indexOf('<!-- INIT_STATE -->') !== -1) {
+            let state = composeState(data, ctx.state, err)
+            let stateText = JSON.stringify(state)
+            let stateScript = `
+            <script type="text/javascript">
+              window.INIT_STATE = ${stateText}
+            </script>
+            `
+            html = vueFileData.replace('<!-- INIT_STATE -->', stateScript)
+          }
+          ctx.body = html
           return
         }
       }
