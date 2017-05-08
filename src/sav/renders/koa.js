@@ -1,12 +1,25 @@
 import {resolve} from 'path'
 import {readFileAsync} from '../util/file.js'
+import {tmpl} from '../util/tmpl.js'
+
+function makeProxy (config, state) {
+  return new Proxy({}, {
+    get (target, name) {
+      if (name in state) {
+        return state[name]
+      }
+      return config.get(name, '')
+    }
+  })
+}
 
 export function koaRenderer (sav) {
   let {config} = sav
   let viewRoot = config.get('viewRoot', 'views')
   let vueTemplate = resolve(viewRoot, config.get('vueTemplate', 'index.html'))
-  let vueFileData
+  let vueFunc
   let composeState = (data, state, error) => {
+    let ret = {}
     if (error) {
       error = error.toJSON()
       if (config.prod) {
@@ -14,10 +27,10 @@ export function koaRenderer (sav) {
         delete error.stack
         delete error.stacks
       }
+      ret.error = error
     }
-    return Object.assign({error}, data || state)
+    return Object.assign(ret, data || state)
   }
-
   sav.setRender({
     async json (ctx, data, err) {
       ctx.body = composeState(data, ctx.state, err)
@@ -27,11 +40,11 @@ export function koaRenderer (sav) {
         if (config.get('vue_server_render') && ctx.getRender('ssr')) {
           return await sav.render(ctx, 'ssr', data, err)
         } else {
-          if (!vueFileData) {
-            vueFileData = (await readFileAsync(vueTemplate)).toString()
+          if (!vueFunc) {
+            vueFunc = tmpl((await readFileAsync(vueTemplate)).toString())
           }
-          let html = vueFileData
-          if (vueFileData.indexOf('<!-- INIT_STATE -->') !== -1) {
+          let html = vueFunc(makeProxy(config, ctx.state))
+          if (html.indexOf('<!-- INIT_STATE -->') !== -1) {
             let state = composeState(data, ctx.state, err)
             let stateText = JSON.stringify(state)
             let stateScript = `
@@ -39,7 +52,7 @@ export function koaRenderer (sav) {
               window.INIT_STATE = ${stateText}
             </script>
             `
-            html = vueFileData.replace('<!-- INIT_STATE -->', stateScript)
+            html = html.replace('<!-- INIT_STATE -->', stateScript)
           }
           ctx.body = html
           return

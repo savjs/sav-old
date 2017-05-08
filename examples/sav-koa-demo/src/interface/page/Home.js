@@ -10,8 +10,13 @@ const {PageInterface, post, get, auth, vue, req, res, meta, title} = SavDecorato
 export default class Home {
   @get('')
   @title('主页')
+  @meta({
+    keywords: '关键字列表',
+    description: '页面描述',
+  })
   index () {}
 
-  @get('about')
+  @get()
+  @title('关于我们')
   about () {}
 }

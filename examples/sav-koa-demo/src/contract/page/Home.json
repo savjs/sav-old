@@ -15,6 +15,13 @@
       "uri": "HomePage.index",
       "tasks": [
         {
+          "name": "meta",
+          "props": {
+            "keywords": "关键字列表",
+            "description": "页面描述"
+          }
+        },
+        {
           "name": "title",
           "props": "主页"
         },
@@ -34,12 +41,15 @@
       "uri": "HomePage.about",
       "tasks": [
         {
+          "name": "title",
+          "props": "关于我们"
+        },
+        {
           "name": "route",
           "props": {
             "methods": [
               "GET"
-            ],
-            "path": "about"
+            ]
           }
         }
       ]
