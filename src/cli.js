@@ -7,6 +7,8 @@ import program from 'commander'
 import {resolve, dirname, extname, basename} from 'path'
 import fs from 'fs'
 
+import {readFileAsync, fileExistsAsync, writeFileAsync, mkdirAsync} from './sav/util/file.js'
+
 program
   .version('0.0.1')
   .option('-p, --path [path]', 'convart root path')
@@ -62,69 +64,6 @@ function readDirModules (path) {
   })
   return modules
 }
-
-function readFileAsync (file) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(file, (err, data) => {
-      return err ? reject(err) : resolve(data)
-    })
-  })
-}
-
-function fileExistsAsync (file) {
-  return new Promise((resolve) => {
-    fs.exists(file, resolve)
-  })
-}
-
-function writeFileAsync (file, data) {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(file, data, (err, data) => {
-      return err ? reject(err) : resolve(file)
-    })
-  })
-}
-
-// 创建所有目录
-function mkdirs (dirpath, mode, callback) {
-  fs.exists(dirpath, function (exists) {
-    if (exists) {
-      if (callback) {
-        callback(null, dirpath)
-      }
-    } else {
-      mkdirs(dirname(dirpath), mode, function () {
-        fs.mkdir(dirpath, mode, callback)
-      })
-    }
-  })
-}
-
-function mkdirp (dirpath, mode, callback) {
-  dirpath = resolve(dirpath)
-  if (!callback) {
-    callback = mode
-    mode = parseInt('0777', 8) & (~process.umask())
-  }
-  return mkdirs(dirpath, mode, (err, data) => {
-    if (typeof callback !== 'function') {
-      return
-    }
-    if ((!err) || (err && err.code === 'EEXIST')) {
-      return callback(null, data)
-    }
-    return callback(err)
-  })
-}
-
-function mkdirAsync (dir) {
-  return new Promise((resolve, reject) => {
-    mkdirp(dir, (err) => {
-      return err ? reject(err) : resolve(dir)
-    })
-  })
-}
-
 function transformFileAsync (file) {
   return readFileAsync(file).then(data => {
     let code = babel.transform(data, {
