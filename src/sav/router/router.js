@@ -1,7 +1,7 @@
 import {EventEmitter} from 'events'
 import compose from 'koa-compose'
 
-import {isArray, isObject, isFunction, makeProp, delProps, prop, promise, ucfirst} from '../util'
+import {isArray, isObject, isFunction, makeProp, delProps, promise, ucfirst} from '../util'
 import {Config} from '../core/config'
 import {NotRoutedException} from '../core/exception.js'
 import {matchModulesRoute} from './matchs.js'
@@ -10,6 +10,8 @@ import {proxyModuleActions} from './proxy.js'
 import {routePlugin} from '../plugins/route.js'
 import {koaPlugin} from '../plugins/koa.js'
 import {koaRenderer} from '../renders/koa.js'
+
+import {prepareModule} from './convert.js'
 
 export class Router extends EventEmitter {
   constructor (config) {
@@ -115,33 +117,8 @@ export function matchContextRoute (ctx, router) {
 
 function walkModules (router, modules) {
   for (let module of modules) {
-    let {uri} = module
-    makeProp(module, false)
+    let {uri} = prepareModule(module)
     for (let route of module.routes) {
-      let middlewares = []
-      makeProp(route, false)({
-        module,
-        middlewares,
-        appendMiddleware (name, middleware, prepend) {
-          let it = {
-            name,
-            middleware
-          }
-          if (prepend) {
-            middlewares.unshift(it)
-          } else {
-            middlewares.push(it)
-          }
-        },
-        props: route.tasks.reduce((obj, it) => {
-          prop(it, 'setMiddleware', (middleware) => {
-            it.middleware = middleware
-          })
-          obj[it.name] = it
-          middlewares.push(it)
-          return obj
-        }, {})
-      })
       router.routes[route.uri] = route
     }
     router.modules[uri] = module

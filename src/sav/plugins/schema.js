@@ -30,6 +30,7 @@ function createSchemaMiddleware (route, uri, schema) {
     }
     let schemaData = props
     if (isObject(schemaData)) {
+      schemaData.name || (schemaData.name = pascalCase(`${name}_${uri}`.replace('.', '_')))
       struct = schema.declare(schemaData)
     } else {
       if (schemaData === null) {

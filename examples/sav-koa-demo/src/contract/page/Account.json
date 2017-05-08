@@ -79,9 +79,17 @@
           "props": {
             "name": "AccountRegister",
             "props": {
-              "username": "String",
-              "email": "String",
-              "password": "String"
+              "accountRegisterStruct": "AccountRegisterStruct"
+            },
+            "refs": {
+              "AccountRegisterStruct": {
+                "name": "AccountRegisterStruct",
+                "props": {
+                  "username": "String",
+                  "email": "String",
+                  "password": "String"
+                }
+              }
             }
           }
         }
@@ -103,13 +111,7 @@
         },
         {
           "name": "req",
-          "props": {
-            "props": {
-              "username": "String",
-              "email": "String",
-              "password": "String"
-            }
-          }
+          "props": "AccountRegisterStruct"
         },
         {
           "name": "route",
@@ -121,7 +123,7 @@
         },
         {
           "name": "res",
-          "props": "AccountRegister"
+          "props": "ResAccountRegister"
         }
       ]
     }

@@ -23,24 +23,26 @@ export default class Account {
   @res({
     name: 'AccountRegister',
     props: {
-      username: 'String',
-      email: 'String',
-      password: 'String'
+      accountRegisterStruct: 'AccountRegisterStruct'
+    },
+    refs: {
+      AccountRegisterStruct: {
+        name: 'AccountRegisterStruct',
+        props: {
+          username: 'String',
+          email: 'String',
+          password: 'String'
+        }
+      }
     }
   })
   @get()
   @title('注册')
   register() {}
 
-  @res('AccountRegister')
+  @res('ResAccountRegister')
   @post()
-  @req({
-    props: {
-      username: 'String',
-      email: 'String',
-      password: 'String'
-    }
-  })
+  @req('AccountRegisterStruct')
   @title('注册')
   @vue({component: 'Account/AccountRegister'})
   postRegister() {}

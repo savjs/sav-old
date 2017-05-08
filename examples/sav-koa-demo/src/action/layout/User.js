@@ -1,11 +1,11 @@
 
 module.exports = class User {
   invoke ({all}) {
-    return all[
+    return all([
       this.copyRight(),
       this.userInfo(), 
       this.userNavMenu()
-    ]
+    ])
   }
   copyRight ({setState}) {
     setState({

@@ -1,4 +1,43 @@
-import {convertCase, isString} from '../util'
+import {convertCase, isString, makeProp, prop} from '../util'
+
+// 初始化模块
+export function prepareModule (module) {
+  if (module.prop) { // 已经注入
+    return module
+  }
+  // 添加注入功能
+  makeProp(module, false)
+  for (let route of module.routes) {
+    // 添加注入功能
+    // 添加中间件处理方法
+    let middlewares = []
+    makeProp(route, false)({
+      module, // 双向关联
+      middlewares, // 中间件
+      appendMiddleware (name, middleware, prepend) { // 追加中间件
+        let it = {
+          name,
+          middleware
+        }
+        if (prepend) {
+          middlewares.unshift(it)
+        } else {
+          middlewares.push(it)
+        }
+      },
+      // 配置项
+      props: route.tasks.reduce((obj, it) => {
+        prop(it, 'setMiddleware', (middleware) => {
+          it.middleware = middleware
+        })
+        obj[it.name] = it
+        middlewares.push(it)
+        return obj
+      }, {})
+    })
+  }
+  return module
+}
 
 export function convertRoute (module, caseType = 'camel', prefix = '/') {
   let {props, moduleName} = module
@@ -92,7 +131,8 @@ function unique (arr) {
   return arr.filter((it, index) => arr.indexOf(it) === index)
 }
 
-export function createVueRoutes (modules, fromGroup) {
+// 生成Vue的路由文件
+export function createVueRoutes (modules, fromGroup, JSON5) {
   let comps = []
   if (fromGroup) {
     for (let moduleGroup in modules) {
@@ -112,22 +152,24 @@ export function createVueRoutes (modules, fromGroup) {
       }
     }
   }
-  let routes = JSON.stringify(comps, null, 2)
+  let routes = JSON5 ? JSON5.stringify(comps, null, 2) : JSON.stringify(comps, null, 2)
   let components = []
   let names = []
   let files = []
-  routes = routes.replace(/"component":\s+"((\w+)\/(\w+))"/g, (_, path, dir, name) => {
+  routes = routes.replace(JSON5 ? /component:\s+"((\w+)\/(\w+))"/g
+    : /"component":\s+"((\w+)\/(\w+))"/g, (_, path, dir, name) => {
     let file = `./${path}.vue`
     components.push(`import ${name} from '${file}'`)
     names.push(name)
     files.push(file)
-    let ret = `"component": ${name}`
+    let ret = `component: ${name}`
     return ret
   })
   // 去重
   files = unique(files)
   components = unique(components)
   names = unique(names)
+
   let arr = [].concat(components).concat([''])
     .concat(names.map((it) => `${it}.name='${it}'`)).concat([''])
     .concat(`export default ${routes}`)
