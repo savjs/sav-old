@@ -12,7 +12,9 @@ const Contract = require('./contract')
 let port = 3000
 let app = new Koa()
 
-app.use(logger())
+if (process.env.NODE_ENV !== 'production') {
+  app.use(logger())
+}
 app.use(staticCache(resolve(__dirname, '../static'), {
   maxAge: 365 * 24 * 60 * 60
 }))

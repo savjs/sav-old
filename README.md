@@ -95,3 +95,87 @@ standard
 ava
 nyc
 babel
+
+```js
+
+装饰器提取后的模块格式
+
+{
+  "moduleName": "Account",
+  "moduleGroup": "Page",
+  "uri": "AccountPage",
+  "props": {
+    "view": "vue",
+    "layout": "UserLayout"
+  },
+  "routes": [
+    {
+      "actionName": "login",
+      "uri": "AccountPage.login",
+      "tasks": [
+        { "name": "title", "props": "登录" },
+        { "name": "route", "props": {"methods": ["GET"]}}
+      ]
+    }
+  ]
+}
+
+经由模块预处理插件(注入, 不会被序列化)
+{
+  "routes": [
+    {
+      "actionName": "login",
+      "uri": "AccountPage.login",
+      "tasks": [
+        { "name": "title", "props": "登录" }, // 任务项
+      ],
+      module, // 双向绑定
+      middlewares: [],
+      appendMiddleware (name, middleware, prepend) {}
+      props: { // 将tasks转换为props方便后续处理
+        title: { // 任务项
+          name: "title",
+          props: "登录",
+
+          middleware: null,
+          setMiddleware (middleware) {}
+        }
+      }
+    }
+  ],
+
+}
+
+经由路由转换插件(添加)
+{
+  "SavRoute": {
+    "uri": "AccountPage",
+    "path": "/account",
+    "childs": [
+      {
+        "uri": "AccountPage.login",
+        "path": "/account/login",
+        "methods": [
+          "GET"
+        ]
+      }
+    ],
+    "parents": []
+  },
+  "VueRoute": {
+    "component": "Account/Account",
+    "path": "/account",
+    "children": [
+      {
+        "component": "Account/AccountLogin",
+        "name": "AccountLogin",
+        "path": "login",
+        "methods": [
+          "GET"
+        ]
+      }
+    ]
+  }
+}
+
+```

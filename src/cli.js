@@ -68,6 +68,7 @@ function readDirModules (path) {
   })
   return modules
 }
+
 function transformFileAsync (file) {
   return readFileAsync(file).then(data => {
     let code = babel.transform(data, {
@@ -196,12 +197,11 @@ async function createSchemaApiFile (modules, dest) {
         let isApi = moduleGroup.toUpperCase() === 'API'
         routes = routes.reduce((dist, it) => {
           it.methods.forEach((method) => {
-            let name = camelCase(method + '_' +
+            let name = camelCase(method.toLowerCase() + '_' +
               (isApi ? 'api_' : '') +
               it.uri.replace(isPage ? 'Page.' : 'Api.', '_'))
             let api = {
-              path: it.path,
-              method
+              path: it.path
             }
             allRoutes[name] = api
             dist.push(api)
