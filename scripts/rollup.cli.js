@@ -5,7 +5,7 @@ import includePaths from 'rollup-plugin-includepaths'
 import json from 'rollup-plugin-json'
 
 export default {
-  entry: 'src/cli.js',
+  entry: 'src/sav-cli/index.js',
   targets: [
     { dest: 'dist/sav-cli.js', format: 'cjs' }
   ],

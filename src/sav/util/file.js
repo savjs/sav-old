@@ -9,6 +9,14 @@ export function readFileAsync (file) {
   })
 }
 
+export function readdirAsync (path) {
+  return new Promise((resolve, reject) => {
+    fs.readdir(path, (err, data) => {
+      return err ? reject(err) : resolve(data)
+    })
+  })
+}
+
 export function fileExistsAsync (file) {
   return new Promise((resolve) => fs.exists(file, resolve))
 }

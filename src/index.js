@@ -1,5 +1,7 @@
 export {Router} from './sav/router'
 
+export {Contract, Modal} from './sav/modal'
+
 import * as plugins from './sav/plugins'
 
 export {plugins}

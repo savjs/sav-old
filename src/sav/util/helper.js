@@ -18,3 +18,17 @@ export function shortId () {
   let a = Math.random() + new Date().getTime()
   return a.toString(16).replace('.', '')
 }
+
+export function only (obj, keys) {
+  obj = obj || {}
+  if (typeof keys === 'string') {
+    keys = keys.split(/ +/)
+  }
+  return keys.reduce((ret, key) => {
+    if (obj[key] === null) {
+      return ret
+    }
+    ret[key] = obj[key]
+    return ret
+  }, {})
+}

@@ -74,17 +74,17 @@ function transform (moduleProps, moduleOpts) {
     module.props = Object.assign({}, refer(target, true), moduleProps)
     let routes = []
     for (let actionName in configs) {
-      let tasks = []
+      let middlewares = []
       let action = {
         actionName,
         uri: `${module.uri}.${actionName}`,
-        tasks
+        middlewares
       }
       let config = configs[actionName]
       for (let item of config) {
         let [name, value] = item
         if (name) {
-          tasks.push({
+          middlewares.push({
             name,
             props: isUndefined(value) ? null : value
           })

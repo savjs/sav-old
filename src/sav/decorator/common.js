@@ -8,15 +8,15 @@ export const title = quickConf('title')
 export const meta = quickConf('meta')
 
 export const PageInterface = (props) => {
-  return gen(props, {moduleGroup: 'Page'})
+  return gen(props, {modalGroup: 'Page'})
 }
 
 export const ApiInterface = (props) => {
-  return gen(props, {moduleGroup: 'Api'})
+  return gen(props, {modalGroup: 'Api'})
 }
 
 export const LayoutInterface = (props) => {
-  return gen(props, {moduleGroup: 'Layout'})
+  return gen(props, {modalGroup: 'Layout'})
 }
 
 export const requestSchema = quickConf('req')
@@ -41,22 +41,22 @@ const maps = {
 
 export function Composer (contracts, actions) {
   let ret = []
-  for (let moduleGroup in contracts) {
-    if (actions[moduleGroup]) {
-      let group = contracts[moduleGroup]
+  for (let modalGroup in contracts) {
+    if (actions[modalGroup]) {
+      let group = contracts[modalGroup]
       let mods = []
-      let acts = actions[moduleGroup].reduce((ret, mod) => {
-        let moduleName = mod.name
-        if (maps[moduleGroup] && group[moduleName]) {
-          let actions = maps[moduleGroup]()(mod).actions
-          ret[moduleName] = Object.assign(group[moduleName], {actions})
-          mods.push(group[moduleName])
+      let acts = actions[modalGroup].reduce((ret, mod) => {
+        let modalName = mod.name
+        if (maps[modalGroup] && group[modalName]) {
+          let actions = maps[modalGroup]()(mod).actions
+          ret[modalName] = Object.assign(group[modalName], {actions})
+          mods.push(group[modalName])
         }
         return ret
       }, {})
-      for (let moduleName in group) {
-        if (!acts[moduleName]) {
-          mods.push(group[moduleName])
+      for (let modalName in group) {
+        if (!acts[modalName]) {
+          mods.push(group[modalName])
         }
       }
       ret = ret.concat(mods)

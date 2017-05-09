@@ -7,7 +7,7 @@
   "jsnext:main": "dist/sav.es.js",
   "scripts": {
     "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
-    "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run cli\"",
+    "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
     "wb": "watch -p \"+(src)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
     "build": "rollup -c",
@@ -15,6 +15,7 @@
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
     "cli": "node ./dist/sav-cli",
+    "test-cli": "cd examples/sav-koa-demo && npm run cv",
     "na": "nyc ava ./test/unit",
     "pretest": "npm run lint",
     "test": "npm run na",
