@@ -6,9 +6,8 @@
     <title>{%=state.title%}</title>
     {% for (let name in state.meta) { %}
     <meta name="{%=name%}" content="{%=state.meta[name]%}"> {% } %}
-    <link src="">
 </head>
-<link href="../../static/css/style.min.css" rel="stylesheet" type="text/css" />
+<link href="{%=state.assertsPath%}/static/css/style.min.css" rel="stylesheet" type="text/css" />
 
 <body>
     <div id="app"></div>
