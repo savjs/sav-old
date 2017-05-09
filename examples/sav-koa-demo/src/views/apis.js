@@ -2,47 +2,36 @@
 
 export default {
   postApiArticleComment: {
-    path: "/api/article/comment/:aid",
-    method: "POST"
+    path: "/api/article/comment/:aid"
   },
   getAccountLogin: {
-    path: "/account/login",
-    method: "GET"
+    path: "/account/login"
   },
   postAccountPostLogin: {
-    path: "/account/postLogin",
-    method: "POST"
+    path: "/account/postLogin"
   },
   getAccountRegister: {
-    path: "/account/register",
-    method: "GET"
+    path: "/account/register"
   },
   postAccountPostRegister: {
-    path: "/account/postRegister",
-    method: "POST"
+    path: "/account/postRegister"
   },
   getArticlePosts: {
-    path: "/article/posts",
-    method: "GET"
+    path: "/article/posts"
   },
   getArticleView: {
-    path: "/article/view/:aid",
-    method: "GET"
+    path: "/article/view/:aid"
   },
   getArticleModify: {
-    path: "/article/modify/:id?",
-    method: "GET"
+    path: "/article/modify/:id?"
   },
   postArticleUpdate: {
-    path: "/article/update/:aid",
-    method: "POST"
+    path: "/article/update/:aid"
   },
   getHomeIndex: {
-    path: "/",
-    method: "GET"
+    path: "/"
   },
   getHomeAbout: {
-    path: "/about",
-    method: "GET"
+    path: "/about"
   }
 }

@@ -7,7 +7,7 @@
     {
       "actionName": "copyRight",
       "uri": "AdminLayout.copyRight",
-      "tasks": [
+      "middlewares": [
         {
           "name": "invoke",
           "props": null
@@ -21,7 +21,7 @@
     {
       "actionName": "userInfo",
       "uri": "AdminLayout.userInfo",
-      "tasks": [
+      "middlewares": [
         {
           "name": "invoke",
           "props": null
@@ -35,7 +35,7 @@
     {
       "actionName": "adminNavMenu",
       "uri": "AdminLayout.adminNavMenu",
-      "tasks": [
+      "middlewares": [
         {
           "name": "invoke",
           "props": null

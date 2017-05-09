@@ -63,7 +63,7 @@ test('interface+impl', (ava) => {
       {
         actionName: 'test',
         uri: 'Test.test',
-        tasks: [
+        middlewares: [
           {
             name: 'hello',
             props: 'world'
@@ -87,7 +87,7 @@ test('interface+impl', (ava) => {
       {
         actionName: 'test',
         uri: 'Test2.test',
-        tasks: [
+        middlewares: [
           {
             name: 'hello',
             props: 'world'

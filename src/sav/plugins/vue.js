@@ -11,10 +11,12 @@ export function vuePlugin (sav) {
       if (module.props.view === 'vue') {
         for (let route of module.routes) {
           if (!route.props.vue) {
-            route.appendMiddleware('vue', vueMiddleware, true)
-          } else {
-            route.props.vue.setMiddleware(vueMiddleware)
+            route.prependMiddleware({
+              name: 'vue',
+              props: null
+            })
           }
+          route.props.vue.setMiddleware(vueMiddleware)
         }
       }
     }

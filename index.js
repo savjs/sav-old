@@ -44,8 +44,8 @@ async function testArticlePageView () {
 
 Promise.all([
   testArticleApiComment(),
-  testArticlePageList(),
-  testArticlePageView()
+  // testArticlePageList(),
+  // testArticlePageView()
 ]).then((ret) => {
   console.log('done')
   console.log()

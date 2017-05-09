@@ -1,7 +1,7 @@
 import {resolve, extname, basename} from 'path'
-import {readdirAsync} from '../sav/util/file.js'
+import {readdirAsync, readFileAsync} from '../sav/util/file.js'
 import {decoratorFileAsync} from './decorator.js'
-import {Contract} from '../sav/modal/contract.js'
+import {Contract} from '../sav/contract'
 
 export async function loadConstractDir (path) {
   let group = {}
@@ -19,7 +19,6 @@ export async function loadConstractDir (path) {
         } else if (ext === '.json') {
           curr.json = file
         }
-        curr.baseName = baseName
       }
     })
   }))
@@ -39,8 +38,7 @@ export async function loadConstractModals (path) {
       } else if (modal.json) { // 直接读取json文件
         content = JSON.parse(await readFileAsync(modal.json))
       }
-      console.log(content)
-      group[modalName] = contract.createModal(Object.assign({}, content, modal))
+      group[modalName] = contract.createModule(Object.assign({}, content, modal))
     }
   }
   return groups

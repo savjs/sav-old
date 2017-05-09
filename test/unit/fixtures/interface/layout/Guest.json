@@ -7,7 +7,7 @@
     {
       "actionName": "copyRight",
       "uri": "GuestLayout.copyRight",
-      "tasks": [
+      "middlewares": [
         {
           "name": "invoke",
           "props": null

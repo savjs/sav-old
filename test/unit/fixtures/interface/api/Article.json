@@ -9,7 +9,7 @@
     {
       "actionName": "comment",
       "uri": "ArticleApi.comment",
-      "tasks": [
+      "middlewares": [
         {
           "name": "req",
           "props": null

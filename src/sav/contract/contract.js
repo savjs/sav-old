@@ -1,21 +1,21 @@
 import {only} from '../util/helper.js'
-import {Modal} from './modal.js'
+import {Module} from './module.js'
 
 export class Contract {
   constructor (props, filter) {
-    this.modals = [
-      'modalName', 'modalGroup', 'uri', 'props', 'routes',
+    this.modules = [
+      'moduleName', 'moduleGroup', 'uri', 'props', 'routes',
       'SavRoute', 'VueRoute'
     ]
     this.routes = ['actionName', 'uri', 'middlewares']
     this.middlewares = ['name', 'props']
     Object.assign(this, filter ? filter(this, props) : props)
   }
-  createModal (props) {
-    return new Modal(props, this)
+  createModule (props) {
+    return new Module(props, this)
   }
-  writeModal (modal) {
-    return only(modal, this.modals)
+  writeModal (module) {
+    return only(module, this.modules)
   }
   writeRoute (route) {
     return only(route, this.routes)

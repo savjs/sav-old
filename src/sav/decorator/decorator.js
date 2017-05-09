@@ -1,4 +1,4 @@
-import {isFunction, isUndefined, prop} from '../util'
+import {isFunction, isUndefined} from '../util'
 
 const CONFIG_KEY = '_CONFIG'
 
@@ -44,7 +44,7 @@ export function impl (intf) {
 
 export function functional (intf) {
   return (target) => {
-    prop(intf, 'actions', convertToFunction(target))
+    intf.actions = convertToFunction(target)
     return intf
   }
 }

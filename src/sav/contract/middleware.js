@@ -5,7 +5,10 @@ export class Middleware {
     this.route = route
     Object.assign(this, props)
   }
+  setMiddleware (middleware) {
+    this.middleware = middleware
+  }
   toJSON () {
-    return this.route.modal.writter.writeMiddleware(this)
+    return this.route.module.writter.writeMiddleware(this)
   }
 }

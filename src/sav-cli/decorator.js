@@ -9,7 +9,7 @@ export function exportSavDecorators () {
   global.SavDecorators = SavDecorators
 }
 
-function interopDefault (ex) { 
+function interopDefault (ex) {
   return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex
 }
 

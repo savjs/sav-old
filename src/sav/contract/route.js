@@ -1,34 +1,34 @@
 import {Middleware} from './middleware.js'
 
 export class Route {
-  constructor (props, modal) {
+  constructor (props, module) {
     this.middlewares = []
     this.props = {}
-    this.modal = modal
+    this.module = module
     Object.assign(this, props)
-    this.middlewares.map((props) => {
+    this.middlewares = this.middlewares.map((props) => {
       let mid = new Middleware(props, this)
-      setProps(this, mid)
+      toProps(this, mid)
       return mid
     })
   }
   prependMiddleware (props) {
     let mid = new Middleware(props, this)
     this.middlewares.unshift(mid)
-    setProps(this, mid)
+    toProps(this, mid)
     return mid
   }
   appendMiddleware (props) {
     let mid = new Middleware(props, this)
     this.middlewares.push(mid)
-    setProps(this, mid)
+    toProps(this, mid)
     return mid
   }
   toJSON () {
-    return this.modal.writter.writeRoute(this)
+    return this.module.writter.writeRoute(this)
   }
 }
 
-function setProps ({props}, middleware) {
+function toProps ({props}, middleware) {
   props[middleware.name] = middleware
 }

@@ -1,2 +1,2 @@
-export * from './modal.js'
+export * from './module.js'
 export * from './contract.js'

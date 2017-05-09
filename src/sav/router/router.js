@@ -10,8 +10,7 @@ import {proxyModuleActions} from './proxy.js'
 import {routePlugin} from '../plugins/route.js'
 import {koaPlugin} from '../plugins/koa.js'
 import {koaRenderer} from '../renders/koa.js'
-
-import {prepareModule} from './convert.js'
+import {Contract} from '../contract/contract.js'
 
 export class Router extends EventEmitter {
   constructor (config) {
@@ -27,7 +26,7 @@ export class Router extends EventEmitter {
     this.moduleActions = {}     // 模块动作
     this.moduleRoutes = []      // 模块路由
     this.routes = {}            // 模块路由
-
+    this.contract = new Contract()
     this.use(koaPlugin)
     this.use(routePlugin)
     this.use(koaRenderer)
@@ -117,11 +116,11 @@ export function matchContextRoute (ctx, router) {
 
 function walkModules (router, modules) {
   for (let module of modules) {
-    let {uri} = prepareModule(module)
+    module = router.contract.createModule(module)
     for (let route of module.routes) {
       router.routes[route.uri] = route
     }
-    router.modules[uri] = module
+    router.modules[module.uri] = module
     router.emit('module', module)
     for (let route of module.routes) {
       router.emit('route', route)
@@ -130,7 +129,7 @@ function walkModules (router, modules) {
       router.moduleRoutes.push(module.SavRoute)
     }
     if (module.actions) { // 模块方法表
-      router.moduleActions[uri] = module.actions
+      router.moduleActions[module.uri] = module.actions
     }
     if (module.moduleGroup === 'Layout') {
       // 合并layout模块下的invoke中间件

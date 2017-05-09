@@ -10,7 +10,7 @@
     {
       "actionName": "list",
       "uri": "ArticlePage.list",
-      "tasks": [
+      "middlewares": [
         {
           "name": "meta",
           "props": {
@@ -53,7 +53,7 @@
     {
       "actionName": "view",
       "uri": "ArticlePage.view",
-      "tasks": [
+      "middlewares": [
         {
           "name": "auth",
           "props": null
@@ -88,7 +88,7 @@
     {
       "actionName": "modify",
       "uri": "ArticlePage.modify",
-      "tasks": [
+      "middlewares": [
         {
           "name": "vue",
           "props": {
@@ -113,7 +113,7 @@
     {
       "actionName": "update",
       "uri": "ArticlePage.update",
-      "tasks": [
+      "middlewares": [
         {
           "name": "vue",
           "props": {
@@ -138,7 +138,7 @@
     {
       "actionName": "comment",
       "uri": "ArticlePage.comment",
-      "tasks": [
+      "middlewares": [
         {
           "name": "vue",
           "props": false
