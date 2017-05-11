@@ -14,7 +14,7 @@ export async function applyAction (groups, program) {
     }
     tasks.push(createIndex(moduleGroup, group, program.action, true))
   }
-  tasks.push(createRoot(groups, program.action, true))
+  tasks.push(createRoot(groups, program.action))
   return Promise.all(tasks)
 }
 
@@ -25,8 +25,8 @@ function createAction (groupDir, module, dest) {
     let jsFile = resolve(dir, module.moduleName + '.js')
     let exists = await fileExistsAsync(jsFile)
     let methods = module.routes.map((it) => it.actionName)
-    if (groupDir.toLowerCase() === 'layout') {
-      methods.push('invoke')
+    if (String(module.moduleGroup).toLowerCase() === 'layout') {
+      methods.unshift('invoke')
     }
     if (exists) {
       let jsData = (await readFileAsync(jsFile)).toString()
@@ -53,10 +53,13 @@ function createAction (groupDir, module, dest) {
 }
 
 function createClassModule (className, methods, args = '', body = '') {
+  if (body) {
+    body = '    ' + body
+  }
   methods = methods.map((method) => {
     return `
   ${method} (${args}) {
-    ${body}
+${body}
   }`
   }).join('').trim()
   return `module.exports = class ${className} {
@@ -66,8 +69,11 @@ function createClassModule (className, methods, args = '', body = '') {
 }
 
 function createMethods (methods, args = '', body = '') {
+  if (body) {
+    body = '    ' + body
+  }
   return methods.map((method) => `  ${method} (${args}) {
-    ${body}
+${body}
   }`).join('\n') + '\n'
 }
 
@@ -78,7 +84,7 @@ function parseClassModule (str, className) {
   })
   for (let item of ast.body) {
     // 表达式
-    if (item.type === 'ExpressionStatement') {
+    if (item.type === 'ExpressionStatement') { // module.export = class ClassName {}
       // 赋值表达式, 右边是类
       if (item.expression.right && item.expression.right.type === 'ClassExpression') {
         let ret = compareClass(item.expression.right, className)
@@ -86,8 +92,13 @@ function parseClassModule (str, className) {
           return ret
         }
       }
-    } else if (item.type === 'ClassDeclaration') {
+    } else if (item.type === 'ClassDeclaration') { // class ClassName
       let ret = compareClass(item, className)
+      if (ret) {
+        return ret
+      }
+    } else if (item.type === 'ExportDefaultDeclaration') { // export default class ClassName {}
+      let ret = compareClass(item.declaration, className)
       if (ret) {
         return ret
       }

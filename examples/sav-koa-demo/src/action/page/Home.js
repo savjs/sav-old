@@ -1,4 +1,3 @@
-
 module.exports = class Home {
   index ({setState}) {
     setState({
@@ -8,6 +7,6 @@ module.exports = class Home {
   about ({setState, ctx}) {
     setState({
       about: '欢迎再次光临'
-    }) 
+    })
   }
 }

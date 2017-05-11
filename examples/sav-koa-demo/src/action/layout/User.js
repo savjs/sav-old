@@ -1,9 +1,8 @@
-
 module.exports = class User {
   invoke ({all}) {
     return all([
       this.copyRight(),
-      this.userInfo(), 
+      this.userInfo(),
       this.userNavMenu()
     ])
   }
@@ -17,7 +16,7 @@ module.exports = class User {
       userInfo: {
         name: 'jetiny',
         id: '1001',
-        role: 'admin',
+        role: 'admin'
       }
     })
   }
