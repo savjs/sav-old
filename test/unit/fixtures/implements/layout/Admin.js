@@ -1,4 +1,4 @@
-import AdminLayoutInterface from '../../interface/Layout/Admin.js'
+import AdminLayoutInterface from '../../interface/layout/Admin.js'
 import {Layout} from 'sav/decorator'
 
 @Layout(AdminLayoutInterface)

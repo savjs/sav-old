@@ -1,4 +1,4 @@
-import UserLayoutInterface from '../../interface/Layout/User.js'
+import UserLayoutInterface from '../../interface/layout/User.js'
 import {Layout} from 'sav/decorator'
 
 @Layout(UserLayoutInterface)

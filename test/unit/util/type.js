@@ -1,5 +1,5 @@
 import test from 'ava'
-import expect from 'expect.js'
+import {expect} from 'chai'
 import * as type from 'sav/util'
 
 test('type', (ava) => {
