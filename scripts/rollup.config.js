@@ -7,7 +7,7 @@ import json from 'rollup-plugin-json'
 export default {
   entry: 'src/index.js',
   targets: [
-    { dest: 'dist/sav.cjs.js', format: 'cjs' }
+    { dest: 'dist/sav.js', format: 'cjs' }
   ],
   external: [
     'bluebird',

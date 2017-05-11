@@ -3,6 +3,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import includePaths from 'rollup-plugin-includepaths'
 import json from 'rollup-plugin-json'
+import fs from 'fs-extra'
 
 export default {
   entry: 'src/sav-cli/index.js',
@@ -29,7 +30,17 @@ export default {
       ]
     }),
     resolve(),
-    commonjs({})
+    commonjs({}),
+    {
+      name: 'copy-files',
+      ongenerate(bundle, res){
+        res.code = res.code.replace('babel-standalone', './babel-standalone')
+        fs.copy(require.resolve('babel-standalone'), 'dist/babel-standalone.js', err => {
+          if (err) return console.error(err)
+          console.log('copy babel-standalone')
+        })
+      }
+    }
   ],
   onwarn (err) {
     if (err) {

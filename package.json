@@ -1,16 +1,15 @@
 {
   "name": "sav",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "sav",
-  "main": "dist/sav.cjs.js",
-  "module": "dist/sav.es.js",
-  "jsnext:main": "dist/sav.es.js",
+  "main": "dist/sav.js",
   "scripts": {
     "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
     "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
     "wb": "watch -p \"+(src)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
-    "build": "rollup -c",
+    "build": "npm run build-sav && npm run build-cli",
+    "build-sav": "rollup -c scripts/rollup.config.js",
     "build-cli": "rollup -c scripts/rollup.cli.js",
     "lint": "standard rollup.config.js test/** src/**",
     "fix": "npm run lint -- --fix",
@@ -70,9 +69,7 @@
     "vue-router": "^2.3.0",
     "vue-server-renderer": "^2.2.4",
     "vue-template-compiler": "^2.2.4",
-    "watch-cli": "^0.2.1"
-  },
-  "dependencies": {
+    "watch-cli": "^0.2.1",
     "bluebird": "^3.4.7",
     "htmling": "0.0.8",
     "consolidate": "^0.14.5"

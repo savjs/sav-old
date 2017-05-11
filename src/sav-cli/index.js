@@ -1,12 +1,12 @@
 import program from 'commander'
 import {resolve} from 'path'
 
-import {exportSavDecorators, decoratorFileAsync} from './decorator.js'
+import {exportSavDecorators} from './decorator.js'
 import {loadConstractModals} from './loader.js'
 import {apply} from './apply.js'
 
 program
-  .version('0.0.1')
+  .version('0.0.3')
   .option('-p, --path [path]', 'convart root path')
   .option('-d, --dest [dest]', 'dest dir')
   .option('-v, --view [view]', 'view dir')
@@ -29,9 +29,8 @@ program.plugins = 'plugins' in program ? (program.plugins.split(',').map((it) =>
 exportSavDecorators()
 
 loadConstractModals(program.path).then(async (groups) => {
-  await apply(groups, program)
+  return await apply(groups, program)
 }).then(() => console.log('done')).catch((err) => {
   console.error(err)
-  process.x = decoratorFileAsync
   process.exit(1)
 })
