@@ -56,6 +56,7 @@ export async function saveVueRoutes (groups, dest) {
 }
 
 export async function applyVue (groups, program) {
+  await mkdirAsync(program.view)
   return Promise.all([
     createAppVue(program.view),
     saveVueRoutes(groups, program.view)

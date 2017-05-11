@@ -36,6 +36,7 @@
     "url": "https://github.com/savjs/sav/issues"
   },
   "devDependencies": {
+    "acorn": "^5.0.3",
     "ava": "^0.18.2",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -44,13 +45,15 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-standalone": "^6.24.0",
-    "bluebird": "^3.5.0",
+    "bluebird": "^3.4.7",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "commander": "^2.9.0",
+    "consolidate": "^0.14.5",
     "eslint-plugin-standard": "^2.0.1",
     "fs-extra": "^3.0.1",
     "handlebars": "^4.0.6",
+    "htmling": "0.0.8",
     "koa-compose": "^3.2.1",
     "nyc": "^10.0.0",
     "path-to-regexp": "^1.7.0",
@@ -69,10 +72,7 @@
     "vue-router": "^2.3.0",
     "vue-server-renderer": "^2.2.4",
     "vue-template-compiler": "^2.2.4",
-    "watch-cli": "^0.2.1",
-    "bluebird": "^3.4.7",
-    "htmling": "0.0.8",
-    "consolidate": "^0.14.5"
+    "watch-cli": "^0.2.1"
   },
   "standard": {
     "parser": "babel-eslint",

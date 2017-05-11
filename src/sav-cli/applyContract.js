@@ -22,26 +22,38 @@ function createContract (groupDir, module, dest, json) {
   })
 }
 
-function createIndex (groupDir, group, dest) {
+export function createIndex (groupDir, group, dest, asArray) {
   return Promise.resolve().then(async () => {
     let dir = resolve(dest, groupDir)
     let dist = resolve(dir, 'index.js')
     console.log('createIndex: ', dist)
-    let reqs = Object.keys(group).map((name) => `  ${name}: require('./${name}')`).join(',\n')
-    let str = `${noticeString}module.exports = {\n${reqs}\n}\n`
     await mkdirAsync(dir)
-    await writeFileAsync(dist, str)
+    if (asArray) {
+      let reqs = Object.keys(group).map((name) => `  require('./${name}')`).join(',\n')
+      let str = `${noticeString}module.exports = [\n${reqs}\n]\n`
+      await writeFileAsync(dist, str)
+    } else {
+      let reqs = Object.keys(group).map((name) => `  ${name}: require('./${name}')`).join(',\n')
+      let str = `${noticeString}module.exports = {\n${reqs}\n}\n`
+      await writeFileAsync(dist, str)
+    }
   })
 }
 
-function createRoot (groups, dest) {
+export function createRoot (groups, dest, asArray) {
   return Promise.resolve().then(async () => {
     await mkdirAsync(dest)
     let dist = resolve(dest, 'index.js')
     console.log('createRoot: ', dist)
-    let reqs = Object.keys(groups).map((name) => `  ${name}: require('./${name}')`).join(',\n')
-    let str = `${noticeString}module.exports = {\n${reqs}\n}\n`
-    await writeFileAsync(dist, str)
+    if (asArray) {
+      let reqs = Object.keys(groups).map((name) => `  require('./${name}')`).join(',\n')
+      let str = `${noticeString}module.exports = [\n${reqs}\n]\n`
+      await writeFileAsync(dist, str)
+    } else {
+      let reqs = Object.keys(groups).map((name) => `  ${name}: require('./${name}')`).join(',\n')
+      let str = `${noticeString}module.exports = {\n${reqs}\n}\n`
+      await writeFileAsync(dist, str)
+    }
   })
 }
 

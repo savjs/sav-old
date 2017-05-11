@@ -2,6 +2,7 @@ import {makeSavRoute, makeVueRoute} from '../sav/middlewares'
 import {applyVue} from './applyVue.js'
 import {applyContract} from './applyContract.js'
 import {applySchemaApi} from './applySchemaApi.js'
+import {applyAction} from './applyAction.js'
 
 export async function prepareModules (groups) {
   for (let modalGroup in groups) {
@@ -20,6 +21,9 @@ export async function apply (groups, program) {
   if (program.view) {
     tasks.push(applyVue(groups, program))
     tasks.push(applySchemaApi(groups, program))
+  }
+  if (program.action) {
+    tasks.push(applyAction(groups, program))
   }
   return Promise.all(tasks)
 }

@@ -6,7 +6,7 @@
     "scripts": {
         "build": "rollup -c",
         "wb": "npm run build -- -w",
-        "cv": "node ../../dist/sav-cli.js -p ./src/interface -d ./src/contract -v ./src/views"
+        "cv": "node ../../dist/sav-cli.js -p ./src/interface -d ./src/contract -v ./src/views -a ./src/action"
     },
     "author": "",
     "license": "ISC",
