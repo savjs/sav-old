@@ -99,7 +99,7 @@ export function createVueRoutes (modules, fromGroup, JSON5) {
   names = unique(names)
 
   let arr = [].concat(components).concat([''])
-    .concat(names.map((it) => `${it}.name='${it}'`)).concat([''])
+    .concat(names.map((it) => `${it}.name = '${it}'`)).concat([''])
     .concat(`export default ${routes}`)
   let content = arr.join('\n')
   return {
