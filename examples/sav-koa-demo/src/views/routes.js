@@ -31,34 +31,22 @@ export default [
       {
         component: AccountLogin,
         name: "AccountLogin",
-        path: "login",
-        methods: [
-          "GET"
-        ]
+        path: "login"
       },
       {
         component: AccountLogin,
         name: "AccountPostLogin",
-        path: "postLogin",
-        methods: [
-          "POST"
-        ]
+        path: "postLogin"
       },
       {
         component: AccountRegister,
         name: "AccountRegister",
-        path: "register",
-        methods: [
-          "GET"
-        ]
+        path: "register"
       },
       {
         component: AccountRegister,
         name: "AccountPostRegister",
-        path: "postRegister",
-        methods: [
-          "POST"
-        ]
+        path: "postRegister"
       }
     ]
   },
@@ -69,34 +57,22 @@ export default [
       {
         component: ArticlePosts,
         name: "ArticlePosts",
-        path: "posts",
-        methods: [
-          "GET"
-        ]
+        path: "posts"
       },
       {
         component: ArticleView,
         name: "ArticleView",
-        path: "view/:aid",
-        methods: [
-          "GET"
-        ]
+        path: "view/:aid"
       },
       {
         component: ArticleModify,
         name: "ArticleModify",
-        path: "modify/:id?",
-        methods: [
-          "GET"
-        ]
+        path: "modify/:id?"
       },
       {
         component: ArticleModify,
         name: "ArticleUpdate",
-        path: "update/:aid",
-        methods: [
-          "POST"
-        ]
+        path: "update/:aid"
       }
     ]
   },
@@ -107,18 +83,12 @@ export default [
       {
         component: HomeIndex,
         name: "HomeIndex",
-        path: "",
-        methods: [
-          "GET"
-        ]
+        path: ""
       },
       {
         component: HomeAbout,
         name: "HomeAbout",
-        path: "about",
-        methods: [
-          "GET"
-        ]
+        path: "about"
       }
     ]
   }

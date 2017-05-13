@@ -6,19 +6,24 @@ export default {
     path: "/api/article/comment/:aid"
   },
   getAccountLogin: {
-    path: "/account/login"
+    path: "/account/login",
+    title: "登录"
   },
   postAccountPostLogin: {
-    path: "/account/postLogin"
+    path: "/account/postLogin",
+    title: "登录"
   },
   getAccountRegister: {
-    path: "/account/register"
+    path: "/account/register",
+    title: "注册"
   },
   postAccountPostRegister: {
-    path: "/account/postRegister"
+    path: "/account/postRegister",
+    title: "注册"
   },
   getArticlePosts: {
-    path: "/article/posts"
+    path: "/article/posts",
+    title: "文章列表"
   },
   getArticleView: {
     path: "/article/view/:aid"
@@ -30,9 +35,12 @@ export default {
     path: "/article/update/:aid"
   },
   getHomeIndex: {
-    path: "/"
+    path: "/",
+    title: "主页"
   },
   getHomeAbout: {
-    path: "/about"
+    timeout: 3000,
+    path: "/about",
+    title: "关于我们"
   }
 }

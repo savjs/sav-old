@@ -8,10 +8,7 @@ import {convertCase} from '../util'
       {
         "component": "Account/AccountLogin",
         "name": "AccountLogin",
-        "path": "login",
-        "methods": [
-          "GET"
-        ]
+        "path": "login"
       }
     ]
   }
@@ -37,8 +34,7 @@ export function makeVueRoute (module) {
         let vueRoute = {
           component: convertCase(vueCase, `${moduleName}/${moduleName}_${action.actionName}`),
           name: convertCase(vueCase, `${moduleName}_${action.actionName}`),
-          path: savRoute.relative,
-          methods: savRoute.methods
+          path: savRoute.relative
         }
         vueRoute = Object.assign(vueRoute, vueAction.props)
         vueModuleRoute.children.push(vueRoute)

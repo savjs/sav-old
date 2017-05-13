@@ -5,12 +5,14 @@ export class Module {
     this.routes = []
     this.props = {}
     this.writter = writter
+    this.uris = {}
     Object.assign(this, props)
-    this.routes = this.routes.map((props) => new Route(props, this))
+    this.routes = this.routes.map(this.appendRoute.bind(this))
   }
   appendRoute (props) {
     let route = new Route(props, this)
     this.routes.push(route)
+    this.uris[route.uri] = route
     return route
   }
   toJSON () {

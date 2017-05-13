@@ -181,34 +181,22 @@ module.exports = {
       {
         component: "Article/ArticlePosts",
         name: "ArticlePosts",
-        path: "posts",
-        methods: [
-          "GET"
-        ]
+        path: "posts"
       },
       {
         component: "Article/ArticleView",
         name: "ArticleView",
-        path: "view/:aid",
-        methods: [
-          "GET"
-        ]
+        path: "view/:aid"
       },
       {
         component: "Article/ArticleModify",
         name: "ArticleModify",
-        path: "modify/:id?",
-        methods: [
-          "GET"
-        ]
+        path: "modify/:id?"
       },
       {
         component: "Article/ArticleModify",
         name: "ArticleUpdate",
-        path: "update/:aid",
-        methods: [
-          "POST"
-        ]
+        path: "update/:aid"
       }
     ]
   }

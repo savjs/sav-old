@@ -52,7 +52,8 @@ module.exports = {
           props: {
             methods: [
               "GET"
-            ]
+            ],
+            timeout: 3000
           }
         }
       ]
@@ -88,18 +89,12 @@ module.exports = {
       {
         component: "Home/HomeIndex",
         name: "HomeIndex",
-        path: "",
-        methods: [
-          "GET"
-        ]
+        path: ""
       },
       {
         component: "Home/HomeAbout",
         name: "HomeAbout",
-        path: "about",
-        methods: [
-          "GET"
-        ]
+        path: "about"
       }
     ]
   }

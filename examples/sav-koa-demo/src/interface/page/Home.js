@@ -16,7 +16,9 @@ export default class Home {
   })
   index () {}
 
-  @get()
+  @get({
+    timeout: 3000
+  })
   @title('关于我们')
   about () {}
 }

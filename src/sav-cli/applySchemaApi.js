@@ -22,12 +22,18 @@ async function createApiFile (groups, dest) {
           let isPage = moduleGroup.toUpperCase() === 'PAGE'
           let isApi = moduleGroup.toUpperCase() === 'API'
           routes.reduce((dist, it) => {
+            let props = module.uris[it.uri].props
+            let routeProps = props.route && props.route.props;
             it.methods.forEach((method) => {
               let name = camelCase(method.toLowerCase() + '_' +
                 (isApi ? 'api_' : '') +
                 it.uri.replace(isPage ? 'Page.' : 'Api.', '_'))
-              let api = {
+              let api = Object.assign({}, routeProps, {
                 path: it.path
+              })
+              delete api.methods
+              if (props.title && props.title.props) {
+                api.title = props.title.props
               }
               allRoutes[name] = api
               dist.push(api)

@@ -177,34 +177,22 @@ module.exports = {
       {
         component: "Account/AccountLogin",
         name: "AccountLogin",
-        path: "login",
-        methods: [
-          "GET"
-        ]
+        path: "login"
       },
       {
         component: "Account/AccountLogin",
         name: "AccountPostLogin",
-        path: "postLogin",
-        methods: [
-          "POST"
-        ]
+        path: "postLogin"
       },
       {
         component: "Account/AccountRegister",
         name: "AccountRegister",
-        path: "register",
-        methods: [
-          "GET"
-        ]
+        path: "register"
       },
       {
         component: "Account/AccountRegister",
         name: "AccountPostRegister",
-        path: "postRegister",
-        methods: [
-          "POST"
-        ]
+        path: "postRegister"
       }
     ]
   }
