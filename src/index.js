@@ -1,4 +1,5 @@
 export {Router} from './sav/router'
+export {Exception, InvalidaArgumentException} from './sav/core/exception.js'
 
 import * as plugins from './sav/plugins'
 

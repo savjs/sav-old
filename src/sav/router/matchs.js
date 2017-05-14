@@ -40,7 +40,7 @@ export function matchRouter (routers, path, method) {
   while (step < len) {
     route = routers[step++]
     isModule = !!route.childs
-    if (matchRoute(route.path, params, path, {end: !isModule, sensitive: true})) {
+    if (matchRoute(route.path, params, path, {end: !isModule || (route.path === '/'), sensitive: true})) {
       if (isModule) {
         return [route]
       }

@@ -16,7 +16,9 @@ export function vuePlugin (sav) {
               props: null
             })
           }
-          route.props.vue.setMiddleware(vueMiddleware)
+          if (route.props.vue.props !== false) {
+            route.props.vue.setMiddleware(vueMiddleware)
+          }
         }
       }
     }

@@ -13,6 +13,18 @@ export function authPlugin (sav) {
       }
       await next()
     },
+    module (module) {
+      if (module.props.auth) {
+        for (let route of module.routes) {
+          if (!route.props.auth) {
+            route.prependMiddleware({
+              name: 'auth',
+              props: module.props.auth
+            })
+          }
+        }
+      }
+    },
     route ({props: {auth}}) {
       if (auth) {
         auth.setMiddleware((ctx) => {

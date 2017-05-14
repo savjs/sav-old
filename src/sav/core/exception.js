@@ -27,3 +27,6 @@ export class NotImplementedException extends Exception {}
 
 // 没有匹配到路由
 export class NotRoutedException extends Exception {}
+
+// 参数错误
+export class InvalidaArgumentException extends Exception {}

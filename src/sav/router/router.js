@@ -236,6 +236,9 @@ function makeRender ({ctx, prop}) {
     setView (data) {
       ctx.setRenderType('view', data)
     },
+    setRaw (data) {
+      ctx.setRenderType('raw', data)
+    },
     setVue (data) {
       ctx.setRenderType('vue', data)
     }

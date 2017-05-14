@@ -62,6 +62,9 @@ export function koaRenderer (sav) {
     },
     async view (ctx, data, err) {
 
+    },
+    async raw (ctx, data, err) {
+      ctx.body = data
     }
   })
 }
