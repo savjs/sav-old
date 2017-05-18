@@ -1,6 +1,6 @@
 {
   "name": "sav",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "sav",
   "main": "dist/sav.js",
   "scripts": {
@@ -65,7 +65,7 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-re": "^1.0.1",
     "rollup-plugin-vue2": "^0.8.0",
-    "sav-schema": "0.0.8",
+    "sav-schema": "dev",
     "sav-util": "0.0.9",
     "standard": "^9.0.1",
     "vue": "^2.2.4",
