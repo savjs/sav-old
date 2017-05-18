@@ -23,7 +23,7 @@ async function createApiFile (groups, dest) {
           let isApi = moduleGroup.toUpperCase() === 'API'
           routes.reduce((dist, it) => {
             let props = module.uris[it.uri].props
-            let routeProps = props.route && props.route.props;
+            let routeProps = props.route && props.route.props
             it.methods.forEach((method) => {
               let name = camelCase(method.toLowerCase() + '_' +
                 (isApi ? 'api_' : '') +
