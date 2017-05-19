@@ -4,14 +4,12 @@
 module.exports = {
   moduleName: "Article",
   moduleGroup: "Api",
-  uri: "ArticleApi",
   props: {
     routePrefix: "api"
   },
   routes: [
     {
       actionName: "comment",
-      uri: "ArticleApi.comment",
       middlewares: [
         {
           name: "req",

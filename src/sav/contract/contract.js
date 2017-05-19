@@ -4,10 +4,10 @@ import {Module} from './module.js'
 export class Contract {
   constructor (props, filter) {
     this.modules = [
-      'moduleName', 'moduleGroup', 'uri', 'props', 'routes',
+      'moduleName', 'moduleGroup', 'props', 'routes',
       'SavRoute', 'VueRoute'
     ]
-    this.routes = ['actionName', 'uri', 'middlewares']
+    this.routes = ['actionName', 'middlewares']
     this.middlewares = ['name', 'props']
     Object.assign(this, filter ? filter(this, props) : props)
   }

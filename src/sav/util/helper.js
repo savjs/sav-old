@@ -1,3 +1,5 @@
+import {isObject, isArray} from './type.js'
+
 export function unique (arr) {
   if (!Array.isArray(arr)) {
     throw new TypeError('array-unique expects an array.')
@@ -31,4 +33,15 @@ export function only (obj, keys) {
     ret[key] = obj[key]
     return ret
   }, {})
+}
+
+export function objectAssign (target, obj, excludes) {
+  if (isObject(obj)) {
+    let isExclude = isArray(excludes)
+    for (let key in obj) {
+      if ((!isExclude) || (excludes.indexOf(key) === -1)) {
+        target[key] = obj[key]
+      }
+    }
+  }
 }

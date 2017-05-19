@@ -4,7 +4,6 @@
 module.exports = {
   moduleName: "Account",
   moduleGroup: "Page",
-  uri: "AccountPage",
   props: {
     view: "vue",
     layout: "UserLayout"
@@ -12,7 +11,6 @@ module.exports = {
   routes: [
     {
       actionName: "login",
-      uri: "AccountPage.login",
       middlewares: [
         {
           name: "title",
@@ -30,7 +28,6 @@ module.exports = {
     },
     {
       actionName: "postLogin",
-      uri: "AccountPage.postLogin",
       middlewares: [
         {
           name: "vue",
@@ -63,7 +60,6 @@ module.exports = {
     },
     {
       actionName: "register",
-      uri: "AccountPage.register",
       middlewares: [
         {
           name: "title",
@@ -100,7 +96,6 @@ module.exports = {
     },
     {
       actionName: "postRegister",
-      uri: "AccountPage.postRegister",
       middlewares: [
         {
           name: "vue",

@@ -4,7 +4,6 @@
 module.exports = {
   moduleName: "Article",
   moduleGroup: "Page",
-  uri: "ArticlePage",
   props: {
     view: "vue",
     layout: "UserLayout"
@@ -12,7 +11,6 @@ module.exports = {
   routes: [
     {
       actionName: "posts",
-      uri: "ArticlePage.posts",
       middlewares: [
         {
           name: "meta",
@@ -56,7 +54,6 @@ module.exports = {
     },
     {
       actionName: "view",
-      uri: "ArticlePage.view",
       middlewares: [
         {
           name: "req",
@@ -88,7 +85,6 @@ module.exports = {
     },
     {
       actionName: "modify",
-      uri: "ArticlePage.modify",
       middlewares: [
         {
           name: "vue",
@@ -112,7 +108,6 @@ module.exports = {
     },
     {
       actionName: "update",
-      uri: "ArticlePage.update",
       middlewares: [
         {
           name: "vue",

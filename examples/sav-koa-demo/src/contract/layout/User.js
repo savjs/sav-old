@@ -4,12 +4,10 @@
 module.exports = {
   moduleName: "User",
   moduleGroup: "Layout",
-  uri: "UserLayout",
   props: {},
   routes: [
     {
       actionName: "copyRight",
-      uri: "UserLayout.copyRight",
       middlewares: [
         {
           name: "invoke"
@@ -26,7 +24,6 @@ module.exports = {
     },
     {
       actionName: "userInfo",
-      uri: "UserLayout.userInfo",
       middlewares: [
         {
           name: "invoke"
@@ -69,7 +66,6 @@ module.exports = {
     },
     {
       actionName: "userNavMenu",
-      uri: "UserLayout.userNavMenu",
       middlewares: [
         {
           name: "invoke"

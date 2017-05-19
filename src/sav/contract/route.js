@@ -1,16 +1,19 @@
 import {Middleware} from './middleware.js'
+import {objectAssign} from '../util'
 
 export class Route {
   constructor (props, module) {
     this.middlewares = []
     this.props = {}
     this.module = module
-    Object.assign(this, props)
-    this.middlewares = this.middlewares.map((props) => {
-      let mid = new Middleware(props, this)
-      toProps(this, mid)
-      return mid
-    })
+    objectAssign(this, props, ['uri', 'middlewares'])
+    if (props.middlewares) {
+      this.middlewares = props.middlewares.map((props) => {
+        let mid = new Middleware(props, this)
+        toProps(this, mid)
+        return mid
+      })
+    }
   }
   prependMiddleware (props) {
     let mid = new Middleware(props, this)
@@ -23,6 +26,9 @@ export class Route {
     this.middlewares.push(mid)
     toProps(this, mid)
     return mid
+  }
+  get uri () {
+    return this.module.uri + '.' + this.actionName
   }
   toJSON () {
     return this.module.writter.writeRoute(this)

@@ -4,7 +4,6 @@
 module.exports = {
   moduleName: "Home",
   moduleGroup: "Page",
-  uri: "HomePage",
   props: {
     view: "vue",
     layout: "UserLayout",
@@ -15,7 +14,6 @@ module.exports = {
   routes: [
     {
       actionName: "index",
-      uri: "HomePage.index",
       middlewares: [
         {
           name: "meta",
@@ -41,7 +39,6 @@ module.exports = {
     },
     {
       actionName: "about",
-      uri: "HomePage.about",
       middlewares: [
         {
           name: "title",
