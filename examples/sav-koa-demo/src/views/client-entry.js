@@ -7,6 +7,7 @@ let app = bootstrap({
 })
 
 app.router.beforeEach((to, from, next) => {
+  console.log(app.router.getMatchedComponents())
   if (app.hotReplace) {
     return next()
   }

@@ -1,4 +1,5 @@
 import SavForm from './SavForm.vue'
+import SavBtn from './SavBtn.vue'
 
 export function install (Vue) {
   Object.keys(components).forEach((it) => {
@@ -9,7 +10,8 @@ export function install (Vue) {
 }
 
 let components = {
-  SavForm
+  SavForm,
+  SavBtn
 }
 
 Object.defineProperty(components, 'install', {
