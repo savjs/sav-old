@@ -179,3 +179,20 @@ babel
 }
 
 ```
+
+#### sav要做什么
+
+App = Page + Route
+Page = PageLayout + PageRoute + PageView
+PageLayout = Views
+View = Template + State + Route
+Route = Api + Schema
+State = Schema
+
+=>
+
+Page = Route + View + State
+Route = View = State
+
+mapGetter => DataSource
+
