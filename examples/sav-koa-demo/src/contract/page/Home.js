@@ -51,40 +51,5 @@ module.exports = {
         }
       ]
     }
-  ],
-  SavRoute: {
-    uri: "HomePage",
-    path: "/",
-    childs: [
-      {
-        uri: "HomePage.index",
-        path: "/",
-        method: "GET",
-        relative: ""
-      },
-      {
-        uri: "HomePage.about",
-        path: "/about",
-        method: "GET",
-        relative: "about"
-      }
-    ],
-    parents: []
-  },
-  VueRoute: {
-    component: "Home/Home",
-    path: "/",
-    children: [
-      {
-        component: "Home/HomeIndex",
-        name: "HomeIndex",
-        path: ""
-      },
-      {
-        component: "Home/HomeAbout",
-        name: "HomeAbout",
-        path: "about"
-      }
-    ]
-  }
+  ]
 }

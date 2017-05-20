@@ -88,11 +88,5 @@ module.exports = {
         }
       ]
     }
-  ],
-  SavRoute: {
-    uri: "UserLayout",
-    path: "/user",
-    childs: [],
-    parents: []
-  }
+  ]
 }

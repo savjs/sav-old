@@ -1,4 +1,4 @@
-import {makeSavRoute, makeVueRoute} from '../sav/middlewares'
+import {makeVueRoute} from '../sav/middlewares'
 import {applyVue} from './applyVue.js'
 import {applyContract} from './applyContract.js'
 import {applySchemaApi} from './applySchemaApi.js'
@@ -9,7 +9,6 @@ export async function prepareModules (groups) {
     let group = groups[modalGroup]
     for (let modalName in group) {
       let module = group[modalName]
-      makeSavRoute(module)
       makeVueRoute(module)
     }
   }

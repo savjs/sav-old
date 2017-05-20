@@ -4,8 +4,7 @@ import {Module} from './module.js'
 export class Contract {
   constructor (props, filter) {
     this.modules = [
-      'moduleName', 'moduleGroup', 'props', 'routes',
-      'SavRoute', 'VueRoute'
+      'moduleName', 'moduleGroup', 'props', 'routes'
     ]
     this.routes = ['actionName', 'middlewares']
     this.middlewares = ['name', 'props']

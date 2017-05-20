@@ -125,8 +125,8 @@ function walkModules (router, modules) {
     for (let route of module.routes) {
       router.emit('route', route)
     }
-    if (module.SavRoute) { // 服务端路由处理
-      router.moduleRoutes.push(module.SavRoute)
+    if (module.savRoute) { // 服务端路由处理
+      router.moduleRoutes.push(module.savRoute)
     }
     if (module.actions) { // 模块方法表
       router.moduleActions[module.uri] = module.actions

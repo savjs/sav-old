@@ -39,18 +39,5 @@ module.exports = {
         }
       ]
     }
-  ],
-  SavRoute: {
-    uri: "ArticleApi",
-    path: "/api/article",
-    childs: [
-      {
-        uri: "ArticleApi.comment",
-        path: "/api/article/comment/:aid",
-        method: "POST",
-        relative: "comment/:aid"
-      }
-    ],
-    parents: []
-  }
+  ]
 }

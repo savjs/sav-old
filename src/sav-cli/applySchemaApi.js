@@ -15,9 +15,9 @@ export async function createApiFile (groups, dest) {
     for (let moduleName in group) {
       let module = group[moduleName]
       // 提取schema
-      if (module.SavRoute) {
+      if (module.savRoute) {
         // 生成路由
-        let routes = [].concat(module.SavRoute.parents).concat(module.SavRoute.childs)
+        let routes = [].concat(module.savRoute.parents).concat(module.savRoute.childs)
         if (routes.length) {
           let isPage = moduleGroup.toUpperCase() === 'PAGE'
           let isApi = moduleGroup.toUpperCase() === 'API'
@@ -58,9 +58,9 @@ export async function createClientUri (groups, dest) {
     for (let moduleName in group) {
       let module = group[moduleName]
       // 提取schema
-      if (module.SavRoute) {
+      if (module.savRoute) {
         // 生成路由
-        let routes = [].concat(module.SavRoute.parents).concat(module.SavRoute.childs)
+        let routes = [].concat(module.savRoute.parents).concat(module.savRoute.childs)
         if (routes.length) {
           let isPage = moduleGroup.toUpperCase() === 'PAGE'
           let isApi = moduleGroup.toUpperCase() === 'API'

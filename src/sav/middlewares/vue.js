@@ -18,23 +18,22 @@ export function makeVueRoute (module) {
   if (module.props.view !== 'vue') {
     return
   }
-  let {SavRoute, moduleName} = module
+  let {savRoute, moduleName} = module
   let vueCase = 'pascal'
   let vueModuleRoute = {
     component: convertCase(vueCase, `${moduleName}/${moduleName}`),
-    path: SavRoute.path,
+    path: savRoute.path,
     children: []
   }
-  let maps = mapSavRoute(SavRoute)
   for (let action of module.routes) {
     if (action.props.route) {
       let vueAction = action.props.vue || {props: null}
       if (vueAction.props !== false) {
-        let savRoute = maps[action.uri]
+        let route = savRoute.uris[action.uri]
         let vueRoute = {
           component: convertCase(vueCase, `${moduleName}/${moduleName}_${action.actionName}`),
           name: convertCase(vueCase, `${moduleName}_${action.actionName}`),
-          path: savRoute.relative
+          path: route.relative
         }
         vueRoute = Object.assign(vueRoute, vueAction.props)
         vueModuleRoute.children.push(vueRoute)
@@ -42,13 +41,6 @@ export function makeVueRoute (module) {
     }
   }
   module.VueRoute = vueModuleRoute
-}
-
-function mapSavRoute (savRoute) {
-  return [].concat(savRoute.parents).concat(savRoute.childs).reduce((tar, it) => {
-    tar[it.uri] = it
-    return tar
-  }, {})
 }
 
 function unique (arr) {
