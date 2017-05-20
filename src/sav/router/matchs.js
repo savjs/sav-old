@@ -10,9 +10,15 @@ export function matchModulesRoute (moduleRoutes, path, method) {
       }
     }
   }
-  ret = matchRouter(moduleRoutes, path, method)
-  if (ret) {
-    return matchRouter(ret[0].childs, path, method)
+  let mats = []
+  matchRouter(moduleRoutes, path, method, mats)
+  let len = mats.length
+  if (len === 1) {
+    return matchRouter(mats[0].childs, path, method)
+  } else if (len > 1) {
+    return mats.reduce((src, it) => {
+      return src || matchRouter(it.childs, path, method)
+    }, null)
   }
 }
 
@@ -31,7 +37,7 @@ export function matchModulesRoute (moduleRoutes, path, method) {
  * @return {Array}          the matched route [route] or [route, params]
  */
 
-export function matchRouter (routers, path, method) {
+export function matchRouter (routers, path, method, mats) {
   let len = routers.length
   let step = 0
   let params = {}
@@ -40,9 +46,13 @@ export function matchRouter (routers, path, method) {
   while (step < len) {
     route = routers[step++]
     isModule = !!route.childs
-    if (matchRoute(route.path, params, path, {end: !isModule || (route.path === '/'), sensitive: true})) {
+    if (matchRoute(route.path, params, path, {end: !isModule, sensitive: true})) {
       if (isModule) {
-        return [route]
+        if (mats) {
+          mats.push(route)
+        } else {
+          return [route]
+        }
       }
       if (route.method === method) {
         return [route, params]
