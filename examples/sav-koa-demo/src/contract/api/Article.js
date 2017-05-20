@@ -23,9 +23,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "POST"
-            ],
+            method: "POST",
             path: "comment/:aid"
           }
         },
@@ -49,9 +47,7 @@ module.exports = {
       {
         uri: "ArticleApi.comment",
         path: "/api/article/comment/:aid",
-        methods: [
-          "POST"
-        ],
+        method: "POST",
         relative: "comment/:aid"
       }
     ],

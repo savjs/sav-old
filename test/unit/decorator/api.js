@@ -115,7 +115,7 @@ test('route', (ava) => {
     @get()
     say () {}
 
-    @route(['get', 'post'])
+    @route('get')
     bye () {}
   }
   expect(Test.routes.length).to.eql(2)

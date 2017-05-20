@@ -17,9 +17,7 @@
         {
           "name": "route",
           "props": {
-            "methods": [
-              "POST"
-            ],
+            "method": "POST",
             "path": "comment/:aid"
           }
         },

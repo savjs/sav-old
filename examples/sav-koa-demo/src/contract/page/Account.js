@@ -19,9 +19,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ]
+            method: "GET"
           }
         }
       ]
@@ -51,9 +49,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "POST"
-            ]
+            method: "POST"
           }
         }
       ]
@@ -68,9 +64,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ]
+            method: "GET"
           }
         },
         {
@@ -114,9 +108,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "POST"
-            ]
+            method: "POST"
           }
         },
         {
@@ -133,33 +125,25 @@ module.exports = {
       {
         uri: "AccountPage.login",
         path: "/account/login",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: "login"
       },
       {
         uri: "AccountPage.postLogin",
         path: "/account/postLogin",
-        methods: [
-          "POST"
-        ],
+        method: "POST",
         relative: "postLogin"
       },
       {
         uri: "AccountPage.register",
         path: "/account/register",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: "register"
       },
       {
         uri: "AccountPage.postRegister",
         path: "/account/postRegister",
-        methods: [
-          "POST"
-        ],
+        method: "POST",
         relative: "postRegister"
       }
     ],

@@ -1,8 +1,8 @@
 import {annotateMethod} from './decorator'
 import {isObject} from '../util/type.js'
 
-export const route = annotateMethod((target, it, [methods, path]) => {
-  it.push(['route', makeRouteProps(processMethod(methods), path)])
+export const route = annotateMethod((target, it, [method, path]) => {
+  it.push(['route', makeRouteProps(processMethod(method), path)])
 })
 
 export const head = routeMethods('head')
@@ -20,12 +20,13 @@ function routeMethods (method) {
 }
 
 function processMethod (method) {
-  method = Array.isArray(method) ? method : [method]
-  return method.filter(Boolean).map((it) => it.toUpperCase())
+  return method.toUpperCase()
+  // method = Array.isArray(method) ? method : [method]
+  // return method.filter(Boolean).map((it) => it.toUpperCase())
 }
 
-function makeRouteProps (methods, path) {
-  let ret = {methods}
+function makeRouteProps (method, path) {
+  let ret = {method}
   if (isObject(path)) {
     Object.assign(ret, path)
   } else {

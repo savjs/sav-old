@@ -44,7 +44,7 @@ export function matchRouter (routers, path, method) {
       if (isModule) {
         return [route]
       }
-      if (route.methods.indexOf(method) !== -1) {
+      if (route.method === method) {
         return [route, params]
       }
     }

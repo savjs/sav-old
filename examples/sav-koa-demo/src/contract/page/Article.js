@@ -26,9 +26,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ]
+            method: "GET"
           }
         },
         {
@@ -66,9 +64,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ],
+            method: "GET",
             path: "view/:aid"
           }
         },
@@ -98,9 +94,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ],
+            method: "GET",
             path: "modify/:id?"
           }
         }
@@ -121,9 +115,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "POST"
-            ],
+            method: "POST",
             path: "update/:aid"
           }
         }
@@ -137,33 +129,25 @@ module.exports = {
       {
         uri: "ArticlePage.posts",
         path: "/article/posts",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: "posts"
       },
       {
         uri: "ArticlePage.view",
         path: "/article/view/:aid",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: "view/:aid"
       },
       {
         uri: "ArticlePage.modify",
         path: "/article/modify/:id?",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: "modify/:id?"
       },
       {
         uri: "ArticlePage.update",
         path: "/article/update/:aid",
-        methods: [
-          "POST"
-        ],
+        method: "POST",
         relative: "update/:aid"
       }
     ],

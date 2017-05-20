@@ -3,42 +3,53 @@
 /* eslint quotes: ["off"] */
 export default {
   postApiArticleComment: {
+    method: "POST",
     path: "/api/article/comment/:aid"
   },
   getAccountLogin: {
+    method: "GET",
     path: "/account/login",
     title: "登录"
   },
   postAccountPostLogin: {
+    method: "POST",
     path: "/account/postLogin",
     title: "登录"
   },
   getAccountRegister: {
+    method: "GET",
     path: "/account/register",
     title: "注册"
   },
   postAccountPostRegister: {
+    method: "POST",
     path: "/account/postRegister",
     title: "注册"
   },
   getArticlePosts: {
+    method: "GET",
     path: "/article/posts",
     title: "文章列表"
   },
   getArticleView: {
+    method: "GET",
     path: "/article/view/:aid"
   },
   getArticleModify: {
+    method: "GET",
     path: "/article/modify/:id?"
   },
   postArticleUpdate: {
+    method: "POST",
     path: "/article/update/:aid"
   },
   getHomeIndex: {
+    method: "GET",
     path: "/",
     title: "主页"
   },
   getHomeAbout: {
+    method: "GET",
     timeout: 3000,
     path: "/about",
     title: "关于我们"

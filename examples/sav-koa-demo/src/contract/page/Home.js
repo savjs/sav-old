@@ -29,9 +29,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ],
+            method: "GET",
             path: ""
           }
         }
@@ -47,9 +45,7 @@ module.exports = {
         {
           name: "route",
           props: {
-            methods: [
-              "GET"
-            ],
+            method: "GET",
             timeout: 3000
           }
         }
@@ -63,17 +59,13 @@ module.exports = {
       {
         uri: "HomePage.index",
         path: "/",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: ""
       },
       {
         uri: "HomePage.about",
         path: "/about",
-        methods: [
-          "GET"
-        ],
+        method: "GET",
         relative: "about"
       }
     ],

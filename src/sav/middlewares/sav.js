@@ -9,9 +9,7 @@ import {convertCase, isString} from '../util'
         "uri": "AccountPage.login",
         "path": "/account/login",
         "relative" : "login",
-        "methods": [
-          "GET"
-        ]
+        "method": "GET"
       }
     ],
     "parents": []
@@ -40,7 +38,7 @@ export function makeSavRoute (module) {
       let route = {
         uri: action.uri,
         path: convertPath(routeProp.path, caseType, action.actionName),
-        methods: routeProp.methods || []
+        method: routeProp.method
       }
       let path = route.path
       relative = path || ''
