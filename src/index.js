@@ -1,60 +1,24 @@
-export {Router} from './sav/router'
-export {Exception, InvalidaArgumentException} from './sav/core/exception.js'
+// export * from './sav'
+import {Graph} from './sav'
 
-import * as plugins from './sav/plugins'
+let graph = new Graph()
 
-export {plugins}
+graph.page.modal('Test').route('test', {
+  response: {
+    state: 'userInfo',
+    props: {
+      username: 'String'
+    }
+  }
+})
 
-import {
-  Api, Page, Layout,
-  conf, quickConf, props,
-  route, head, options, get, post, put, patch, del,
-  auth, vue, invoke, title, meta, req, res,
-  PageInterface, ApiInterface, LayoutInterface,
-  PageModule, ApiModule, LayoutModule,
-  Composer
-} from './sav/decorator'
+graph.schema.declare({
+  name: 'Sex',
+  enums: [
+    {key: 'male', value: 1},
+    {key: 'female', value: 2}
+  ]
+})
 
-let decorators = {
-  Api,
-  Page,
-  Layout,
-  conf,
-  quickConf,
-  props,
-  route,
-  head,
-  options,
-  get,
-  post,
-  put,
-  patch,
-  del,
-  auth,
-  vue,
-  invoke,
-  title,
-  meta,
-  req,
-  res,
-  PageInterface,
-  ApiInterface,
-  LayoutInterface,
-  PageModule,
-  ApiModule,
-  LayoutModule
-}
-
-export {decorators}
-
-export {Api}
-export {Page}
-export {Layout}
-
-export {ApiModule}
-export {PageModule}
-export {LayoutModule}
-
-export {Composer}
-
-export {props}
+console.log(graph.uris)
+console.log(JSON.stringify(graph, null, 2))

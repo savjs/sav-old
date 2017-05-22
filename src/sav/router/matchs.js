@@ -22,21 +22,6 @@ export function matchModulesRoute (moduleRoutes, path, method) {
   }
 }
 
-/**
-  @typedef  {Object} Route
-  @property {String} path         url expr
-  @property {Array}  methods      http methods
-  @property {Array}  childs       the module's sub Route (ModuleRoute only)
- */
-
-/**
- * math routes
- * @param  {Array} routers  array of routers to match
- * @param  {String} path    the path of url
- * @param  {String} method  the method of http request
- * @return {Array}          the matched route [route] or [route, params]
- */
-
 export function matchRouter (routers, path, method, mats) {
   let len = routers.length
   let step = 0

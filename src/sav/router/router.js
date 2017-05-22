@@ -1,15 +1,11 @@
 import {EventEmitter} from 'events'
-import compose from 'koa-compose'
 
-import {isArray, isObject, isFunction, makeProp, delProps, promise, ucfirst} from '../util'
+import {compose, isArray, isObject, isFunction, makeProp, delProps, promise, ucfirst} from '../util'
 import {Config} from '../core/config'
 import {NotRoutedException} from '../core/exception.js'
 import {matchModulesRoute} from './matchs.js'
 import {executeMiddlewares} from './executer.js'
 import {proxyModuleActions} from './proxy.js'
-import {routePlugin} from '../plugins/route.js'
-import {koaPlugin} from '../plugins/koa.js'
-import {koaRenderer} from '../renders/koa.js'
 import {Contract} from '../contract/contract.js'
 
 export class Router extends EventEmitter {
@@ -27,9 +23,6 @@ export class Router extends EventEmitter {
     this.moduleRoutes = []      // 模块路由
     this.routes = {}            // 模块路由
     this.contract = new Contract()
-    this.use(koaPlugin)
-    this.use(routePlugin)
-    this.use(koaRenderer)
   }
   use (plugin) {
     if (isFunction(plugin)) {
