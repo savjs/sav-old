@@ -28,6 +28,9 @@ export class Schema {
     return this
   }
   add (name, value) {
+    if (name === 'default') {
+      return
+    }
     this[name] = value
     this.root.addUri(`${this.uri}.${name}`, value)
   }

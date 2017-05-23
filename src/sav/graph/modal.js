@@ -18,7 +18,7 @@ export class Modal {
     if (this[name]) {
       return this[name]
     }
-    let route = this.routes[name] = new Route(this, name, props)
+    this.routes[name] = new Route(this, name, props)
     return this
   }
   modal (name, props) {

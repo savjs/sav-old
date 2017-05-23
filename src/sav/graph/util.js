@@ -11,7 +11,7 @@ export function objectAssign (target, obj, excludes) {
   }
 }
 
-let longMaps  = {}
+let longMaps = {}
 let shortMaps = {}
 
 export function registerNames (names) {
@@ -73,7 +73,7 @@ export function arrayToObject (obj) {
   }
   let ret = {}
   for (let i = 0, len = obj.length; i < len; i += 2) {
-    ret[obj[i]] = obj[i+1]
+    ret[obj[i]] = obj[i + 1]
   }
   return ret
 }
