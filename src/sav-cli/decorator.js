@@ -44,10 +44,10 @@ function requireFromString (code, filename, opts) {
   return m.exports
 }
 
-let {_load, _findPath} = Module
+let {_load} = Module
 let memoryModules = {}
 
-Module._load = function(request, parent, isMain) {
+Module._load = function (request, parent, isMain) {
   if (memoryModules[request]) {
     return memoryModules[request].exports
   }

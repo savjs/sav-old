@@ -6,7 +6,7 @@ import {createIndex, createRoot} from './applyContract.js'
 let actionGroups = {
   api: true,
   page: true,
-  layout: true,
+  layout: true
 }
 
 export async function applyAction (groups, program) {
