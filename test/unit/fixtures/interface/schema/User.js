@@ -1,8 +1,8 @@
 
 exports.ReqAccountLogin = {
   props: {
-    userId: 'String',
-    password: 'String'
+    userId: String,
+    password: String
   }
 };
 

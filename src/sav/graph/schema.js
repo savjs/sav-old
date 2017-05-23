@@ -1,4 +1,5 @@
 import {isObject} from '../util'
+import {convertFunctionToName} from './util.js'
 
 export class Schema {
   constructor (parent, props) {
@@ -31,6 +32,7 @@ export class Schema {
     if (name === 'default') {
       return
     }
+    convertFunctionToName(value)
     this[name] = value
     this.root.addUri(`${this.uri}.${name}`, value)
   }

@@ -1,4 +1,4 @@
-import {isObject} from '../util'
+import {isObject, isFunction} from '../util'
 
 export function objectAssign (target, obj, excludes) {
   if (isObject(obj)) {
@@ -76,4 +76,20 @@ export function arrayToObject (obj) {
     ret[obj[i]] = obj[i + 1]
   }
   return ret
+}
+
+let defaultFunction = [String, Number, Boolean, Array]
+
+export function convertFunctionToName (obj) {
+  if (isObject(obj)) {
+    for (let name in obj) {
+      let value = obj[name]
+      if (isFunction(value) && (defaultFunction.indexOf(value) !== -1)) {
+        obj[name] = value.name
+      } else if (isObject(value)) {
+        convertFunctionToName(value)
+      }
+    }
+  }
+  return obj
 }
