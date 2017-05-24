@@ -30,7 +30,7 @@ export default [
       {
         component: ArticleView,
         name: "ArticleView",
-        path: "view/:aid"
+        path: "/articles/:aid"
       },
       {
         component: ArticleModify,

@@ -3,8 +3,8 @@ import pathToRegexp from 'path-to-regexp'
 export function matchModulesRoute (moduleRoutes, path, method) {
   let ret
   for (let moduleRoute of moduleRoutes) {
-    if (moduleRoute.parents.length) {
-      ret = matchRouter(moduleRoute.parents, path, method)
+    if (moduleRoute.absolutes.length) {
+      ret = matchRouter(moduleRoute.absolutes, path, method)
       if (ret) {
         return ret
       }
@@ -14,10 +14,10 @@ export function matchModulesRoute (moduleRoutes, path, method) {
   matchRouter(moduleRoutes, path, method, mats)
   let len = mats.length
   if (len === 1) {
-    return matchRouter(mats[0].childs, path, method)
+    return matchRouter(mats[0].relatives, path, method)
   } else if (len > 1) {
     return mats.reduce((src, it) => {
-      return src || matchRouter(it.childs, path, method)
+      return src || matchRouter(it.relatives, path, method)
     }, null)
   }
 }
@@ -30,7 +30,7 @@ export function matchRouter (routers, path, method, mats) {
   let isModule
   while (step < len) {
     route = routers[step++]
-    isModule = !!route.childs
+    isModule = !!route.relatives
     if (matchRoute(route.path, params, path, {end: !isModule, sensitive: true})) {
       if (isModule) {
         if (mats) {

@@ -24,7 +24,7 @@ export default class Article {
   posts() {}
 
   @get({
-    path: 'view/:aid',
+    path: '/articles/:aid',
     response: {
       props: {
         article: 'ArticleItem'

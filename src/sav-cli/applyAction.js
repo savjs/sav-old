@@ -21,7 +21,7 @@ export async function applyAction (groups, program) {
         let module = group[moduleName]
         tasks.push(createAction(moduleGroup, module, moduleName, program.actions))
       }
-      tasks.push(createIndex(moduleGroup, group, program.actions, true))
+      tasks.push(createIndex(moduleGroup, group, program.actions))
     }
   }
   tasks.push(createRoot(indexs, program.actions))

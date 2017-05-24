@@ -31,7 +31,7 @@ export function createIndex (groupDir, group, dest, asArray, asAssign) {
     await mkdirAsync(dir)
     if (asAssign) {
       let reqs = Object.keys(group).map((name) => `  require('./${name}')`).join(',\n')
-      let str = `${noticeString}module.exports = Object.assign({},\n${reqs}\n}\n`
+      let str = `${noticeString}module.exports = Object.assign({},\n${reqs}\n)\n`
       await writeFileAsync(dist, str)
     } else {
       if (asArray) {

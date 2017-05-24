@@ -24,7 +24,7 @@ module.exports = {
     },
     view: {
       method: "GET",
-      path: "view/:aid",
+      path: "/articles/:aid",
       response: {
         props: {
           article: "ArticleItem"
