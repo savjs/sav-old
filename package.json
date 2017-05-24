@@ -18,6 +18,7 @@
     "na": "nyc ava ./test/unit",
     "pretest": "npm run lint",
     "test": "npm run na",
+    "nit": "npm-install-tag",
     "prepare": "npm run build"
   },
   "bin": {
@@ -55,6 +56,7 @@
     "handlebars": "^4.0.6",
     "htmling": "0.0.8",
     "koa-compose": "^3.2.1",
+    "npm-install-tag": "^1.0.4",
     "nyc": "^10.0.0",
     "path-to-regexp": "^1.7.0",
     "rollup": "^0.41.4",
@@ -65,7 +67,7 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-re": "^1.0.1",
     "rollup-plugin-vue2": "^0.8.0",
-    "sav-schema": "0.0.14",
+    "sav-schema": "dev",
     "sav-util": "0.0.9",
     "standard": "^9.0.1",
     "vue": "^2.2.4",
