@@ -1,25 +1,23 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {Sav, NotRoutedException, propsPlugin, actionPlugin, routerPlugin} from 'sav'
+import {Sav, NotRoutedException, propsPlugin, actionPlugin, uriPlugin, routerPlugin, statePlugin} from 'sav'
 import contract from './fixtures/contract'
 import actions from './fixtures/action'
 
-test('api', async (ava) => {
+test('sav.neat', async (ava) => {
   expect(Sav).to.be.a('function')
   let sav = new Sav({
     neat: true
   })
-  expect(await sav.exec(1)).to.be.eql(1)
   expect(await sav.exec({})).to.be.eql({})
-  expect(await sav.exec([])).to.be.eql([])
-  expect(await sav.exec()).to.be.eql(undefined)
 })
 
 test('sav.routerPlugin', async (ava) => {
   let sav = new Sav({
     neat: true
   })
+  sav.use(uriPlugin)
   sav.use(routerPlugin)
   sav.prepare(contract)
   let ctx = {
@@ -66,10 +64,43 @@ test('sav.actionPlugin', async (ava) => {
 
   let ctx = {}
   sav.use({
-    setup ({ctx}) {
+    setup (ctx) {
+      expect(ctx.prop).to.be.a('function')
+      expect(ctx.sav).to.be.a('object')
+    },
+    teardown (ctx) {
+      expect(ctx.prop).to.be.a('function')
       expect(ctx.sav).to.be.a('object')
     }
   })
   await sav.exec(ctx)
+  expect(ctx.prop).to.be.not.a('function')
   expect(ctx.sav).to.be.not.a('object')
+})
+
+test('sav.statePlugin', async (ava) => {
+  expect(Sav).to.be.a('function')
+  let sav = new Sav({
+    neat: true
+  })
+  sav.use(propsPlugin)
+  sav.use(statePlugin)
+
+  let ctx = {}
+  sav.use({
+    setup (ctx) {
+      expect(ctx.setState).to.be.a('function')
+      expect(ctx.replaceState).to.be.a('function')
+      expect(ctx.state).to.be.a('object')
+    },
+    teardown (ctx) {
+      expect(ctx.setState).to.be.a('function')
+      expect(ctx.replaceState).to.be.a('function')
+      expect(ctx.state).to.be.a('object')
+    }
+  })
+  await sav.exec(ctx)
+  expect(ctx.setState).to.be.not.a('function')
+  expect(ctx.replaceState).to.be.not.a('function')
+  expect(ctx.state).to.be.not.a('object')
 })

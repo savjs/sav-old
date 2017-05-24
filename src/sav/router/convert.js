@@ -1,28 +1,24 @@
 import {isString, convertCase} from '../util'
 
-let groups = ['page', 'layout', 'api']
+let modalGroups = ['page', 'layout', 'api']
 
-export function convertRouters (contract) {
+export function convertRouters (groups) {
   let routes = []
-  let uris = {}
-  groups.forEach(groupName => {
-    if (contract[groupName]) {
-      let group = contract[groupName]
+  modalGroups.forEach(groupName => {
+    if (groups[groupName]) {
+      let group = groups[groupName]
       for (let moduleName in group) {
-        routes.push(makeModalRouter(group[moduleName], moduleName, groupName, uris))
+        routes.push(makeModalRouter(moduleName, group[moduleName], groupName, groups))
       }
     }
   })
-  return {
-    routes,
-    uris
-  }
+  return routes
 }
 
 const caseType = 'camel'
 const prefix = '/'
 
-function makeModalRouter (module, moduleName, groupName, uris) {
+function makeModalRouter (moduleName, module, groupName, {uris}) {
   let routePrefix = module.prefix || ''
   if (routePrefix.length) {
     routePrefix = normalPath(routePrefix + '/')
@@ -33,7 +29,7 @@ function makeModalRouter (module, moduleName, groupName, uris) {
     relatives: [],
     absolutes: []
   }
-  uris[moduleRouter.uri] = moduleRouter
+  uris[moduleRouter.uri].router = moduleRouter
   for (let routeName in module.routes) {
     let route = module.routes[routeName]
     let path = convertPath(route.path, caseType, routeName)
@@ -46,7 +42,7 @@ function makeModalRouter (module, moduleName, groupName, uris) {
       method: route.method || (groupName === 'page' ? 'GET' : 'POST'),
       path
     }
-    uris[savRoute.uri] = savRoute
+    uris[savRoute.uri].router = savRoute
     if (isRelative) {
       moduleRouter.relatives.push(savRoute)
     } else {

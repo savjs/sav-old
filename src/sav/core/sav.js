@@ -1,8 +1,8 @@
 import {EventEmitter} from 'events'
-import {compose, isObject, isFunction} from '../util'
+import {compose, isObject, isFunction, makeProp} from '../util'
 import {Config} from './config'
 
-import {propsPlugin, routerPlugin, actionPlugin} from '../plugins'
+import {propsPlugin, statePlugin, routerPlugin, actionPlugin, uriPlugin} from '../plugins'
 
 export class Sav extends EventEmitter {
   constructor (config) {
@@ -15,8 +15,10 @@ export class Sav extends EventEmitter {
     this.payloads = []      // 插件
     let neat = config.env('neat')
     if (!neat) {
-      this.use(routerPlugin)
       this.use(propsPlugin)
+      this.use(statePlugin)
+      this.use(uriPlugin)
+      this.use(routerPlugin)
       this.use(actionPlugin)
     }
   }
@@ -27,6 +29,8 @@ export class Sav extends EventEmitter {
       for (let name in plugin) {
         if (name === 'payload') {
           this.payloads.push(plugin[name])
+        } else if (name === 'teardown') {
+          this.prependListener(name, plugin[name])
         } else {
           this.on(name, plugin[name])
         }
@@ -34,29 +38,27 @@ export class Sav extends EventEmitter {
     }
     return this
   }
-  async prepare (data) {
+  prepare (data) {
     let promise = Promise.resolve()
     this.emit('prepare', data, promise)
-    return promise.catch((err) => {
-      this.emit('error', err)
-    })
+    return promise
   }
   compose () {
     let payload = compose([async (ctx, next) => {
       await next()
     }].concat(this.payloads))
     return async (ctx, next) => {
-      let error
       try {
-        await setup(this, {ctx})
+        makeProp(ctx)
+        await setup(this, ctx)
         await payload(ctx)
-      } catch (err) {
-        error = err
+      } catch (error) {
         if (this.isExecMode) {
           throw error
         }
+        ctx.prop('error', error)
       }
-      await shutdown(this, {ctx, error})
+      await teardown(this, ctx)
     }
   }
   async exec (ctx) {
@@ -75,9 +77,9 @@ async function setup (sav, target) {
   return promise
 }
 
-async function shutdown (sav, target) {
+async function teardown (sav, target) {
   let promise = Promise.resolve()
-  sav.emit('shutdown', target, promise)
+  sav.emit('teardown', target, promise)
   return promise.catch((err) => {
     sav.emit('error', err)
   })

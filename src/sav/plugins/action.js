@@ -5,14 +5,10 @@ import {proxyModuleActions} from '../router/proxy.js'
 export function actionPlugin (sav) {
   sav.use({
     prepare ({actions}) {
-      if (actions) {
-        sav.actions = actions
-      }
+      sav.actions = actions
     },
-    setup ({ctx}) {
-      if (sav.actions) {
-        ctx.prop('sav', proxyModuleActions(ctx, sav.actions))
-      }
+    setup (ctx) {
+      ctx.prop('sav', proxyModuleActions(ctx, sav.actions))
     }
   })
 }

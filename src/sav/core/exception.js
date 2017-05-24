@@ -30,3 +30,12 @@ export class NotRoutedException extends Exception {}
 
 // 参数错误
 export class InvalidaArgumentException extends Exception {}
+
+// 调用错误
+export class EnsureException extends Exception {}
+
+export function ensure (value, message) {
+  if (!value) {
+    throw new EnsureException(message)
+  }
+}
