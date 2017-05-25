@@ -1,24 +1,24 @@
-// export * from './sav'
-import {Graph} from './sav'
+// 核心框架
+import {Sav} from './sav/core/sav.js'
+// 异常
+import {Exception} from './sav/core/exception.js'
+// 插件
+import {propsPlugin} from './sav/plugins/props.js'
+import {statePlugin} from './sav/plugins/state.js'
+import {promisePlugin} from './sav/plugins/promise.js'
+import {uriPlugin} from './sav/plugins/uri.js'
+import {routerPlugin} from './sav/plugins/router.js'
+import {actionPlugin} from './sav/plugins/action.js'
+import {schemaPlugin} from './sav/plugins/schema.js'
+import {authPlugin} from './sav/plugins/auth.js'
+// 构造器
+import {Graph} from './sav/graph/graph.js'
+import {registerNames} from './sav/graph/util.js'
+// 装饰器
+import {Modal, get, post, head, options, put, patch, del} from './sav/core/decorator.js'
 
-let graph = new Graph()
-
-graph.page.modal('Test').route('test', {
-  response: {
-    state: 'userInfo',
-    props: {
-      username: 'String'
-    }
-  }
-})
-
-graph.schema.declare({
-  name: 'Sex',
-  enums: [
-    {key: 'male', value: 1},
-    {key: 'female', value: 2}
-  ]
-})
-
-console.log(graph.uris)
-console.log(JSON.stringify(graph, null, 2))
+// 导出
+export {Sav, Exception}
+export {propsPlugin, statePlugin, promisePlugin, uriPlugin, routerPlugin, actionPlugin, schemaPlugin, authPlugin}
+export {Graph, registerNames}
+export {Modal, get, post, head, options, put, patch, del}

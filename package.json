@@ -8,7 +8,7 @@
     "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
     "wb": "watch -p \"+(src)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
-    "build": "npm run build-cli && npm run cv",
+    "build": "npm run build-sav && npm run build-cli",
     "build-sav": "rollup -c scripts/rollup.config.js",
     "build-cli": "rollup -c scripts/rollup.cli.js",
     "lint": "standard rollup.config.js test/** src/**",

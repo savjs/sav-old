@@ -23,39 +23,46 @@ export function normalizeUris (groups) {
     }
     let group = groups[groupName]
     let groupRef = uris[groupName] = {
-      name: groupName,
-      // uri: groupName,
-      self: group,
-      isGroup: true
+      // name: groupName,
+      uri: groupName,
+      // isGroup: true,
+      props: group
     }
-    prop(groupRef, 'uri', groupName)
-    prop(groupRef, 'self', group)
+    // prop(groupRef, 'uri', groupName)
+    // prop(groupRef, 'props', group)
+    prop(groupRef, 'name', groupName)
+    prop(groupRef, 'isGroup', true)
     for (let modalName in group) {
       let modal = group[modalName]
       let modalUri = `${groupName}.${modalName}`
       let modalRef = uris[modalUri] = {
-        name: modalName,
-        // uri: modalUri,
-        self: modal,
+        // name: modalName,
+        uri: modalUri,
         // parent: groupRef,
-        isModal: true
+        // isModal: true,
+        props: modal
       }
-      prop(modalRef, 'uri', modalUri)
-      prop(modalRef, 'self', modal)
+      // prop(modalRef, 'uri', modalUri)
+      // prop(modalRef, 'props', modal)
+      prop(modalRef, 'name', modalName)
+      prop(modalRef, 'isModal', true)
       prop(modalRef, 'parent', groupRef)
       for (let routeName in modal.routes) {
         let route = modal.routes[routeName]
         let routeUri = `${modalUri}.${routeName}`
-        let routeRef = uris[routeUri] = {
-          name: routeName,
-          // uri: routeUri,
-          self: route,
+        let routeRef = {
+          // name: routeName,
+          uri: routeUri,
           // parent: modalRef,
-          isRoute: true
+          // isRoute: true,
+          props: route
         }
-        prop(routeRef, 'uri', routeUri)
-        prop(routeRef, 'self', route)
+        uris[routeUri] = routeRef
+        // prop(routeRef, 'uri', routeUri)
+        // prop(routeRef, 'props', route)
+        prop(routeRef, 'name', routeName)
         prop(routeRef, 'parent', modalRef)
+        prop(routeRef, 'isRoute', true)
       }
     }
   }

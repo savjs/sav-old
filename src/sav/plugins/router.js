@@ -1,6 +1,6 @@
 // 路由中间件
 import pathToRegexp from 'path-to-regexp'
-import {isString, convertCase} from '../util'
+import {isString, convertCase, prop} from '../util'
 import {NotRoutedException} from '../core/exception.js'
 
 export function routerPlugin (sav) {
@@ -16,7 +16,7 @@ export function routerPlugin (sav) {
           let [route, params] = matched
           ctx.route = route
           ctx.params = params
-          ctx.routeUri = groups.uris[route.uri]
+          ctx.router = groups.uris[route.uri]
         }
         return matched
       }
@@ -53,9 +53,9 @@ const prefix = '/'
 
 function createRoute (ref) {
   if (!ref.route) {
-    let {name, self, uri, parent} = ref
+    let {name, props, uri, parent} = ref
     let parentRoute = getModalRoute(parent)
-    let path = convertPath(self.path, caseType, name)
+    let path = convertPath(props.path, caseType, name)
     let isRelative = path[0] !== '/'
     if (isRelative) { // 相对路由
       path = normalPath(parentRoute.path + (path ? ('/' + path) : ''))
@@ -63,30 +63,31 @@ function createRoute (ref) {
     let savRoute = {
       uri,
       path,
-      method: self.method || (parent.parent.name === 'page' ? 'GET' : 'POST')
+      method: props.method || (parent.parent.name === 'page' ? 'GET' : 'POST')
     }
     if (isRelative) {
       parentRoute.relatives.push(savRoute)
     } else {
       parentRoute.absolutes.push(savRoute)
     }
-    ref.route = savRoute
+    prop(ref, 'route', savRoute)
   }
 }
 
 function getModalRoute (ref) {
   if (!ref.route) {
-    let {name, self, uri} = ref
-    let routePrefix = self.prefix || ''
+    let {name, props, uri} = ref
+    let routePrefix = props.prefix || ''
     if (routePrefix.length) {
       routePrefix = normalPath(routePrefix + '/')
     }
-    ref.route = {
+    let route = {
       uri,
-      path: normalPath(prefix + routePrefix + convertPath(self.path, caseType, name)),
+      path: normalPath(prefix + routePrefix + convertPath(props.path, caseType, name)),
       relatives: [],
       absolutes: []
     }
+    prop(ref, 'route', route)
   }
   return ref.route
 }
