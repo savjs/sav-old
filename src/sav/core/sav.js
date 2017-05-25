@@ -2,7 +2,15 @@ import {EventEmitter} from 'events'
 import {compose, isObject, isFunction, makeProp} from '../util'
 import {Config} from './config'
 
-import {propsPlugin, statePlugin, routerPlugin, actionPlugin, uriPlugin} from '../plugins'
+import {
+  propsPlugin,
+  statePlugin,
+  promisePlugin,
+  uriPlugin,
+  routerPlugin,
+  actionPlugin,
+  schemaPlugin
+} from '../plugins'
 
 export class Sav extends EventEmitter {
   constructor (config) {
@@ -17,9 +25,11 @@ export class Sav extends EventEmitter {
     if (!neat) {
       this.use(propsPlugin)
       this.use(statePlugin)
+      this.use(promisePlugin)
       this.use(uriPlugin)
       this.use(routerPlugin)
       this.use(actionPlugin)
+      this.use(schemaPlugin)
     }
   }
   use (plugin) {
