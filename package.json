@@ -15,7 +15,7 @@
     "fix": "npm run lint -- --fix",
     "cli": "node ./dist/sav-cli",
     "cv": "node ./dist/sav-cli.js -p ./test/unit/fixtures/interface -d ./test/unit/fixtures/contract -a ./test/unit/fixtures/action -v ./test/unit/fixtures/view",
-    "na": "nyc ava ./test/unit",
+    "na": "nyc ava ./test/unit/**",
     "pretest": "npm run lint",
     "test": "npm run na",
     "nit": "npm-install-tag",

@@ -1,11 +1,11 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import ApiArticle from './fixtures/interface/api/Article.js'
-import LayoutUser from './fixtures/interface/layout/User.js'
-import PageHome from './fixtures/interface/page/Home.js'
-import PageArticle from './fixtures/interface/page/Article.js'
-import SchemaUser from './fixtures/interface/schema/User.js'
+import ApiArticle from '../fixtures/interface/api/Article.js'
+import LayoutUser from '../fixtures/interface/layout/User.js'
+import PageHome from '../fixtures/interface/page/Home.js'
+import PageArticle from '../fixtures/interface/page/Article.js'
+import SchemaUser from '../fixtures/interface/schema/User.js'
 
 import {Graph} from 'sav'
 import {convertFunctionToName} from 'sav/graph/util.js'

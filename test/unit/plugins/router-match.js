@@ -1,7 +1,7 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import contract from './fixtures/contract'
+import contract from '../fixtures/contract'
 import {normalizeUris, convertRouters, matchModulesRoute} from 'sav'
 
 test('convert.convertRouters', (ava) => {

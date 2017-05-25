@@ -19,8 +19,8 @@ test('routerPlugin', async (ava) => {
   sav.use({
     setup ({ctx, schema}) {
       expect(schema).to.be.a('object')
-      console.log(Object.keys(schema))
     }
   })
   sav.prepare(contract)
+  await sav.exec({})
 })

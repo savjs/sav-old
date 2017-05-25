@@ -2,9 +2,13 @@
 import {prop} from '../util'
 
 export function uriPlugin (sav) {
+  let uris
   sav.use({
     prepare (groups) {
-      normalizeUris(groups)
+      uris = normalizeUris(groups)
+    },
+    setup ({prop}) {
+      prop('uri', (uri) => uris[uri])
     }
   })
 }
@@ -56,4 +60,5 @@ export function normalizeUris (groups) {
     }
   }
   prop(groups, 'uris', uris)
+  return uris
 }

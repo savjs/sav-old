@@ -9,7 +9,8 @@ import {
   uriPlugin,
   routerPlugin,
   actionPlugin,
-  schemaPlugin
+  schemaPlugin,
+  authPlugin
 } from '../plugins'
 
 export class Sav extends EventEmitter {
@@ -30,6 +31,7 @@ export class Sav extends EventEmitter {
       this.use(routerPlugin)
       this.use(actionPlugin)
       this.use(schemaPlugin)
+      this.use(authPlugin)
     }
   }
   use (plugin) {

@@ -6,7 +6,10 @@ export function schemaPlugin (sav) {
   let schema = sav.config.get('schema') || SavSchema
   sav.use({
     prepare (payload, promise) {
-      schema.declare(payload.schema)
+      for (let name in payload.schema) {
+        payload.schema[name].name = name
+        schema.declare(payload.schema[name])
+      }
       normalizeSchema(payload, schema)
       promise.then(schema.ready())
     },
@@ -27,11 +30,16 @@ export function normalizeSchema ({uris}, schema) {
   }
 }
 
+const shortMaps = {
+  request: 'Req',
+  response: 'Res'
+}
+
 function extractSchema (ref, type, schema) {
   let {uri, self} = ref
   let value = self[type]
   let ret = {
-    name: pascalCase((type + uri).replace(/./g, '_'))
+    name: pascalCase((shortMaps[type] + '_' + uri.replace('page.', '')).replace(/\./g, '_'))
   }
   if (isString(value)) {
     ret.name = value

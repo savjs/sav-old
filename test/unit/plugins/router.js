@@ -25,6 +25,7 @@ test('routerPlugin', async (ava) => {
   await sav.exec(ctx)
   expect(ctx.route).to.be.a('object')
   expect(ctx.params).to.be.a('object')
+  expect(ctx.routeUri).to.be.a('object')
 
   {
     let exp
