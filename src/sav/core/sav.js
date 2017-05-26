@@ -7,6 +7,7 @@ import {
   statePlugin,
   promisePlugin,
   uriPlugin,
+  renderPlugin,
   routerPlugin,
   actionPlugin,
   schemaPlugin,
@@ -28,6 +29,7 @@ export class Sav extends EventEmitter {
       this.use(statePlugin)
       this.use(promisePlugin)
       this.use(uriPlugin)
+      this.use(renderPlugin)
       this.use(routerPlugin)
       this.use(actionPlugin)
       this.use(schemaPlugin)

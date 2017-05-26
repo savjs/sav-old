@@ -13,6 +13,13 @@ export function actionPlugin (sav) {
     setup (ctx) {
       if (actions) {
         ctx.prop('sav', proxyModuleActions(ctx, actions))
+        ctx.prop('dispatch', async (uri) => {
+          uri || (uri = ctx.route.uri)
+          let parts = uri.split('.')
+          let method = parts.pop()
+          let name = pascalCase(parts.join('_'))
+          return await ctx.sav[name][method]()
+        })
       }
     }
   })

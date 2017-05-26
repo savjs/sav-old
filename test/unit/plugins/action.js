@@ -46,6 +46,7 @@ test('actionPlugin', async (ava) => {
     setup ({ctx, sav}) {
       expect(ctx.prop).to.be.a('function')
       expect(sav).to.be.a('object')
+      expect(ctx.dispatch).to.be.not.a('undefined')
       let exec = async () => {
         let exp
         try {
@@ -105,17 +106,13 @@ test('actionPlugin.sav', async (ava) => {
 
   let ctx = {}
   sav.use({
-    setup ({ctx, sav}) {
-      expect(ctx.prop).to.be.a('function')
-      expect(sav).to.be.a('object')
-      expect(sav.ApiTest).to.be.a('object')
+    setup ({ctx}) {
       let exec = async () => {
         let exp
         try {
-          await sav.ApiTest.test()
+          await ctx.dispatch('api.Test.test')
         } catch (err) {
           exp = err
-          console.error(err)
         } finally {
           expect(exp).to.be.a('undefined')
         }
@@ -124,6 +121,5 @@ test('actionPlugin.sav', async (ava) => {
     }
   })
   await sav.exec(ctx)
-  expect(ctx.prop).to.be.not.a('function')
-  expect(ctx.sav).to.be.not.a('object')
+  expect(ctx.dispatch).to.be.a('undefined')
 })
