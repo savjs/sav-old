@@ -20,9 +20,9 @@ export function renderPlugin (sav) {
         }
       })
     },
-    teardown (ctx, promise) {
+    teardown (ctx, next) {
       if (ctx.renderer) {
-        promise.then(async () => {
+        next(async () => {
           await ctx.renderer(ctx)
         })
       }

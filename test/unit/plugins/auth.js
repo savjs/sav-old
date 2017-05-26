@@ -22,8 +22,8 @@ test('authPlugin', async (ava) => {
 
   let ctx = {}
   sav.use({
-    setup (ctx, promise) {
-      promise.then(async () => {
+    setup (ctx, next) {
+      next(async () => {
         expect(await ctx.auth()).to.eql(1)
       })
     }
@@ -42,8 +42,8 @@ test('authPlugin.Exception', async (ava) => {
 
   let ctx = {}
   sav.use({
-    setup (ctx, promise) {
-      promise.then(async () => {
+    setup (ctx, next) {
+      next(async () => {
         let exp
         try {
           await ctx.auth()

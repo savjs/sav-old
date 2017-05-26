@@ -8,77 +8,77 @@ export function koaPlugin (sav) {
   let autoRenderType = config.get('autoRenderType', true) // 自动检测类型
   let viewRoot = config.get('viewRoot', 'views')
   let viewTemplate = resolve(viewRoot, config.get('viewTemplate', 'index.html'))
-  let composeState = (data, state, error) => {
-    let ret = {}
-    if (error) {
-      error = error.toJSON()
-      if (config.prod) {
-        delete error.step
-        delete error.stack
-        delete error.stacks
-      }
-      ret.error = error
-    }
-    return Object.assign(ret, data || state)
-  }
-  let viewFunc
-  let renderHtml = async (ctx) => {
-    if (!viewFunc) {
-      viewFunc = tmpl((await readFileAsync(viewTemplate)).toString())
-    }
-    console.log(ctx, ctx.renderData, ctx.state)
-    let html = viewFunc(makeProxy(config, ctx.renderData || ctx.state))
-    if (html.indexOf('<!-- INIT_STATE -->') !== -1) {
-      let state = composeState(ctx.renderData, ctx.state, ctx.error)
-      let stateText = JSON.stringify(state)
-      let stateScript = `
-      <script type="text/javascript">
-        window.INIT_STATE = ${stateText}
-      </script>
-      `
-      html = html.replace('<!-- INIT_STATE -->', stateScript)
-    }
-    ctx.body = html
-  }
-
-  let renderWith = async (type, ctx) => {
-    switch (type) {
-      case 'json':
-        ctx.body = composeState(ctx.renderData, ctx.state, ctx.error)
-        break
-      case 'raw':
-        ctx.body = ctx.renderData
-        break
-      case 'html':
-        await renderHtml(ctx)
-        break
-      default:
-        break
+  let renders = {
+    json (ctx) {
+      ctx.body = composeState(ctx.renderData, ctx.state, ctx.error, config)
+    },
+    raw (ctx) {
+      ctx.body = ctx.renderData
+    },
+    html (ctx) {
+      return renderTmpl(viewTemplate, ctx, config)
     }
   }
-
   let renderer = async (ctx) => {
     let renderType = ctx.renderType || (autoRenderType && ctx.acceptType) || defaultRenderType
-    await renderWith(renderType, ctx)
+    if (renders[renderType]) {
+      await renders[renderType](ctx)
+    }
   }
-
-  let accepts = ['json', 'html']
-
   sav.use({
     setup ({prop, ctx}) {
-      prop({
-        renderer
-      })
-      prop.getter('acceptType', () => {
-        if (ctx.accept) { // is koa
-          let type = ctx.accept.type(['json', 'html'])
-          if (accepts.indexOf(type) !== -1) {
-            return type
-          }
-        }
-      })
+      prop({renderer})
+      makeAcceptType(ctx)
     }
   })
+}
+
+const tmpMaps = {}
+
+async function renderTmpl (viewTemplate, ctx, config) {
+  let viewFunc = tmpMaps[viewTemplate] || (
+    tmpMaps[viewTemplate] = tmpl((await readFileAsync(viewTemplate)).toString())
+  )
+  let state = makeProxy(config, ctx.renderData || ctx.state)
+  let html = viewFunc(state)
+  if (html.indexOf('<!-- INIT_STATE -->') !== -1) {
+    let state = composeState(ctx.renderData, ctx.state, ctx.error, config)
+    let stateText = JSON.stringify(state)
+    let stateScript = `
+    <script type="text/javascript">
+      window.INIT_STATE = ${stateText}
+    </script>
+    `
+    html = html.replace('<!-- INIT_STATE -->', stateScript)
+  }
+  ctx.body = html
+}
+
+const accepts = ['json', 'html']
+
+function makeAcceptType ({prop, ctx}) {
+  prop.getter('acceptType', () => {
+    if (ctx.accept) { // is koa
+      let type = ctx.accept.type(['json', 'html'])
+      if (accepts.indexOf(type) !== -1) {
+        return type
+      }
+    }
+  })
+}
+
+function composeState (data, state, error, config) {
+  let ret = {}
+  if (error) {
+    error = error.toJSON()
+    if (config.prod) {
+      delete error.step
+      delete error.stack
+      delete error.stacks
+    }
+    ret.error = error
+  }
+  return Object.assign(ret, data || state)
 }
 
 function makeProxy (config, state) {

@@ -5,13 +5,13 @@ import {isString, isObject, pascalCase} from '../util'
 export function schemaPlugin (sav) {
   let schema = sav.config.get('schema') || SavSchema
   sav.use({
-    prepare (payload, promise) {
+    prepare (payload, next) {
       for (let name in payload.schema) {
         payload.schema[name].name = name
         schema.declare(payload.schema[name])
       }
       normalizeSchema(payload, schema)
-      promise.then(schema.ready())
+      next(schema.ready())
     },
     setup ({prop}) {
       prop('schema', schema)

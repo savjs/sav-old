@@ -53,9 +53,13 @@ export class Sav extends EventEmitter {
     return this
   }
   prepare (data) {
-    let promise = Promise.resolve()
-    this.emit('prepare', data, promise)
-    return promise
+    let next = promiseNext()
+    try {
+      this.emit('prepare', data, next)
+    } catch (err) {
+      next(() => { throw err })
+    }
+    return next()
   }
   compose () {
     let payload = compose([async (ctx, next) => {
@@ -85,16 +89,35 @@ export class Sav extends EventEmitter {
   }
 }
 
-async function setup (sav, target) {
-  let promise = Promise.resolve()
-  sav.emit('setup', target, promise)
-  return promise
+function setup (sav, target) {
+  let next = promiseNext()
+  try {
+    sav.emit('setup', target, next)
+  } catch (err) {
+    next(() => { throw err })
+  }
+  return next()
 }
 
-async function teardown (sav, target) {
-  let promise = Promise.resolve()
-  sav.emit('teardown', target, promise)
-  return promise.catch((err) => {
+function teardown (sav, target) {
+  let next = promiseNext()
+  try {
+    sav.emit('teardown', target, next)
+  } catch (err) {
+    next(() => { throw err })
+  }
+  return next().catch((err) => {
     sav.emit('error', err)
   })
+}
+
+function promiseNext () {
+  let promise = Promise.resolve()
+  let ret = (resolve, reject) => {
+    if (resolve || reject) {
+      promise = promise.then(resolve, reject)
+    }
+    return promise
+  }
+  return ret
 }
