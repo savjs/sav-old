@@ -11,6 +11,7 @@ test('config.api', (ava) => {
   expect(config.prepend).to.be.a('function')
   expect(config.append).to.be.a('function')
   expect(config.env).to.be.a('function')
+  expect(config.prod).to.be.a('boolean')
 })
 
 test('config.default', (ava) => {

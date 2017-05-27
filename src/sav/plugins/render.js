@@ -2,6 +2,7 @@
 
 export function renderPlugin (sav) {
   sav.use({
+    name: 'render',
     setup ({prop, ctx}) {
       prop({
         renderType: null,

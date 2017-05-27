@@ -10,7 +10,7 @@ export function koaPlugin (sav) {
   let viewTemplate = resolve(viewRoot, config.get('viewTemplate', 'index.html'))
   let renders = {
     json (ctx) {
-      ctx.body = composeState(ctx.renderData, ctx.state, ctx.error, config)
+      ctx.body = composeState(ctx.renderData || ctx.state, ctx.error, config)
     },
     raw (ctx) {
       ctx.body = ctx.renderData
@@ -26,8 +26,12 @@ export function koaPlugin (sav) {
     }
   }
   sav.use({
+    name: 'koa',
     setup ({prop, ctx}) {
-      prop({renderer})
+      prop({
+        renderer,
+        inputData: Object.assign({}, ctx.query, ctx.request && ctx.request.body, ctx.params)
+      })
       makeAcceptType(ctx)
     }
   })
@@ -42,7 +46,7 @@ async function renderTmpl (viewTemplate, ctx, config) {
   let state = makeProxy(config, ctx.renderData || ctx.state)
   let html = viewFunc(state)
   if (html.indexOf('<!-- INIT_STATE -->') !== -1) {
-    let state = composeState(ctx.renderData, ctx.state, ctx.error, config)
+    let state = composeState(ctx.renderData || ctx.state, ctx.error, config)
     let stateText = JSON.stringify(state)
     let stateScript = `
     <script type="text/javascript">
@@ -67,7 +71,7 @@ function makeAcceptType ({prop, ctx}) {
   })
 }
 
-function composeState (data, state, error, config) {
+function composeState (data, error, config) {
   let ret = {}
   if (error) {
     error = error.toJSON()
@@ -78,7 +82,7 @@ function composeState (data, state, error, config) {
     }
     ret.error = error
   }
-  return Object.assign(ret, data || state)
+  return Object.assign(ret, data)
 }
 
 function makeProxy (config, state) {

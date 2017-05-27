@@ -1,9 +1,8 @@
 import {EventEmitter} from 'events'
-import {compose, isObject, isFunction, makeProp} from '../util'
+import {compose, isObject, isArray, isFunction, makeProp, delProps} from '../util'
 import {Config} from './config'
 
 import {
-  propsPlugin,
   statePlugin,
   promisePlugin,
   uriPlugin,
@@ -22,10 +21,10 @@ export class Sav extends EventEmitter {
     }
     this.config = config    // 配置
     this.executer = null    // 执行器
-    this.payloads = []      // 插件
+    this.payloads = []      // 执行中间件
+    this.installed = {}     // 已安装插件
     let neat = config.env('neat')
     if (!neat) {
-      this.use(propsPlugin)
       this.use(statePlugin)
       this.use(promisePlugin)
       this.use(uriPlugin)
@@ -40,15 +39,9 @@ export class Sav extends EventEmitter {
     if (isFunction(plugin)) {
       plugin(this)
     } else if (isObject(plugin)) {
-      for (let name in plugin) {
-        if (name === 'payload') {
-          this.payloads.push(plugin[name])
-        } else if (name === 'teardown') {
-          this.prependListener(name, plugin[name])
-        } else {
-          this.on(name, plugin[name])
-        }
-      }
+      installPlugin(this, plugin)
+    } else if (isArray(plugin)) {
+      plugin.forEach(this.use)
     }
     return this
   }
@@ -71,12 +64,16 @@ export class Sav extends EventEmitter {
         await setup(this, ctx)
         await payload(ctx)
       } catch (error) {
-        if (this.isExecMode) {
+        if (this.isExecMode && (!this.config.env('execNotThrow'))) {
           throw error
         }
         ctx.prop('error', error)
       }
-      await teardown(this, ctx)
+      try {
+        await teardown(this, ctx)
+      } finally {
+        delProps(ctx)
+      }
     }
   }
   async exec (ctx) {
@@ -86,6 +83,24 @@ export class Sav extends EventEmitter {
   }
   get isExecMode () {
     return !!this.executer
+  }
+}
+
+let emits = ['prepare', 'setup', 'payload', 'error']
+
+function installPlugin (sav, plugin) {
+  let {name, teardown} = plugin
+  emits.forEach((name) => {
+    if (plugin[name]) {
+      sav.on(name, plugin[name])
+    }
+  })
+  if (teardown) {
+    sav.prependListener('teardown', teardown)
+  }
+  if (name) {
+    sav.installed[name] = plugin
+    plugin.installed = true
   }
 }
 

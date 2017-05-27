@@ -6,6 +6,7 @@ export function authPlugin (sav) {
     throw new NotImplementedException('Auth is not implemented')
   }
   sav.use({
+    name: 'auth',
     setup ({ctx, prop}) {
       prop('auth', async (access) => {
         return sav.config.get('auth', auth)(ctx, access)

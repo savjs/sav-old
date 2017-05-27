@@ -1,11 +1,10 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {Sav, propsPlugin, authPlugin, NotImplementedException} from 'sav'
+import {Sav, authPlugin, NotImplementedException} from 'sav'
 
 test('api', (ava) => {
   expect(Sav).to.be.a('function')
-  expect(propsPlugin).to.be.a('function')
   expect(authPlugin).to.be.a('function')
 })
 
@@ -17,7 +16,6 @@ test('authPlugin', async (ava) => {
       return 1
     }
   })
-  sav.use(propsPlugin)
   sav.use(authPlugin)
 
   let ctx = {}
@@ -37,7 +35,6 @@ test('authPlugin.Exception', async (ava) => {
   let sav = new Sav({
     neat: true
   })
-  sav.use(propsPlugin)
   sav.use(authPlugin)
 
   let ctx = {}

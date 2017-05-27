@@ -1,11 +1,10 @@
 import test from 'ava'
 import {expect} from 'chai'
-import {Sav, propsPlugin, uriPlugin, schemaPlugin} from 'sav'
+import {Sav, uriPlugin, schemaPlugin} from 'sav'
 import contract from '../fixtures/contract'
 
 test('api', (ava) => {
   expect(Sav).to.be.a('function')
-  expect(propsPlugin).to.be.a('function')
   expect(uriPlugin).to.be.a('function')
   expect(schemaPlugin).to.be.a('function')
 })

@@ -12,15 +12,66 @@ test('api', (ava) => {
   expect(actions).to.be.a('object')
 })
 
-test('api', async ava => {
+test('sav', async ava => {
   let sav = new Sav()
-  sav.prepare(Object.assign(contract, {actions}))
-  let ctx = {
-    path: '/',
-    method: 'GET'
+  expect(sav).to.be.a('object')
+})
+
+test('installPlugin', async ava => {
+  let sav = new Sav({
+    neat: true
+  })
+  sav.use({
+    name: 'test',
+    prepare () {},
+    setup () {},
+    payload () {},
+    teardown () {}
+  })
+  sav.use({prepare () {}})
+  sav.use({setup () {}})
+  sav.use({payload () {}})
+  sav.use({teardown () {}})
+  sav.use({})
+  sav.use([{}])
+  sav.use(() => {})
+})
+
+async function testSav (plugins) {
+  let sav = new Sav({
+    neat: true,
+    execNotThrow: true
+  })
+  sav.use(plugins)
+  await sav.exec({})
+  return sav
+}
+
+test('pluginException', async ava => {
+  await Promise.all(['setup', 'preload', 'teardown'].map(async (name) => {
+    await testSav({
+      [`${name}`] () {
+        throw new Error('xxx')
+      },
+      error (err) {
+        expect(err.message).to.eql('xxx')
+      }
+    })
+  }))
+  let exp
+  try {
+    let sav = new Sav({
+      neat: true
+    })
+    sav.use({
+      prepare () {
+        throw new Error('xxx')
+      }
+    })
+    await sav.prepare()
+  } catch (err) {
+    exp = err
+  } finally {
+    expect(exp).to.be.a('error')
   }
-  await sav.exec(ctx)
-  expect(ctx.route).to.be.a('object')
-  expect(ctx.params).to.be.a('object')
-  expect(ctx.router).to.be.a('object')
 })

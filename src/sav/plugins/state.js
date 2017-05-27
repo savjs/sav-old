@@ -2,6 +2,7 @@
 
 export function statePlugin (sav) {
   sav.use({
+    name: 'state',
     setup ({prop}) {
       let state = {}
       prop.getter('state', () => state)

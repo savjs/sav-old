@@ -1,11 +1,10 @@
 import test from 'ava'
 import {expect} from 'chai'
-import {Sav, propsPlugin, statePlugin, renderPlugin, koaPlugin} from 'sav'
+import {Sav, statePlugin, renderPlugin, koaPlugin} from 'sav'
 import {resolve} from 'path'
 
 test('api', (ava) => {
   expect(Sav).to.be.a('function')
-  expect(propsPlugin).to.be.a('function')
   expect(statePlugin).to.be.a('function')
   expect(renderPlugin).to.be.a('function')
   expect(koaPlugin).to.be.a('function')
@@ -17,7 +16,6 @@ test('koaPlugin', async (ava) => {
     neat: true,
     viewRoot: resolve(__dirname, '../fixtures/view')
   })
-  sav.use(propsPlugin)
   sav.use(statePlugin)
   sav.use(renderPlugin)
   sav.use(koaPlugin)
@@ -55,7 +53,6 @@ test('koaPlugin2', async (ava) => {
     viewRoot: resolve(__dirname, '../fixtures/view'),
     viewTemplate: 'pure.html'
   })
-  sav.use(propsPlugin)
   sav.use(statePlugin)
   sav.use(renderPlugin)
   sav.use(koaPlugin)

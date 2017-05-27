@@ -5,15 +5,16 @@ import {isFunction, pascalCase} from '../util'
 export function actionPlugin (sav) {
   let actions
   sav.use({
+    name: 'action',
     prepare (groups) {
       if (groups.actions) {
         actions = normalizeActions(groups.actions)
       }
     },
-    setup (ctx) {
+    setup ({ctx, prop}) {
       if (actions) {
-        ctx.prop('sav', proxyModuleActions(ctx, actions))
-        ctx.prop('dispatch', async (uri) => {
+        prop('sav', proxyModuleActions(ctx, actions))
+        prop('dispatch', async (uri) => {
           uri || (uri = ctx.route.uri)
           let parts = uri.split('.')
           let method = parts.pop()

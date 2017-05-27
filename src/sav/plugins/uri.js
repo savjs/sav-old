@@ -4,6 +4,7 @@ import {prop} from '../util'
 export function uriPlugin (sav) {
   let uris
   sav.use({
+    name: 'uri',
     prepare (groups) {
       uris = normalizeUris(groups)
     },

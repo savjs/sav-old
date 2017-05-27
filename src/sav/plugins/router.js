@@ -5,6 +5,7 @@ import {NotRoutedException} from '../core/exception.js'
 
 export function routerPlugin (sav) {
   sav.use({
+    name: 'router',
     prepare (groups) {
       let routes = convertRouters(groups)
       sav.matchRoute = (ctx) => {

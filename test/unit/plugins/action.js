@@ -1,12 +1,11 @@
 import test from 'ava'
 import {expect} from 'chai'
 
-import {Sav, propsPlugin, actionPlugin} from 'sav'
+import {Sav, actionPlugin} from 'sav'
 import actions from '../fixtures/action'
 
 test('api', (ava) => {
   expect(Sav).to.be.a('function')
-  expect(propsPlugin).to.be.a('function')
   expect(actionPlugin).to.be.a('function')
   expect(actions).to.be.a('object')
 })
@@ -16,7 +15,6 @@ test('actionPlugin.noop', async (ava) => {
   let sav = new Sav({
     neat: true
   })
-  sav.use(propsPlugin)
   sav.use(actionPlugin)
   sav.prepare({})
 
@@ -37,7 +35,6 @@ test('actionPlugin', async (ava) => {
   let sav = new Sav({
     neat: true
   })
-  sav.use(propsPlugin)
   sav.use(actionPlugin)
   sav.prepare({actions})
 
@@ -75,7 +72,6 @@ test('actionPlugin.sav', async (ava) => {
   let sav = new Sav({
     neat: true
   })
-  sav.use(propsPlugin)
   sav.use(actionPlugin)
 
   class Test {

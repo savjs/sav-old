@@ -1,10 +1,9 @@
 import test from 'ava'
 import {expect} from 'chai'
-import {Sav, propsPlugin, renderPlugin} from 'sav'
+import {Sav, renderPlugin} from 'sav'
 
 test('api', (ava) => {
   expect(Sav).to.be.a('function')
-  expect(propsPlugin).to.be.a('function')
   expect(renderPlugin).to.be.a('function')
 })
 
@@ -13,7 +12,6 @@ test('renderPlugin', async (ava) => {
   let sav = new Sav({
     neat: true
   })
-  sav.use(propsPlugin)
   sav.use(renderPlugin)
 
   let ctx = {

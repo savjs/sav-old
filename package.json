@@ -4,7 +4,7 @@
   "description": "sav",
   "main": "dist/sav.js",
   "scripts": {
-    "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm test\"",
+    "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm run na\"",
     "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
     "wb": "watch -p \"+(src)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
@@ -16,6 +16,7 @@
     "cli": "node ./dist/sav-cli",
     "cv": "node ./dist/sav-cli.js -p ./test/unit/fixtures/interface -d ./test/unit/fixtures/contract -a ./test/unit/fixtures/action -v ./test/unit/fixtures/view",
     "na": "nyc ava ./test/unit/**",
+    "naw": "nyc ava ./test/unit/plugins/action.js",
     "pretest": "npm run lint",
     "test": "npm run na",
     "nit": "npm-install-tag",

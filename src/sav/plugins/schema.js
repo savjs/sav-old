@@ -5,6 +5,7 @@ import {isString, isObject, pascalCase} from '../util'
 export function schemaPlugin (sav) {
   let schema = sav.config.get('schema') || SavSchema
   sav.use({
+    name: 'schema',
     prepare (payload, next) {
       for (let name in payload.schema) {
         payload.schema[name].name = name
@@ -13,8 +14,26 @@ export function schemaPlugin (sav) {
       normalizeSchema(payload, schema)
       next(schema.ready())
     },
-    setup ({prop}) {
-      prop('schema', schema)
+    setup ({prop, ctx}) {
+      prop({
+        schema,
+        async checkRequest (uri) {
+          let ref = ctx.uri(uri || ctx.route.uri)
+          let struct = schema[ref.request]
+          if (struct) {
+            struct.check(ctx.inputData)
+          }
+        },
+        async checkResponse (uri) {
+          let ref = ctx.uri(uri || ctx.route.uri)
+          let struct = schema[ref.response]
+          let data = ctx.renderData || ctx.state
+          if (struct) {
+            struct.check(data)
+          }
+          ctx.setData(data)
+        }
+      })
     }
   })
 }
