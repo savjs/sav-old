@@ -3,7 +3,6 @@ import {Sav} from './sav/core/sav.js'
 // 异常
 import {Exception} from './sav/core/exception.js'
 // 插件
-import {propsPlugin} from './sav/plugins/props.js'
 import {statePlugin} from './sav/plugins/state.js'
 import {promisePlugin} from './sav/plugins/promise.js'
 import {uriPlugin} from './sav/plugins/uri.js'
@@ -19,6 +18,6 @@ import {Modal, get, post, head, options, put, patch, del} from './sav/core/decor
 
 // 导出
 export {Sav, Exception}
-export {propsPlugin, statePlugin, promisePlugin, uriPlugin, routerPlugin, actionPlugin, schemaPlugin, authPlugin}
+export {statePlugin, promisePlugin, uriPlugin, routerPlugin, actionPlugin, schemaPlugin, authPlugin}
 export {Graph, registerNames}
 export {Modal, get, post, head, options, put, patch, del}
