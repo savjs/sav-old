@@ -10,7 +10,8 @@ import {
   routerPlugin,
   actionPlugin,
   schemaPlugin,
-  authPlugin
+  authPlugin,
+  invokePlugin
 } from '../plugins'
 
 export class Sav extends EventEmitter {
@@ -31,8 +32,9 @@ export class Sav extends EventEmitter {
       this.use(renderPlugin)
       this.use(routerPlugin)
       this.use(actionPlugin)
-      this.use(schemaPlugin)
       this.use(authPlugin)
+      this.use(schemaPlugin)
+      this.use(invokePlugin)
     }
   }
   use (plugin) {
@@ -86,10 +88,10 @@ export class Sav extends EventEmitter {
   }
 }
 
-let emits = ['prepare', 'setup', 'payload', 'error']
+let emits = ['prepare', 'setup', 'error']
 
 function installPlugin (sav, plugin) {
-  let {name, teardown} = plugin
+  let {name, teardown, payload} = plugin
   emits.forEach((name) => {
     if (plugin[name]) {
       sav.on(name, plugin[name])
@@ -97,6 +99,9 @@ function installPlugin (sav, plugin) {
   })
   if (teardown) {
     sav.prependListener('teardown', teardown)
+  }
+  if (payload) {
+    sav.payloads.push(payload)
   }
   if (name) {
     sav.installed[name] = plugin

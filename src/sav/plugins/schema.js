@@ -17,17 +17,17 @@ export function schemaPlugin (sav) {
     setup ({prop, ctx}) {
       prop({
         schema,
-        async checkRequest (uri) {
+        async checkRequest (uri, inputData) {
           let ref = ctx.uri(uri || ctx.route.uri)
           let struct = schema[ref.request]
           if (struct) {
-            struct.check(ctx.inputData)
+            struct.check(inputData || ctx.inputData)
           }
         },
-        async checkResponse (uri) {
+        async checkResponse (uri, renderData) {
           let ref = ctx.uri(uri || ctx.route.uri)
           let struct = schema[ref.response]
-          let data = ctx.renderData || ctx.state
+          let data = renderData || ctx.renderData || ctx.state
           if (struct) {
             struct.check(data)
           }

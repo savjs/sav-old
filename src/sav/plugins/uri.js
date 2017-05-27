@@ -8,8 +8,10 @@ export function uriPlugin (sav) {
     prepare (groups) {
       uris = normalizeUris(groups)
     },
-    setup ({prop}) {
-      prop('uri', (uri) => uris[uri])
+    setup ({prop, ctx}) {
+      prop('uri', (uri) => {
+        return uris[uri || ctx.route.uri]
+      })
     }
   })
 }

@@ -18,7 +18,16 @@ test('authPlugin', async (ava) => {
   })
   sav.use(authPlugin)
 
-  let ctx = {}
+  let ctx = {
+    route: {
+      uri: 'api.Test.test'
+    },
+    uri () {
+      return {
+        auth: true
+      }
+    }
+  }
   sav.use({
     setup (ctx, next) {
       next(async () => {
@@ -37,7 +46,16 @@ test('authPlugin.Exception', async (ava) => {
   })
   sav.use(authPlugin)
 
-  let ctx = {}
+  let ctx = {
+    route: {
+      uri: 'api.Test.test'
+    },
+    uri () {
+      return {
+        auth: true
+      }
+    }
+  }
   sav.use({
     setup (ctx, next) {
       next(async () => {
