@@ -4,7 +4,7 @@ exports.ReqAccountLogin = {
     userId: String,
     password: String
   }
-};
+}
 
 exports.Sex = {
   default: 1,
