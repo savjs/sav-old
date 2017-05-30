@@ -52,7 +52,13 @@ export function createRoot (groups, dest) {
     await mkdirAsync(dest)
     let dist = resolve(dest, 'index.js')
     console.log('createRoot: ', dist)
-    let reqs = Object.keys(groups).map((name) => `  ${name}: require('./${name}')`).join(',\n')
+    let reqs = Object.keys(groups).map((name) => {
+      let ret = `  ${name}: require('./${name}')`
+      if (name === 'mock') {
+        ret += '/* IS_MOCK */'
+      }
+      return ret
+    }).join(',\n')
     let str = `${noticeString}module.exports = {\n${reqs}\n}\n`
     await writeFileAsync(dist, str)
   })
@@ -66,7 +72,8 @@ function createContracts (groups, program) {
       let module = group[moduleName]
       tasks.push(createContract(moduleGroup, module, moduleName, program.dest, program.json))
     }
-    tasks.push(createIndex(moduleGroup, group, program.dest, false, moduleGroup === 'schema'))
+    tasks.push(createIndex(moduleGroup, group, program.dest, false, moduleGroup === 'schema' || 
+      moduleGroup === 'mock'))
   }
   tasks.push(createRoot(groups, program.dest))
   return Promise.all(tasks)

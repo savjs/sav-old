@@ -1,6 +1,6 @@
 // 注入模块方法
 
-import {isFunction, pascalCase} from '../util'
+import {isFunction, pascalCase} from 'sav-util'
 
 export function actionPlugin (sav) {
   let actions

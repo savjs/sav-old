@@ -1,4 +1,4 @@
-import {isObject, isFunction} from '../util'
+import {isObject, isFunction} from 'sav-util'
 
 export function objectAssign (target, obj, excludes) {
   if (isObject(obj)) {

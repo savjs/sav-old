@@ -1,5 +1,5 @@
 // uri资源处理, 扁平化
-import {prop} from '../util'
+import {prop} from 'sav-util'
 
 export function uriPlugin (sav) {
   let uris

@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events'
-import {compose, isObject, isArray, isFunction, makeProp, delProps} from '../util'
+import {isObject, isArray, isFunction, makeProp, delProps, next as promiseNext} from 'sav-util'
+import {compose} from '../util/compose.js'
 import {Config} from './config'
 
 import {
@@ -129,15 +130,4 @@ function teardown (sav, target) {
   return next().catch((err) => {
     sav.emit('error', err)
   })
-}
-
-function promiseNext () {
-  let promise = Promise.resolve()
-  let ret = (resolve, reject) => {
-    if (resolve || reject) {
-      promise = promise.then(resolve, reject)
-    }
-    return promise
-  }
-  return ret
 }

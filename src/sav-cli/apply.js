@@ -1,14 +1,13 @@
 import {applyVue} from './applyVue.js'
 import {applyContract} from './applyContract.js'
-// import {applySchemaApi} from './applySchemaApi.js'
+import {applyUri} from './applyUri.js'
 import {applyAction} from './applyAction.js'
 
 export async function apply (groups, program) {
-  // await prepareModules(groups)
+  applyUri(groups)
   let tasks = [applyContract(groups, program)]
   if (program.views) {
     tasks.push(applyVue(groups, program))
-  //   tasks.push(applySchemaApi(groups, program))
   }
   if (program.actions) {
     tasks.push(applyAction(groups, program))

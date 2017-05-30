@@ -1,0 +1,13 @@
+{
+  "name": "sav-vue-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "wb": "npm run build -- -w",
+    "cv": "node ../../dist/sav-cli.js -p ./interface -d ./contract -v ./views"
+  },
+  "author": "",
+  "license": "ISC"
+}

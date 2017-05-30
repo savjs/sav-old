@@ -1,13 +1,13 @@
 // 路由中间件
 import pathToRegexp from 'path-to-regexp'
-import {isString, convertCase, prop} from '../util'
+import {isString, convertCase, prop} from 'sav-util'
 import {NotRoutedException} from '../core/exception.js'
 
 export function routerPlugin (sav) {
   sav.use({
     name: 'router',
     prepare (groups) {
-      let routes = convertRouters(groups)
+      let routes = normalizeRoutes(groups)
       sav.matchRoute = (ctx) => {
         let method = ctx.method.toUpperCase()
         let path = ctx.path || ctx.originalUrl
@@ -36,7 +36,7 @@ export function routerPlugin (sav) {
   })
 }
 
-export function convertRouters ({uris}) {
+export function normalizeRoutes ({uris}) {
   let routes = []
   for (let uri in uris) {
     let ret = uris[uri]
@@ -71,6 +71,7 @@ function createRoute (ref) {
     } else {
       parentRoute.absolutes.push(savRoute)
     }
+    prop(savRoute, 'regexp', pathToRegexp.compile(path))
     prop(ref, 'route', savRoute)
   }
 }

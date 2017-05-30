@@ -1,16 +1,12 @@
 // Schema中间件
 import SavSchema from 'sav-schema'
-import {isString, isObject, pascalCase} from '../util'
+import {isString, isObject, pascalCase} from 'sav-util'
 
 export function schemaPlugin (sav) {
   let schema = sav.config.get('schema') || SavSchema
   sav.use({
     name: 'schema',
     prepare (payload, next) {
-      for (let name in payload.schema) {
-        payload.schema[name].name = name
-        schema.declare(payload.schema[name])
-      }
       normalizeSchema(payload, schema)
       next(schema.ready())
     },
@@ -38,13 +34,18 @@ export function schemaPlugin (sav) {
   })
 }
 
-export function normalizeSchema ({uris}, schema) {
+export function normalizeSchema (payload, schema, isExport) {
+  for (let name in payload.schema) {
+    payload.schema[name].name = name
+    schema.declare(payload.schema[name])
+  }
+  let {uris} = payload
   for (let uri in uris) {
     let ret = uris[uri]
     if (ret.isRoute) {
       // 提取路由中的schema定义
-      extractSchema(ret, 'request', schema)
-      extractSchema(ret, 'response', schema)
+      extractSchema(ret, 'request', schema, isExport)
+      extractSchema(ret, 'response', schema, isExport)
     }
   }
 }
@@ -54,7 +55,7 @@ const shortMaps = {
   response: 'Res'
 }
 
-function extractSchema (ref, type, schema) {
+function extractSchema (ref, type, schema, isExport) {
   let {uri, props} = ref
   let value = props[type]
   let structName = pascalCase((shortMaps[type] + '_' + uri.replace('page.', '')).replace(/\./g, '_'))
@@ -69,4 +70,7 @@ function extractSchema (ref, type, schema) {
     schema.declare(value)
   }
   ref[type] = structName
+  if (isExport) {
+    ref[`${type}Schema`] = schema[structName]
+  }
 }

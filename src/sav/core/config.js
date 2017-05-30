@@ -1,4 +1,4 @@
-import {isArray, isObject} from '../util'
+import {isArray, isObject} from 'sav-util'
 
 export class Config {
   constructor (data) {

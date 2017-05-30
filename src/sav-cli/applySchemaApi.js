@@ -1,5 +1,5 @@
 import {writeFileAsync, mkdirAsync} from '../sav/util/file.js'
-import {camelCase} from '../sav/util/convert.js'
+import {camelCase} from 'sav-util'
 import {resolve} from 'path'
 import JSON5 from 'json5'
 

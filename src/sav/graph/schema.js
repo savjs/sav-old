@@ -1,4 +1,4 @@
-import {isObject} from '../util'
+import {isObject} from 'sav-util'
 import {convertFunctionToName} from './util.js'
 
 export class Schema {
