@@ -56,9 +56,9 @@ const shortMaps = {
 }
 
 function extractSchema (ref, type, schema, isExport) {
-  let {uri, props} = ref
-  let value = props[type]
-  let structName = pascalCase((shortMaps[type] + '_' + uri.replace('page.', '')).replace(/\./g, '_'))
+  let value = ref.props[type]
+  let structName = pascalCase((shortMaps[type] + '_' + ref.parent.name + '_' + ref.name).replace(/\./g, '_'))
+  // let structName = pascalCase((shortMaps[type] + '_' + uri.replace('page.', '')).replace(/\./g, '_'))
   if (isString(value)) {
     structName = value
   } else if (isObject(value)) {

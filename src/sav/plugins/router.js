@@ -52,6 +52,10 @@ export function normalizeRoutes ({uris}) {
 const caseType = 'camel'
 const prefix = '/'
 
+function getDefaultMethod (modalGroup) {
+  return modalGroup === 'api' ? 'POST' : 'GET'
+}
+
 function createRoute (ref) {
   if (!ref.route) {
     let {name, props, uri, parent} = ref
@@ -64,7 +68,7 @@ function createRoute (ref) {
     let savRoute = {
       uri,
       path,
-      method: props.method || (parent.parent.name === 'page' ? 'GET' : 'POST')
+      method: props.method || getDefaultMethod(parent.parent.name)
     }
     if (isRelative) {
       parentRoute.relatives.push(savRoute)

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "cv": "cd sav-vue-demo && npm run cv",
     "build": "cd sav-vue-demo && npm run build",
     "build-dev": "cd sav-vue-demo && npm run build-dev"
   },
