@@ -5,27 +5,13 @@ import includePaths from 'rollup-plugin-includepaths'
 import json from 'rollup-plugin-json'
 
 export default {
-  entry: 'src/sav-client/index.js',
+  entry: 'src/index.js',
   targets: [
     { dest: 'dist/sav.js', format: 'cjs' }
   ],
   external: [
-    'bluebird',
-    'consolidate',
-
-    // 'koa-compose',
-    // 'sav-schema',
-    // 'path-to-regexp',
-
-    'vue',
-    'vue-router',
-    'vue-server-renderer',
-    'rollup',
-    'rollup-plugin-babel',
-    'rollup-plugin-node-resolve',
-    'rollup-plugin-commonjs',
-    'rollup-plugin-vue2',
-    'rollup-plugin-re'
+    'sav-schema',
+    'sav-util'
   ],
   plugins: [
     includePaths({

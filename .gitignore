@@ -42,3 +42,5 @@ test/unit/vue/fixtures/TestRoutes.js
 /examples/sav-koa-demo/static/js
 /examples/sav-koa-demo/static/css
 tmp
+/examples/sav-vue-demo/static/js/*.map
+/examples/sav-vue-demo/static/js/client-entry.js

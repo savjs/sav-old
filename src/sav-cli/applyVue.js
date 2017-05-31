@@ -75,7 +75,8 @@ export async function applyVue (groups, program) {
   await mkdirAsync(program.views)
   return Promise.all([
     createAppVue(program.views),
-    saveVueRoutes(groups, program.views)
+    saveVueRoutes(groups, program.views),
+    createVueFiles(program.views)
   ])
 }
 
@@ -194,4 +195,96 @@ function convertPath (path, caseType, name) {
 
 function normalPath (path) {
   return path.replace(/\/\//g, '/')
+}
+
+let clientEntry = `${noticeString}// 程序入口文件
+// 宏定义采用注释的方式, 需要打包工具根据环境变量来匹配
+// 区块宏 IS_MOCK    是否开启mock功能
+// 区块宏 IS_DEV     是否dev环境
+// 区块宏 IS_LOCAL   是否本地开发环境
+
+import {Vue, VueRouter, Flux, FluxVue} from './VueFlux.js'
+import routes from './routes.js'
+import App from './App.vue'
+import {resolveContract} from 'sav/dist/sav-client.js'
+// 这里替换为真正的contract
+import contract from  '../contract'
+
+// 定义路由
+
+let routerMode
+
+// #if IS_LOCAL
+  routerMode = 'hash'
+// #endif
+
+if (!routerMode) {
+  routerMode = 'history'
+}
+
+let router = new VueRouter(Object.assign({
+  mode: routerMode,
+  routes,
+  linkActiveClass: 'is-active'
+}))
+
+let flux = new Flux({
+// #if IS_MOCK
+  mockState: true,
+// #endif
+  strict: true
+})
+
+// flux服务在这里嵌入
+// flux.declare(...)
+
+// #if IS_DEV
+// 打印一下未定义schema的接口
+flux.on('schemaRequired', (lists) => {
+  console.warn('schemaRequired', lists)
+})
+// #endif
+resolveContract({contract, flux, router}).then(() => {
+
+// 或者flux服务在这里嵌入
+// flux.declare(...)
+
+  let vm = new Vue(Object.assign({vaf: new FluxVue({flux}), router}, App))
+  vm.$mount('#app')
+  window.app = {
+    router,
+    vm,
+    flux
+  }
+})
+`
+
+let vueFlux = `${noticeString}
+// 全局的VUE组件需要在这里注册
+// 其他需要用Vue的需要从这里引入
+import VueRouter from 'vue-router'
+import Vue from 'vue'
+import {Flux, FluxVue} from 'sav-flux'
+
+Vue.use(VueRouter)
+Vue.use(FluxVue)
+
+export {Vue}
+export {VueRouter}
+export {Flux}
+export {FluxVue}
+`
+
+async function createVueFiles (dest) {
+  let clientEntryFile = resolve(dest, 'client-entry.js')
+  if (!await fileExistsAsync(clientEntryFile)) {
+    console.log('createClientEntry:', clientEntryFile)
+    await writeFileAsync(clientEntryFile, clientEntry)
+  }
+
+  let vueFluxFile = resolve(dest, 'VueFlux.js')
+  if (!await fileExistsAsync(vueFluxFile)) {
+    console.log('createVueFlux:', vueFluxFile)
+    await writeFileAsync(vueFluxFile, vueFlux)
+  }
 }

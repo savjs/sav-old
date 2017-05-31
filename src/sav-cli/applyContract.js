@@ -52,13 +52,18 @@ export function createRoot (groups, dest) {
     await mkdirAsync(dest)
     let dist = resolve(dest, 'index.js')
     console.log('createRoot: ', dist)
+    
     let reqs = Object.keys(groups).map((name) => {
       let ret = `  ${name}: require('./${name}')`
       if (name === 'mock') {
-        ret += '/* IS_MOCK */'
+        return `// #if IS_MOCK
+${ret},
+// #endif`
       }
       return ret
     }).join(',\n')
+
+    reqs = reqs.replace('#endif,', `#endif`)
     let str = `${noticeString}module.exports = {\n${reqs}\n}\n`
     await writeFileAsync(dist, str)
   })

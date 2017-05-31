@@ -3,7 +3,9 @@
 module.exports = {
   api: require('./api'),
   layout: require('./layout'),
-  mock: require('./mock')/* IS_MOCK */,
+// #if IS_MOCK
+  mock: require('./mock'),
+// #endif
   page: require('./page'),
   schema: require('./schema')
 }

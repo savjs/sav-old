@@ -23,6 +23,11 @@ export function resolveContract ({contract, schema, flux, router, opts}) {
   normalizeSchema(contract, schema, true)
   normalizeFetch(contract, flux, router)
   return schema.ready().then(() => {
+    if (typeof window !== 'undefined') {
+      if (window.INIT_STATE) {
+        flux.replaceState(window.INIT_STATE)
+      }
+    }
     normalizeState(contract, flux)
   })
 }

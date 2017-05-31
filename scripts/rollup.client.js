@@ -11,11 +11,8 @@ export default {
   format: 'cjs',
   // format: 'umd',
   external: [
-    // 'koa-compose',
-    // 'sav-schema',
-    // 'path-to-regexp',
-    'vue',
-    'vue-router',
+    'sav-schema',
+    'sav-util'
   ],
   plugins: [
     includePaths({
