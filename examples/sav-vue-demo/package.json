@@ -6,6 +6,7 @@
   "scripts": {
     "build": "rollup -c",
     "wb": "npm run build -- -w",
+    "build-dev": "cross-env IS_MOCK=1 IS_LOCAL=1 IS_DEV=1 rollup -c",
     "cv": "node ../../dist/sav-cli.js -p ./interface -d ./contract -v ./views"
   },
   "author": "",

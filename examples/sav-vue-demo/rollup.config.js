@@ -5,6 +5,38 @@ import commonjs from 'rollup-plugin-commonjs'
 import re from 'rollup-plugin-re'
 import json from 'rollup-plugin-json'
 
+let IS_MOCK = process.env.IS_MOCK
+let IS_LOCAL = process.env.IS_LOCAL
+let IS_DEV = process.env.IS_DEV
+
+let patterns = [
+  {
+    test: 'process.env.NODE_ENV',
+    replace: `${process.env.NODE_ENV}` || "development"
+  }
+]
+
+if (!IS_MOCK) {
+  patterns.push({
+    test: /\/\/\s#if\sIS_MOCK([\s\S]*)#endif/g,
+    replace: ''
+  })
+}
+
+if (!IS_LOCAL) {
+  patterns.push({
+    test: /\/\/\s#if\sIS_LOCAL([\s\S]*)#endif/g,
+    replace: ''
+  })
+}
+
+if (!IS_DEV) {
+  patterns.push({
+    test: /\/\/\s#if\sIS_DEV([\s\S]*)#endif/g,
+    replace: ''
+  })
+}
+
 export default {
   entry: './views/client-entry.js',
   dest: 'static/js/client-entry.js', 
@@ -12,12 +44,7 @@ export default {
   sourceMap: true,
   plugins: [
     re({
-      patterns: [
-        {
-          test: 'process.env.NODE_ENV',
-          replace: `${process.env.NODE_ENV}` || "development"
-        }
-      ]
+      patterns
     }),
     json({
       preferConst: false // Default: false

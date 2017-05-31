@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd sav-vue-demo && npm run build"
+    "build": "cd sav-vue-demo && npm run build",
+    "build-dev": "cd sav-vue-demo && npm run build-dev"
   },
   "devDependencies": {
+    "cross-env": "^5.0.0",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
