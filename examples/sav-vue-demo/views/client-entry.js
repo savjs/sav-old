@@ -12,7 +12,6 @@ import App from './App.vue'
 import {resolveContract} from '../../../dist/sav-client.js'
 // 这里替换为真正的contract
 import contract from  '../contract'
-
 // 定义路由
 
 let routerMode
@@ -32,6 +31,9 @@ let router = new VueRouter(Object.assign({
 }))
 
 let flux = new Flux({
+// #if IS_DEV
+  noProxy: true, // 开发模式下不使用Proxy方便调用dispatch
+// #endif
 // #if IS_MOCK
   mockState: true,
 // #endif

@@ -229,6 +229,9 @@ let router = new VueRouter(Object.assign({
 }))
 
 let flux = new Flux({
+// #if IS_DEV
+  noProxy: true, // 开发模式下不使用Proxy方便调用dispatch
+// #endif
 // #if IS_MOCK
   mockState: true,
 // #endif

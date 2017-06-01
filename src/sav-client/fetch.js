@@ -11,11 +11,12 @@ function toJSON () {
 
 export function normalizeFetch (contract, flux) {
   flux.prop('fetchRoute', fetchRoute.bind(flux))
-  flux.prop('fetch',  createActions(contract, flux))
+  let {actions, fetchs} = createActions(contract, flux)
+  flux.prop('fetch',  fetchs)
   flux.declare({
-    actions: {
+    actions: Object.assign({
       fetchPage
-    }
+    }, actions)
   })
   flux.on('fetch', fetchFromMockState.bind(flux))
 }
@@ -68,6 +69,7 @@ function fetchPage ({flux, updateState}, data) {
 }
 
 function createActions (contract, flux) {
+  let fetchs = {}
   let actions = {}
   let {uris} = contract
   for (let uri in uris) {
@@ -81,12 +83,15 @@ function createActions (contract, flux) {
       }
       ret.method = method
       let actionName = ret.actionName = method.toLowerCase() + pascalCase(`${uri}`.replace(/\./g, '_'))
-      actions[actionName] = (data) => {
+      fetchs[actionName] = (data) => {
         return flux.fetchRoute(Object.assign({uri}, data))
+      }
+      actions[actionName] = ({fetch}, data) => {
+        return fetch[actionName](data)
       }
     }
   }
-  return actions
+  return {fetchs, actions}
 }
 
 function fetchRoute (opts) {
