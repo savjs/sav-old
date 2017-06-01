@@ -68,6 +68,19 @@ function fetchPage ({flux, updateState}, data) {
     })
 }
 
+function fetchUri ({flux, updateState}, data) {
+  return flux.fetchRoute(data)
+    .then(({data}) => {
+      let newData = Object.assign({error: {}}, data)
+      return updateState(newData)
+    }, (err) => {
+      let error = toJSON.call(err)
+      return updateState({error}).then(() =>{
+        throw error
+      })
+    })
+}
+
 function createActions (contract, flux) {
   let fetchs = {}
   let actions = {}
@@ -84,7 +97,7 @@ function createActions (contract, flux) {
       ret.method = method
       let actionName = ret.actionName = method.toLowerCase() + pascalCase(`${uri}`.replace(/\./g, '_'))
       fetchs[actionName] = (data) => {
-        return flux.fetchRoute(Object.assign({uri}, data))
+        return fetchUri(flux, Object.assign({uri}, data))
       }
       actions[actionName] = ({fetch}, data) => {
         return fetch[actionName](data)
