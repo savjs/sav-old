@@ -16,7 +16,7 @@ let appTemplate = `<template>
     name: 'App',
     getters: [
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>
@@ -39,7 +39,7 @@ let vueTemplate = `<template>
     name: 'componentName',
     getters: [
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>
