@@ -8,7 +8,7 @@
     name: 'HomeAbout',
     getters: [
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>

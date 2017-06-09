@@ -8,7 +8,7 @@
     name: 'Article',
     getters: [
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>

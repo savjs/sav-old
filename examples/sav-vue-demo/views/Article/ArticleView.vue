@@ -8,7 +8,7 @@
     name: 'ArticleView',
     getters: [
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>

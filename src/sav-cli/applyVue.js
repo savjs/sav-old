@@ -45,7 +45,7 @@ let vueTemplate = `<template>
 </script>
 `
 export async function saveVueRoutes (groups, dest) {
-  let {content, files} = createVueRoutes(groups, JSON5)
+  let {content, files} = createVueRoutes(groups)
   await mkdirAsync(dest)
   
   let routes = resolve(dest, 'routes.js')
@@ -132,7 +132,10 @@ function unique (arr) {
 }
 
 // 生成Vue的路由文件
-export function createVueRoutes (groups, JSON5, es6 = true) {
+export function createVueRoutes (groups, JSON, es6 = true) {
+  if (groups.vueInfo) {
+    return groups.vueInfo
+  }
   let comps = []
   let nameUris = {}
   let uris = groups.uris
@@ -145,7 +148,7 @@ export function createVueRoutes (groups, JSON5, es6 = true) {
       }
     }
   }
-  let routes = JSON5 ? JSON5.stringify(comps, null, 2) : JSON.stringify(comps, null, 2)
+  let routes = JSON ? JSON.stringify(comps, null, 2) : JSON5.stringify(comps, null, 2)
   let components = []
   // let names = []
   let files = []
@@ -177,13 +180,15 @@ export function createVueRoutes (groups, JSON5, es6 = true) {
     arr.push(`module.exports = ${routes}`)
   }
   let content = arr.join('\n')
-  return {
+  let vueInfo = {
     content,
     nameUris,
     // components,
     // names,
     files
   }
+  prop(groups, 'vueInfo', vueInfo)
+  return vueInfo
 }
 
 function convertPath (path, caseType, name) {

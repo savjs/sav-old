@@ -11,6 +11,8 @@ program
   .option('-d, --dest [dest]', 'dest dir')
   .option('-v, --views [views]', 'views dir')
   .option('-a, --actions [actions]', 'actions dir')
+  .option('-s, --sass [sass]', 'sass dir')
+  .option('-S, --sassPage [sassPage]', 'sass page by modal|action|actions limit number', /^(modal|action|\d+)$/i, 'action')
   .parse(process.argv)
 
 program.path = 'path' in program ? resolve(program.path || '.', '') : false
@@ -23,6 +25,7 @@ if (!program.path) {
 program.dest = 'dest' in program ? resolve(program.dest) : false
 program.views = 'views' in program ? resolve(program.views) : false
 program.actions = 'actions' in program ? resolve(program.actions) : false
+program.sass = 'sass' in program ? resolve(program.sass) : false
 
 exportSavDecorators()
 

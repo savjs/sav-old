@@ -10,7 +10,7 @@
     name: 'Home',
     getters: [
     ],
-    acctions: [
+    actions: [
     ],
     components: {
       NavMenus

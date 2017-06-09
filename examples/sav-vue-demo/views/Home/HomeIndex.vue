@@ -9,7 +9,7 @@
     getters: [
       'welcome'
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>
