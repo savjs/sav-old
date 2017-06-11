@@ -300,7 +300,7 @@ let buildClient = `${noticeString}// rollup-standard 编译配置文件
 // 本地环境构建 cross-env NODE_ENV=development IS_MOCK=1 IS_LOCAL=1 IS_DEV=1 rollup-cli -c views/build-client.js
 // 生成环境构建 cross-env NODE_ENV=production rollup-cli -c views/build-client.js
 
-const {executeRollup, fse, errorExit} = require('rollup-standalone')
+const {executeRollup, fse} = require('rollup-standalone')
 const path = require('path')
 
 let IS_PROD = process.env.NODE_ENV === 'production'
@@ -339,20 +339,22 @@ module.exports = executeRollup({
   }
 })
 
-fse.copy(require.resolve(IS_PROD
-  ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js'),
-  'static/js/vue.js').catch(errorExit('can not copy vue'))
-
-fse.copy(require.resolve(IS_PROD
-  ? 'vue-router/dist/vue-router.min.js' : 'vue-router/dist/vue-router.js'),
-  'static/js/vue-router.js').catch(errorExit('can not copy vue-router'))
+fse.ensureDir('static/js').then(() => {
+  return Promise.all([
+    fse.copy(require.resolve(IS_PROD
+      ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js'),
+      'static/js/vue.js'),
+    fse.copy(require.resolve(IS_PROD
+      ? 'vue-router/dist/vue-router.min.js' : 'vue-router/dist/vue-router.js'),
+      'static/js/vue-router.js')
+  ])
+})
 
 process.on('unhandledRejection', (reason) => {
   console.error(reason)
   process.exit(1)
 })
 `
-
 async function createVueFiles (dest) {
   let clientEntryFile = resolve(dest, 'client-entry.js')
   if (!await fileExistsAsync(clientEntryFile)) {
