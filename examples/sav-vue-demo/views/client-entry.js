@@ -2,22 +2,24 @@
 
 // 程序入口文件
 // 宏定义采用注释的方式, 需要打包工具根据环境变量来匹配
-// 区块宏 IS_MOCK    是否开启mock功能
-// 区块宏 IS_DEV     是否dev环境
-// 区块宏 IS_LOCAL   是否本地开发环境
+// 区块宏 IS_DEV     是否开发环境
+// 区块宏 IS_PROD    是否生产环境
+// 区块宏 IS_MOCK    是否mock环境
+// 区块宏 IS_LOCAL   是否本地环境
 
 import {Vue, VueRouter, Flux, FluxVue} from './VueFlux.js'
 import routes from './routes.js'
 import App from './App.vue'
-import {resolveContract} from '../../../dist/sav-client.js'
-// 这里替换为真正的contract
-import contract from  '../contract'
+import {resolveContract} from 'sav'
+// @TODO 这里替换为真正的contract
+import contract from '../contract'
+
 // 定义路由
 
 let routerMode
 
 // #if IS_LOCAL
-  routerMode = 'hash'
+routerMode = 'hash'
 // #endif
 
 if (!routerMode) {
@@ -49,16 +51,22 @@ flux.on('schemaRequired', (lists) => {
   console.warn('schemaRequired', lists)
 })
 // #endif
-resolveContract({contract, flux, router}).then(() => {
 
+let ret = {}
+
+export default ret
+
+resolveContract({contract, flux, router}).then(() => {
 // 或者flux服务在这里嵌入
 // flux.declare(...)
 
   let vm = new Vue(Object.assign({vaf: new FluxVue({flux}), router}, App))
   vm.$mount('#app')
-  window.app = {
+// #if IS_DEV
+  Object.assign(ret, {
     router,
     vm,
     flux
-  }
+  })
+// #endif
 })

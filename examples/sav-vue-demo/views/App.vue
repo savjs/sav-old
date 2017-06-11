@@ -10,7 +10,7 @@
     name: 'App',
     getters: [
     ],
-    acctions: [
+    actions: [
     ]
   }
 </script>

@@ -12,7 +12,7 @@ program
   .option('-v, --views [views]', 'views dir')
   .option('-a, --actions [actions]', 'actions dir')
   .option('-s, --sass [sass]', 'sass dir')
-  .option('-S, --sassPage [sassPage]', 'sass page by modal|action|actions limit number', /^(modal|action|\d+)$/i, 'action')
+  .option('-S, --sassPage [sassPage]', 'sass page by modal|action', /^(modal|action)$/i, 'action')
   .parse(process.argv)
 
 program.path = 'path' in program ? resolve(program.path || '.', '') : false
@@ -31,7 +31,7 @@ exportSavDecorators()
 
 loadConstractModals(program.path).then(async (groups) => {
   return await apply(groups, program)
-}).then(() => console.log('done')).catch((err) => {
+}).then(() => console.log('Done')).catch((err) => {
   console.error(err)
   process.exit(1)
 })

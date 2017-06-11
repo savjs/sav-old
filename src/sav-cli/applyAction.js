@@ -1,16 +1,19 @@
 import acorn from 'acorn'
 import {resolve} from 'path'
 import {writeFileAsync, mkdirAsync, fileExistsAsync, readFileAsync} from './sav/util/file.js'
-import {createIndex, createRoot} from './applyContract.js'
+import {createIndex, createRoot} from './applyUtil.js'
 
 let actionGroups = {
   api: true,
   page: true,
   layout: true
 }
+const applyTitle = '[  Action]'
 
 export async function applyAction (groups, program) {
-  await mkdirAsync(program.actions)
+  let dir = program.actions
+  console.log(`${applyTitle}[ensure] `, dir)
+  await mkdirAsync(dir)
   let tasks = []
   let indexs = {}
   for (let moduleGroup in groups) {
@@ -19,12 +22,12 @@ export async function applyAction (groups, program) {
       let group = groups[moduleGroup]
       for (let moduleName in group) {
         let module = group[moduleName]
-        tasks.push(createAction(moduleGroup, module, moduleName, program.actions))
+        tasks.push(createAction(moduleGroup, module, moduleName, dir))
       }
-      tasks.push(createIndex(moduleGroup, group, program.actions))
+      tasks.push(createIndex(moduleGroup, group, dir))
     }
   }
-  tasks.push(createRoot(indexs, program.actions))
+  tasks.push(createRoot(indexs, dir))
   return Promise.all(tasks)
 }
 
@@ -46,17 +49,17 @@ function createAction (groupDir, module, moduleName, dest) {
         if (methods.length) {
           let attach = createMethods(methods)
           jsData = jsData.substr(0, parsed.end - 1) + attach + jsData.substr(parsed.end - 1)
+          console.log(`${applyTitle}[update] `, jsFile)
           await writeFileAsync(jsFile, jsData)
-          console.log('updateAction: ', jsFile)
         } else {
-          console.log('skipAction: ', jsFile)
+          console.log(`${applyTitle}[  skip] `, jsFile)
         }
       } else {
-        console.log('Can not sync methods to: ', jsFile)
+        console.log(`${applyTitle}[error] `, jsFile)
       }
     } else {
       let jsData = createClassModule(moduleName, methods)
-      console.log('createAction: ', jsFile)
+      console.log(`${applyTitle}[create] `, jsFile)
       await writeFileAsync(jsFile, jsData)
     }
   })

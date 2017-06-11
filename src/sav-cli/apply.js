@@ -7,14 +7,14 @@ import {applySass} from './applySass.js'
 export async function apply (groups, program) {
   applyUri(groups)
   let tasks = [applyContract(groups, program)]
+  if (program.actions) {
+    tasks.push(applyAction(groups, program))
+  }
   if (program.views) {
     tasks.push(applyVue(groups, program))
   }
   if (program.sass) {
     tasks.push(applySass(groups, program))
-  }
-  if (program.actions) {
-    tasks.push(applyAction(groups, program))
   }
   return Promise.all(tasks)
 }
