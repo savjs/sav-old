@@ -1,6 +1,6 @@
 {
   "name": "sav",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "sav",
   "main": "dist/sav.js",
   "browser": "dist/sav-client.js",

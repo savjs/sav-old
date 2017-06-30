@@ -34,7 +34,7 @@ export function createRoot (groups, dest) {
     await mkdirAsync(dest)
     let dist = resolve(dest, 'index.js')
     console.log(`${applyTitle}[create] `, dist)
-    
+
     let reqs = Object.keys(groups).map((name) => {
       let ret = `  ${name}: require('./${name}')`
       if (name === 'mock') {

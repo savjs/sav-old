@@ -44,3 +44,4 @@ test/unit/vue/fixtures/TestRoutes.js
 tmp
 /examples/sav-vue-demo/static/js/*.map
 /examples/sav-vue-demo/static/js/client-entry.js
+/examples/sav-vue-demo/static/js

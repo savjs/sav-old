@@ -33,7 +33,7 @@ function createContracts (groups, program) {
       let module = group[moduleName]
       tasks.push(createContract(moduleGroup, module, moduleName, program.dest, program.json))
     }
-    tasks.push(createIndex(moduleGroup, group, program.dest, false, moduleGroup === 'schema' || 
+    tasks.push(createIndex(moduleGroup, group, program.dest, false, moduleGroup === 'schema' ||
       moduleGroup === 'mock'))
   }
   tasks.push(createRoot(groups, program.dest))

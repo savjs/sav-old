@@ -7,7 +7,7 @@ module.exports = {
   routes: {
     index: {
       method: "GET",
-      path: "",
+      path: "/",
       title: "主页",
       keywords: "关键字列表",
       description: "页面描述"

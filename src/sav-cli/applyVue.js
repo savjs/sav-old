@@ -51,7 +51,7 @@ export async function saveVueRoutes (groups, dest) {
   let {content, files} = createVueRoutes(groups)
   console.log(`${applyTitle}[ensure] `, dest)
   await mkdirAsync(dest)
-  
+
   let routes = resolve(dest, 'routes.js')
   console.log(`${applyTitle}[create] `, routes)
   await writeFileAsync(routes, `${noticeString}${eslintQuotes}${content}\n`)

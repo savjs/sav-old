@@ -12,7 +12,7 @@ function toJSON () {
 export function normalizeFetch (contract, flux) {
   flux.prop('fetchRoute', fetchRoute.bind(flux))
   let {actions, fetchs} = createActions(contract, flux)
-  flux.prop('fetch',  fetchs)
+  flux.prop('fetch', fetchs)
   flux.declare({
     actions: Object.assign({
       fetchPage
@@ -62,7 +62,7 @@ function fetchPage ({flux, updateState}, data) {
       return updateState(newData)
     }, (err) => {
       let error = toJSON.call(err)
-      return updateState({error}).then(() =>{
+      return updateState({error}).then(() => {
         throw error
       })
     })
@@ -75,7 +75,7 @@ function fetchUri ({flux, updateState}, data) {
       return updateState(newData)
     }, (err) => {
       let error = toJSON.call(err)
-      return updateState({error}).then(() =>{
+      return updateState({error}).then(() => {
         throw error
       })
     })
@@ -110,7 +110,9 @@ function createActions (contract, flux) {
 function fetchRoute (opts) {
   // {uri, url, params, data} + route
   let ctx = Object.assign({
-    headers: {},
+    headers: {
+      accept: 'application/json'
+    },
     rule: this.contract.uris[opts.uri]
   }, opts)
   let next = promiseNext()

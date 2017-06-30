@@ -43,7 +43,7 @@ export default [
       {
         component: HomeIndex,
         name: "HomeIndex",
-        path: ""
+        path: "/"
       },
       {
         component: HomeAbout,

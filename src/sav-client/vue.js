@@ -19,7 +19,7 @@ export function normalizeVue (contract, router, flux) {
       return next()
     }
     return flux.dispatch('fetchPage', {
-      uri, 
+      uri,
       url: to.fullPath,
       params: to.params,
       query: to.query

@@ -1,8 +1,13 @@
 module.exports = class Home {
-  index () {
-
+  index ({setState}) {
+    setState({
+      welcome: 'HelloWrold'
+    })
+    console.log('home')
   }
-  about () {
-
+  about ({setState}) {
+    setState({
+      aboutInfo: "AboutAbout"
+    })
   }
 }

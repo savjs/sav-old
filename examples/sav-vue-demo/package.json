@@ -12,6 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "cross-env": "^5.0.1",
+    "koa": "^2.3.0",
+    "koa-static": "^3.0.0",
     "rollup-standalone": "^0.42.9",
     "sav": "../../",
     "sav-flux": "0.0.16",

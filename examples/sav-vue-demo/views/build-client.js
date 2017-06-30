@@ -23,7 +23,7 @@ module.exports = executeRollup({
   babelOptions: true,
   vueOptions: true,
   sourceMap: !IS_PROD,
-  uglifyOptions: IS_PROD,
+  // uglifyOptions: IS_PROD,
   commonjsOptions: {
     include: [
       'node_modules/**',

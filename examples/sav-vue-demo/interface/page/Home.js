@@ -6,7 +6,7 @@ import {Modal, get} from 'sav'
 })
 export default class Home {
   @get({
-    path: '',
+    path: '/',
     title: '主页',
     keywords: '关键字列表',
     description: '页面描述'

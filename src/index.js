@@ -12,6 +12,7 @@ import {actionPlugin} from './sav/plugins/action.js'
 import {schemaPlugin} from './sav/plugins/schema.js'
 import {authPlugin} from './sav/plugins/auth.js'
 import {invokePlugin} from './sav/plugins/invoke.js'
+import {koaPlugin} from './sav/plugins/koa.js'
 // 构造器
 import {Graph} from './sav/graph/graph.js'
 import {registerNames} from './sav/graph/util.js'
@@ -20,6 +21,6 @@ import {Modal, get, post, head, options, put, patch, del} from './sav/core/decor
 
 // 导出
 export {Sav, Exception}
-export {statePlugin, promisePlugin, uriPlugin, renderPlugin, routerPlugin, actionPlugin, schemaPlugin, authPlugin, invokePlugin}
+export {statePlugin, promisePlugin, uriPlugin, renderPlugin, routerPlugin, actionPlugin, schemaPlugin, authPlugin, invokePlugin, koaPlugin}
 export {Graph, registerNames}
 export {Modal, get, post, head, options, put, patch, del}
