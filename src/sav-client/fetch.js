@@ -29,6 +29,14 @@ function fetchFromMockState (ctx) {
   let mockState = this.opt('mockState')
   if (mockState) {
     if (!rule.responseSchema) {
+      if (this.opt('mockAllowNoResponse')) { // 允许空的 mock 数据
+        ctx.fetch = () => {
+          return Promise.resolve().then(() => {
+            return {}
+          })
+        }
+        return
+      }
       throw new Error(`uri ${rule.uri} has no responseSchma.`)
     }
     let mockData
