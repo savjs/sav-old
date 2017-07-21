@@ -9,7 +9,7 @@ const applyTitle = '[     Vue]'
 
 let appTemplate = `<template>
   <div id="app">
-    <router-view class="view"></router-view>
+    <router-view class="page-container"></router-view>
   </div>
 </template>
 <script>
@@ -62,10 +62,14 @@ export async function saveVueRoutes (groups, dest) {
       let baseName = basename(file, '.vue')
       let dirName = basename(dirname(file))
       let template = vueTemplate
+      let className = hyphenCase(baseName)
       if (baseName !== dirName) {
         template = vueTemplate.replace('<router-view></router-view>', baseName)
+      } else {
+        className = 'page-' + className
+        template = vueTemplate.replace('<router-view></router-view>',
+          '<router-view class="view-container"></router-view>')
       }
-      let className = hyphenCase(baseName)
       template = template.replace('className', `class="${className}"`)
         .replace('componentName', baseName)
       await mkdirAsync(dirname(file))

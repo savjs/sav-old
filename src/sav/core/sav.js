@@ -2,6 +2,9 @@ import {EventEmitter} from 'events'
 import {isObject, isArray, isFunction, makeProp, delProps, next as promiseNext} from 'sav-util'
 import {compose} from '../util/compose.js'
 import {Config} from './config'
+import Debug from 'debug'
+
+const debug = Debug('sav:core')
 
 import {
   statePlugin,
@@ -71,6 +74,7 @@ export class Sav extends EventEmitter {
           throw error
         }
         ctx.prop('error', error)
+        debug('error', error)
       }
       try {
         await teardown(this, ctx)
@@ -105,6 +109,7 @@ function installPlugin (sav, plugin) {
     sav.payloads.push(payload)
   }
   if (name) {
+    debug('install plugin', name)
     sav.installed[name] = plugin
     plugin.installed = true
   }
