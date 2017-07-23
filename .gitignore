@@ -47,3 +47,4 @@ tmp
 /examples/sav-vue-demo/static/js
 
 package-lock.json
+/examples/sav-vue-demo/server-entry.js
