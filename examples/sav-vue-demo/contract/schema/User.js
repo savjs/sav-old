@@ -33,5 +33,18 @@ module.exports = {
     props: {
       aboutInfo: "String"
     }
+  },
+  ResHomeProfile: {
+    props: {
+      userProfile: "UserProfile"
+    },
+    refs: {
+      UserProfile: {
+        props: {
+          id: "Number",
+          name: "String"
+        }
+      }
+    }
   }
 }

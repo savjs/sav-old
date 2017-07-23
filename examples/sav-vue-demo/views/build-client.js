@@ -16,6 +16,10 @@ module.exports = executeRollup({
   dest: 'static/js/client-entry.js',
   format: 'iife',
   moduleName: 'app',
+  globals: {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter'
+  },
   external: [
     'vue',
     'vue-router'
@@ -24,9 +28,15 @@ module.exports = executeRollup({
   vueOptions: true,
   sourceMap: !IS_PROD,
   // uglifyOptions: IS_PROD,
+  includeOptions: {
+    paths: [
+      path.resolve(__dirname, '../../../src/')
+    ]
+  },
   commonjsOptions: {
     include: [
       'node_modules/**',
+      '../../node_modules/**',
       'contract/**'
     ]
   },

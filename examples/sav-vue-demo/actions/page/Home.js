@@ -10,4 +10,12 @@ module.exports = class Home {
       aboutInfo: "AboutAbout"
     })
   }
+  profile ({setState, inputData}) {
+    setState({
+      userProfile: {
+        id: +inputData.uid,
+        name: `user-${inputData.uid}`
+      }
+    })
+  }
 }

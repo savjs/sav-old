@@ -8,6 +8,7 @@ import ArticleModify from './Article/ArticleModify.vue'
 import Home from './Home/Home.vue'
 import HomeIndex from './Home/HomeIndex.vue'
 import HomeAbout from './Home/HomeAbout.vue'
+import HomeProfile from './Home/HomeProfile.vue'
 
 export default [
   {
@@ -49,6 +50,11 @@ export default [
         component: HomeAbout,
         name: "HomeAbout",
         path: "about"
+      },
+      {
+        component: HomeProfile,
+        name: "HomeProfile",
+        path: "profile/:uid"
       }
     ]
   }

@@ -1,10 +1,11 @@
 const Koa = require('koa')
 const static = require('koa-static')
+const path = require('path')
 
-const {Sav, koaPlugin} = require('sav')
+const {Sav, koaPlugin} = require('../../')
 const actions = require('./actions')
 const contract = require('./contract')
-const path = require('path')
+let ssr = require('./server-entry.js')
 
 let app = new Koa()
 
@@ -24,3 +25,31 @@ app.use(static(path.resolve(__dirname, './static/'), {
 
 app.use(sav.compose())
 app.listen(3000)
+
+sav.on('render', async (opts, next) => {
+  let {ctx, renderType, data} = opts
+  if (renderType === 'html') {
+    next(async () => {
+      ssr.render || (ssr.render = ssr.createRenderer(Object.assign({
+        template: data.replace('<div id="app"></div>', '')
+      }, ssr.renderOptions)))
+      let {router, flux} = ssr
+      let path = ctx.path || ctx.originalUrl
+      router.push(path)
+      if (flux) {
+        await flux.replaceState(ctx.composeState || {})
+      }
+      return new Promise((resolve, reject) => {
+        ssr.render.renderToString(ssr.vm, (err, html) => {
+          if (err) {
+            reject(err)
+          }
+          opts.data = html
+          resolve()
+        })
+      })
+    })
+  }
+})
+
+console.log('server: http://localhost:3000/')

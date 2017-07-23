@@ -1,15 +1,27 @@
 <template>
   <div class="home-index">
-    HomeIndex-{{welcome}}
+    <div>HomeIndex-{{welcome}}</div>
+    <component is="UserInfo"></component>
   </div>
 </template>
 <script>
+  import UserInfo from '../layouts/UserInfo.vue'
   export default {
     name: 'HomeIndex',
     getters: [
       'welcome'
     ],
     actions: [
-    ]
+    ],
+    components: {
+      UserInfo
+    },
+    beforeRouteEnter (to, from, next) {
+      console.log('HomeIndex-beforeRouteEnter', 'to', to, 'from', from)
+      next()
+    },
+    created () {
+      console.log('HomeIndex-created')
+    },
   }
 </script>

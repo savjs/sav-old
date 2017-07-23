@@ -1,6 +1,7 @@
 import {resolve} from 'path'
 import {readFileAsync} from '../util/file.js'
 import {tmpl} from '../util/tmpl.js'
+import {next as promiseNext} from 'sav-util'
 
 export function koaPlugin (sav) {
   let {config} = sav
@@ -10,10 +11,10 @@ export function koaPlugin (sav) {
   let viewTemplate = resolve(viewRoot, config.get('viewTemplate', 'index.html'))
   let renders = {
     json (ctx) {
-      ctx.body = composeState(ctx.renderData || ctx.state, ctx.error, config)
+      return composeState(ctx.renderData || ctx.state, ctx.error, config)
     },
     raw (ctx) {
-      ctx.body = ctx.renderData
+      return ctx.renderData
     },
     html (ctx) {
       return renderTmpl(viewTemplate, ctx, config)
@@ -22,8 +23,23 @@ export function koaPlugin (sav) {
   let renderer = async (ctx) => {
     let renderType = ctx.renderType || (autoRenderType && ctx.acceptType) || defaultRenderType
     if (renders[renderType]) {
-      await renders[renderType](ctx)
+      let data = await renders[renderType](ctx)
+      let dataCtx = {
+        ctx,
+        renderType, 
+        data
+      }
+      let next = promiseNext()
+      try {
+        sav.emit('render', dataCtx, next)
+      } catch (err) {
+        next(() => { throw err })
+      }
+      return next().then(() => {
+        ctx.body = dataCtx.data
+      })
     }
+    // return new Error('404')
   }
   sav.use({
     name: 'koa',
@@ -43,10 +59,10 @@ async function renderTmpl (viewTemplate, ctx, config) {
   let viewFunc = tmpMaps[viewTemplate] || (
     tmpMaps[viewTemplate] = tmpl((await readFileAsync(viewTemplate)).toString())
   )
-  let state = makeProxy(config, ctx.renderData || ctx.state)
-  let html = viewFunc(state)
+  let renderState = makeProxy(config, ctx.renderData || ctx.state)
+  let state = ctx.composeState = composeState(ctx.renderData || ctx.state, ctx.error, config)
+  let html = viewFunc(renderState)
   if (html.indexOf('<!-- INIT_STATE -->') !== -1) {
-    let state = composeState(ctx.renderData || ctx.state, ctx.error, config)
     let stateText = JSON.stringify(state)
     let stateScript = `
     <script type="text/javascript">
@@ -55,7 +71,7 @@ async function renderTmpl (viewTemplate, ctx, config) {
     `
     html = html.replace('<!-- INIT_STATE -->', stateScript)
   }
-  ctx.body = html
+  return html
 }
 
 const accepts = ['json', 'html']

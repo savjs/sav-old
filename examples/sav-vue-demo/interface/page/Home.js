@@ -19,4 +19,9 @@ export default class Home {
     title: '关于我们'
   })
   about () {}
+
+  @get({
+    path: 'profile/:uid'
+  })
+  profile() {}
 }

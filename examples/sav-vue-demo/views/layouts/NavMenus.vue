@@ -15,8 +15,11 @@
     actions: [
       'getLayoutUserNavMenu'
     ],
-    created () {
+    mounted () {
       this.getLayoutUserNavMenu()
-    }
+    },
+    created () {
+      console.log('NavMenu-created')
+    },
   }
 </script>

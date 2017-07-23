@@ -4,12 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sav": "npm run build-sav && npm run update-sav",
-    "build-sav": "cd ../../ && npm run build",
-    "update-sav": "npm i ../../",
     "build-local": "cross-env NODE_ENV=development IS_MOCK=1 IS_LOCAL=1 IS_DEV=1 rollup-cli -c views/build-client.js",
     "build-prod": "cross-env NODE_ENV=production rollup-cli -c views/build-client.js",
-    "cv": "sav-cli -a actions -p ./interface -d ./contract -v ./views -s ./sass -S action"
+    "build-server": "cross-env NODE_ENV=production rollup-cli -c views/build-server.js",
+    "cv": "node ../../bin/sav-cli -a actions -p ./interface -d ./contract -v ./views -s ./sass -S action"
   },
   "author": "",
   "license": "ISC",
@@ -17,10 +15,10 @@
     "cross-env": "^5.0.1",
     "koa": "^2.3.0",
     "koa-static": "^3.0.0",
-    "rollup-standalone": "^0.42.9",
-    "sav": "file:../..",
+    "rollup-standalone": "^0.42.12",
     "sav-flux": "0.0.16",
-    "vue": "^2.3.4",
-    "vue-router": "^2.5.3"
+    "vue": "^2.4.2",
+    "vue-router": "^2.5.3",
+    "vue-server-renderer": "^2.4.2"
   }
 }

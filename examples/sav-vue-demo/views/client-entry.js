@@ -10,7 +10,7 @@
 import {Vue, VueRouter, Flux, FluxVue} from './VueFlux.js'
 import routes from './routes.js'
 import App from './App.vue'
-import {resolveContract} from 'sav'
+import {resolveContract} from 'sav-client'
 // @TODO 这里替换为真正的contract
 import contract from '../contract'
 

@@ -28,3 +28,17 @@ exports.ResHomeAbout = {
     aboutInfo: String
   }
 }
+
+exports.ResHomeProfile = {
+  props: {
+    userProfile: 'UserProfile'
+  },
+  refs: {
+    UserProfile: {
+      props: {
+        id: Number,
+        name: String
+      }
+    }
+  }
+}

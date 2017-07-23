@@ -23,9 +23,7 @@ export function renderPlugin (sav) {
     },
     teardown (ctx, next) {
       if (ctx.renderer) {
-        next(async () => {
-          await ctx.renderer(ctx)
-        })
+        next(() => ctx.renderer(ctx))
       }
     }
   })

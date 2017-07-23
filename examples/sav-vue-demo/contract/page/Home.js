@@ -17,6 +17,10 @@ module.exports = {
       keywords: "关键字列表",
       description: "页面描述",
       title: "关于我们"
+    },
+    profile: {
+      method: "GET",
+      path: "profile/:uid"
     }
   }
 }

@@ -22,6 +22,14 @@ module.exports = class User {
           title: 'home',
           url: '/'
         },
+        {
+          title: 'profile1',
+          url: '/profile/1'
+        },
+        {
+          title: 'profile2',
+          url: '/profile/2'
+        },
       ]
     })
   }
