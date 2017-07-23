@@ -9,13 +9,13 @@
       'userInfo'
     ],
     actions: [
-      'getLayoutUserUserInfo'
+      'getPageHomeUserInfo'
     ],
     created () {
       console.log('UserInfo-created')
     },
     mounted () {
-      this.getLayoutUserUserInfo()
+      this.getPageHomeUserInfo()
     }
   }
 </script>

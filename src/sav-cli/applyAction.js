@@ -5,8 +5,7 @@ import {createIndex, createRoot} from './applyUtil.js'
 
 let actionGroups = {
   api: true,
-  page: true,
-  layout: true
+  page: true
 }
 const applyTitle = '[  Action]'
 
@@ -38,9 +37,6 @@ function createAction (groupDir, module, moduleName, dest) {
     let jsFile = resolve(dir, moduleName + '.js')
     let exists = await fileExistsAsync(jsFile)
     let methods = Object.keys(module.routes)
-    if (String(groupDir).toLowerCase() === 'layout') {
-      methods.unshift('invoke')
-    }
     if (exists) {
       let jsData = (await readFileAsync(jsFile)).toString()
       let parsed = parseClassModule(jsData, moduleName)

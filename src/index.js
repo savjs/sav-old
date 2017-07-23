@@ -13,14 +13,10 @@ import {schemaPlugin} from './sav/plugins/schema.js'
 import {authPlugin} from './sav/plugins/auth.js'
 import {invokePlugin} from './sav/plugins/invoke.js'
 import {koaPlugin} from './sav/plugins/koa.js'
-// 构造器
-import {Graph} from './sav/graph/graph.js'
-import {registerNames} from './sav/graph/util.js'
 // 装饰器
 import {Modal, get, post, head, options, put, patch, del} from './sav/core/decorator.js'
 
 // 导出
 export {Sav, Exception}
 export {statePlugin, promisePlugin, uriPlugin, renderPlugin, routerPlugin, actionPlugin, schemaPlugin, authPlugin, invokePlugin, koaPlugin}
-export {Graph, registerNames}
 export {Modal, get, post, head, options, put, patch, del}

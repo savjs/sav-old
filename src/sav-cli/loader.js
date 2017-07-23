@@ -2,7 +2,7 @@ import {resolve, extname, basename} from 'path'
 import {readdirAsync, readFileAsync} from '../sav/util/file.js'
 import {prop} from 'sav-util'
 import {decoratorFileAsync} from './decorator.js'
-import {convertFunctionToName} from './sav/graph/util.js'
+import {convertFunctionToName} from './sav/util/helper.js'
 
 export async function loadConstractDir (path) {
   let group = {}

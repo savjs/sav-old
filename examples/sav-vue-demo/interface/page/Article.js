@@ -1,8 +1,6 @@
 import {Modal, post, get} from 'sav'
 
-@Modal({
-  layout: 'User'
-})
+@Modal()
 export default class Article {
   @get({
     title: '文章列表',

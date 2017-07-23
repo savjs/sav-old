@@ -13,10 +13,10 @@
       'menus'
     ],
     actions: [
-      'getLayoutUserNavMenu'
+      'getPageHomeNavMenu'
     ],
     mounted () {
-      this.getLayoutUserNavMenu()
+      this.getPageHomeNavMenu()
     },
     created () {
       console.log('NavMenu-created')

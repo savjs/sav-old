@@ -2,7 +2,6 @@
 
 /* eslint quotes: ["off"] */
 module.exports = {
-  layout: "User",
   routes: {
     posts: {
       method: "GET",

@@ -2,7 +2,6 @@
 
 module.exports = {
   api: require('./api'),
-  layout: require('./layout'),
 // #if IS_MOCK
   mock: require('./mock'),
 // #endif

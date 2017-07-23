@@ -48,7 +48,6 @@ test('actionPlugin', async (ava) => {
         let exp
         try {
           await sav.ApiArticle.comment()
-          await sav.LayoutUser.userInfo()
           await sav.PageArticle.view()
           await sav.PageArticle.modify()
           await sav.PageHome.index()

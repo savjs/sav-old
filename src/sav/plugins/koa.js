@@ -26,7 +26,7 @@ export function koaPlugin (sav) {
       let data = await renders[renderType](ctx)
       let dataCtx = {
         ctx,
-        renderType, 
+        renderType,
         data
       }
       let next = promiseNext()

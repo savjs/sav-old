@@ -2,7 +2,6 @@
 
 /* eslint quotes: ["off"] */
 module.exports = {
-  layout: "User",
   path: "",
   routes: {
     index: {
@@ -21,6 +20,14 @@ module.exports = {
     profile: {
       method: "GET",
       path: "profile/:uid"
+    },
+    userInfo: {
+      method: "GET",
+      vue: false
+    },
+    navMenu: {
+      method: "GET",
+      vue: false
     }
   }
 }

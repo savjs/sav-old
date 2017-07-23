@@ -1,7 +1,6 @@
 import {Modal, get} from 'sav'
 
 @Modal({
-  layout: 'User',
   path: ''
 })
 export default class Home {
@@ -24,4 +23,14 @@ export default class Home {
     path: 'profile/:uid'
   })
   profile() {}
+
+  @get({
+    vue: false
+  })
+  userInfo () {}
+
+  @get({
+    vue: false
+  })
+  navMenu () {}
 }

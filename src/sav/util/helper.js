@@ -1,4 +1,4 @@
-import {isObject, isArray} from 'sav-util'
+import {isObject, isArray, isFunction} from 'sav-util'
 
 export function unique (arr) {
   if (!Array.isArray(arr)) {
@@ -55,4 +55,20 @@ export function promiseNext () {
     return promise
   }
   return ret
+}
+
+let defaultFunction = [String, Number, Boolean, Array]
+
+export function convertFunctionToName (obj) {
+  if (isObject(obj)) {
+    for (let name in obj) {
+      let value = obj[name]
+      if (isFunction(value) && (defaultFunction.indexOf(value) !== -1)) {
+        obj[name] = value.name
+      } else if (isObject(value)) {
+        convertFunctionToName(value)
+      }
+    }
+  }
+  return obj
 }

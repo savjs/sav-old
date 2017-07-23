@@ -16,7 +16,7 @@ export function uriPlugin (sav) {
   })
 }
 
-let modalGroups = ['page', 'layout', 'api']
+let modalGroups = ['page', 'api']
 
 export function normalizeUris (groups) {
   let uris = {}
