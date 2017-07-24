@@ -31,7 +31,7 @@ sav.on('render', async (opts, next) => {
   if (renderType === 'html') {
     next(async () => {
       ssr.render || (ssr.render = ssr.createRenderer(Object.assign({
-        template: data.replace('<div id="app"></div>', '')
+        template: data
       }, ssr.renderOptions)))
       let {router, flux} = ssr
       let path = ctx.path || ctx.originalUrl
@@ -42,7 +42,7 @@ sav.on('render', async (opts, next) => {
       return new Promise((resolve, reject) => {
         ssr.render.renderToString(ssr.vm, (err, html) => {
           if (err) {
-            reject(err)
+            return reject(err)
           }
           opts.data = html
           resolve()

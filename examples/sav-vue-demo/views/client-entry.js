@@ -62,11 +62,9 @@ resolveContract({contract, flux, router}).then(() => {
 
   let vm = new Vue(Object.assign({vaf: new FluxVue({flux}), router}, App))
   vm.$mount('#app')
-// #if IS_DEV
   Object.assign(ret, {
     router,
     vm,
     flux
   })
-// #endif
 })

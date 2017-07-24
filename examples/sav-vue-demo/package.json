@@ -6,6 +6,7 @@
   "scripts": {
     "build-local": "cross-env NODE_ENV=development IS_MOCK=1 IS_LOCAL=1 IS_DEV=1 rollup-cli -c views/build-client.js",
     "build-prod": "cross-env NODE_ENV=production rollup-cli -c views/build-client.js",
+    "build-client-dev": "cross-env NODE_ENV=development IS_DEV=1 rollup-cli -c views/build-client.js",
     "build-server": "cross-env NODE_ENV=production rollup-cli -c views/build-server.js",
     "cv": "node ../../bin/sav-cli -a actions -p ./interface -d ./contract -v ./views -s ./sass -S modal"
   },
