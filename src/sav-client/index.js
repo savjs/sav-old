@@ -4,7 +4,6 @@ import {normalizeUris} from '../sav/plugins/uri.js'
 import {normalizeRoutes} from '../sav/plugins/router.js'
 import {normalizeSchema} from '../sav/plugins/schema.js'
 import {normalizeFetch} from './fetch.js'
-import {normalizeVue} from './vue.js'
 import {normalizeState} from './state.js'
 
 export function resolveContract ({contract, schema, flux, router, opts}) {
@@ -19,7 +18,6 @@ export function resolveContract ({contract, schema, flux, router, opts}) {
   }
   normalizeUris(contract)
   normalizeRoutes(contract)
-  normalizeVue(contract, router, flux)
   normalizeSchema(contract, schema, true)
   normalizeFetch(contract, flux, router)
   return schema.ready().then(() => {
