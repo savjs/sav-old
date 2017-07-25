@@ -9,13 +9,9 @@
       'userInfo'
     ],
     actions: [
-      'getPageHomeUserInfo'
     ],
-    created () {
-      console.log('UserInfo-created')
-    },
-    mounted () {
-      this.getPageHomeUserInfo()
+    payload ({dispatch}) {
+      return dispatch('getHomeUserInfo')
     }
   }
 </script>

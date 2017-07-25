@@ -11,12 +11,10 @@ function toJSON () {
 
 export function normalizeFetch (contract, flux) {
   flux.prop('fetchRoute', fetchRoute.bind(flux))
-  let {actions, fetchs} = createActions(contract, flux)
-  flux.prop('fetch', fetchs)
+  flux.prop('fetchUri', fetchUri.bind(flux))
+  let actions = createActions(contract, flux)
   flux.declare({
-    actions: Object.assign({
-      fetchPage
-    }, actions)
+    actions
   })
   flux.on('fetch', fetchFromMockState.bind(flux))
 }
@@ -63,34 +61,20 @@ function fetchFromMockState (ctx) {
   }
 }
 
-function fetchPage ({flux, updateState}, data) {
-  return flux.fetchRoute(data)
+function fetchUri (data) {
+  return this.fetchRoute(data)
     .then(({data}) => {
       let newData = Object.assign({error: {}}, data)
-      return updateState(newData)
+      return this.updateState(newData)
     }, (err) => {
       let error = toJSON.call(err)
-      return updateState({error}).then(() => {
-        throw error
-      })
-    })
-}
-
-function fetchUri ({flux, updateState}, data) {
-  return flux.fetchRoute(data)
-    .then(({data}) => {
-      let newData = Object.assign({error: {}}, data)
-      return updateState(newData)
-    }, (err) => {
-      let error = toJSON.call(err)
-      return updateState({error}).then(() => {
+      return this.updateState({error}).then(() => {
         throw error
       })
     })
 }
 
 function createActions (contract, flux) {
-  let fetchs = {}
   let actions = {}
   let {uris} = contract
   for (let uri in uris) {
@@ -103,16 +87,13 @@ function createActions (contract, flux) {
         method = isPage ? 'GET' : 'POST'
       }
       ret.method = method
-      let actionName = ret.actionName = method.toLowerCase() + pascalCase(`${uri}`.replace(/\./g, '_'))
-      fetchs[actionName] = (data) => {
-        return fetchUri(flux, Object.assign({uri}, data))
-      }
-      actions[actionName] = ({fetch}, data) => {
-        return fetch[actionName](data)
+      let actionName = ret.actionName = method.toLowerCase() + pascalCase(`${uri.replace('page.', '')}`.replace(/\./g, '_'))
+      actions[actionName] = ({fetchUri}, data) => {
+        return fetchUri(Object.assign({uri}, data))
       }
     }
   }
-  return {fetchs, actions}
+  return actions
 }
 
 function fetchRoute (opts) {

@@ -44,7 +44,7 @@ sav.on('render', async (opts, next) => {
           if (err) {
             return reject(err)
           }
-          opts.data = html
+          opts.data = html.replace('data-server-rendered="true"', '')
           resolve()
         })
       })

@@ -16,15 +16,8 @@
     components: {
       UserInfo
     },
-    payload ({dispatch, route}) {
-      return dispatch('getPageHomeIndex', route.fullPath)
-    },
-    beforeRouteEnter (to, from, next) {
-      console.log('HomeIndex-beforeRouteEnter', 'to', to, 'from', from)
-      next()
-    },
-    created () {
-      console.log('HomeIndex-created')
-    },
+    payload ({dispatch}) {
+      return dispatch('getHomeIndex')
+    }
   }
 </script>

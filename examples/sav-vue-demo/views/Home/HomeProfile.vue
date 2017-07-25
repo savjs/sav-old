@@ -17,16 +17,8 @@
     components: {
       UserInfo
     },
-    beforeRouteEnter (to, from, next) {
-      console.log('HomeProfile-beforeRouteEnter', 'to', to, 'from', from)
-      next()
-    },
-    beforeRouteUpdate (to, from, next) {
-      console.log('HomeProfile-beforeRouteUpdate', 'to', to, 'from', from)
-      next()
-    },
-    created () {
-      console.log('HomeProfile-created')
+    payload ({dispatch, route}) {
+      return dispatch('getHomeProfile', route)
     }
   }
 </script>

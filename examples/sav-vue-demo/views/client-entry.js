@@ -60,7 +60,7 @@ resolveContract({contract, flux, router}).then(() => {
 // 或者flux服务在这里嵌入
 // flux.declare(...)
 
-  let vm = new Vue(Object.assign({vaf: new FluxVue({flux}), router}, App))
+  let vm = new Vue(Object.assign({vaf: new FluxVue({flux, router}), router}, App))
   vm.$mount('#app')
   Object.assign(ret, {
     router,

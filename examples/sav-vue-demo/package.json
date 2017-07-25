@@ -17,7 +17,7 @@
     "koa": "^2.3.0",
     "koa-static": "^3.0.0",
     "rollup-standalone": "^0.42.12",
-    "sav-flux": "0.0.16",
+    "sav-flux": "0.0.19",
     "vue": "^2.4.2",
     "vue-router": "^2.5.3",
     "vue-server-renderer": "^2.4.2"

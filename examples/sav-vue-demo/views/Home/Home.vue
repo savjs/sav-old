@@ -14,14 +14,6 @@
     ],
     components: {
       NavMenus
-    },
-    beforeRouteEnter (to, from, next) {
-      console.log('Home-beforeRouteEnter', 'to', to, 'from', from)
-      next()
-    },
-    beforeRouteUpdate (to, from, next) {
-      console.log('Home-beforeRouteUpdate', 'to', to, 'from', from)
-      next()
     }
   }
 </script>

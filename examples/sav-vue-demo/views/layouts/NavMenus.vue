@@ -13,13 +13,9 @@
       'menus'
     ],
     actions: [
-      'getPageHomeNavMenu'
     ],
-    mounted () {
-      this.getPageHomeNavMenu()
-    },
-    created () {
-      console.log('NavMenu-created')
-    },
+    payload ({dispatch}) {
+      return dispatch('getHomeNavMenu')
+    }
   }
 </script>

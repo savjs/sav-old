@@ -15,8 +15,8 @@
     components: {
       UserInfo
     },
-    created () {
-      console.log('HomeAbout-created')
+    payload ({dispatch}) {
+      return dispatch('getHomeAbout')
     }
   }
 </script>

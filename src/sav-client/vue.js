@@ -1,6 +1,7 @@
 import {pascalCase} from 'sav-util'
 
 export function normalizeVue (contract, router, flux) {
+  return
   let {uris} = contract
   let nameUris = {}
   for (let uri in uris) {
