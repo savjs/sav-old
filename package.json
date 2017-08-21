@@ -5,20 +5,21 @@
   "main": "dist/sav.js",
   "browser": "dist/sav-client.js",
   "scripts": {
-    "watch": "watch -p \"+(test|src)/**/*.js\" -c \"npm run fix && npm run na\"",
-    "wc": "watch -p \"+(src)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
-    "wb": "watch -p \"+(src)/**/*.js\" -c \"npm run build\"",
+    "watch": "watch -p \"+(test|lib)/**/*.js\" -c \"npm run fix && npm run na\"",
+    "wc": "watch -p \"+(lib)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
+    "wb": "watch -p \"+(lib)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
     "build": "npm run build-sav && npm run build-cli && npm run build-client",
     "build-sav": "rollup -c scripts/rollup.config.js",
     "build-cli": "rollup -c scripts/rollup.cli.js",
     "build-client": "rollup -c scripts/rollup.client.js",
-    "lint": "standard rollup.config.js test/** src/**",
+    "lint": "standard rollup.config.js test/** lib/**",
     "fix": "npm run lint -- --fix",
     "cli": "node ./dist/sav-cli",
     "cv": "node ./dist/sav-cli.js -p ./test/unit/fixtures/interface -d ./test/unit/fixtures/contract -a ./test/unit/fixtures/action -v ./test/unit/fixtures/view",
     "na": "nyc ava ./test/unit/**",
     "naw": "nyc ava ./test/unit/plugins/action.js",
+    "ava": "ava ./test/unit/**",
     "pretest": "npm run lint",
     "test": "npm run na",
     "nit": "npm-install-tag",
@@ -107,7 +108,7 @@
         "resolver",
         {
           "resolveDirs": [
-            "src"
+            "lib"
           ]
         }
       ],
