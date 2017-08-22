@@ -48,3 +48,4 @@ tmp
 
 package-lock.json
 /examples/sav-vue-demo/server-entry.js
+/test/unit/fixtures/static
