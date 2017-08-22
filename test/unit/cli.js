@@ -1,6 +1,6 @@
 import test from 'ava'
 import {expect} from 'chai'
-import {loadInterface, writeContract, writeActions, writeSass} from 'sav-cli'
+import {loadInterface, writeContract, writeActions, writeSass, writeVue} from 'sav-cli'
 import path from 'path'
 
 test('api', async (ava) => {
@@ -16,5 +16,6 @@ test('convertInterface', async (ava) => {
   await writeActions(path.resolve(__dirname, './fixtures/actions'), modules.actions)
   await writeSass(path.resolve(__dirname, './fixtures/sass-page'), modules.actions, {pageMode: true})
   await writeSass(path.resolve(__dirname, './fixtures/sass-view'), modules.actions, {pageMode: false})
+  await writeVue(path.resolve(__dirname, './fixtures/views'), modules.actions, {force: true})
   expect(modules).to.be.a('object')
 })
