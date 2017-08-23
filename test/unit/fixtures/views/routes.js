@@ -12,12 +12,12 @@ import HomeProfile from 'Home/HomeProfile.vue'
 export default [
   {
     component: Article,
-    path: "Article",
+    path: "/article",
     children: [
       {
         component: ArticlePosts,
         name: "ArticlePosts",
-        path: "Posts"
+        path: "posts"
       },
       {
         component: ArticleView,
@@ -27,7 +27,7 @@ export default [
       {
         component: ArticleModify,
         name: "ArticleModify",
-        path: "modify/:id?"
+        path: "modify/:aid?"
       },
       {
         component: ArticleModify,
@@ -48,7 +48,7 @@ export default [
       {
         component: HomeAbout,
         name: "HomeAbout",
-        path: "About"
+        path: "about"
       },
       {
         component: HomeProfile,

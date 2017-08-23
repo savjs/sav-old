@@ -38,7 +38,7 @@ module.exports = {
     },
     modify: {
       method: "POST",
-      path: "modify/:id?",
+      path: "modify/:aid?",
       auth: true,
       component: "Article/ArticleModify"
     },

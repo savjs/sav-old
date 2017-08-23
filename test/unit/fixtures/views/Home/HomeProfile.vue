@@ -1,6 +1,7 @@
 <template>
   <div class="home-profile">
-    <router-view></router-view>
+    <h2>HomeProfile</h2>
+    <router-view class="view-container"></router-view>
   </div>
 </template>
 <script>

@@ -40,7 +40,7 @@ export default class Article {
   view() {}
 
   @post({
-    path: 'modify/:id?',
+    path: 'modify/:aid?',
     auth: true,
     component: 'Article/ArticleModify'
   })

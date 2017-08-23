@@ -10,6 +10,7 @@
   "devDependencies": {
     "node-sass": "^4.5.3",
     "rollup-standalone": "^0.42.12",
+    "sav-flux": "0.0.19",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0",
     "vue-server-renderer": "^2.4.2",

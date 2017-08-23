@@ -1,6 +1,7 @@
 <template>
   <div class="article-modify">
-    <router-view></router-view>
+    <h2>ArticleUpdate</h2>
+    <router-view class="view-container"></router-view>
   </div>
 </template>
 <script>
