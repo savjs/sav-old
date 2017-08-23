@@ -61,6 +61,7 @@
     "fs-extra": "^3.0.1",
     "handlebars": "^4.0.6",
     "htmling": "0.0.8",
+    "json5": "^0.5.1",
     "koa-compose": "^3.2.1",
     "npm-install-tag": "^1.0.4",
     "nyc": "^10.0.0",
