@@ -1,13 +1,13 @@
 import test from 'ava'
 import {expect} from 'chai'
-import {Modal} from 'sav'
+import {ModalAction} from 'sav'
 
 test('api', async (ava) => {
-  expect(Modal).to.be.a('function')
+  expect(ModalAction).to.be.a('function')
 })
 
-test('Modal.declare', async (ava) => {
-  let modal = new Modal()
+test('ModalAction.declare', async (ava) => {
+  let modal = new ModalAction()
   class Article {
     list () {}
   }

@@ -2,15 +2,15 @@
 
 module.exports = class Home {
   async index () {
-    return await Promsie.all([])
+
   }
-  about () {
+  async about () {
 
   }
   async profile () {
 
   }
-  userInfo () {
+  async userInfo () {
 
   }
   async navMenu () {
