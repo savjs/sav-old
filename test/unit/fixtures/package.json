@@ -1,14 +1,20 @@
 {
-  "name": "sav-test-fixtures",
+  "name": "sav-project",
   "version": "1.0.0",
   "scripts": {
-    "build": "npm run build-client && npm run build-server && npm run build-sass",
-    "build-client": "rollup -c ./scripts/build-client.js",
+    "build": "cross-env NODE_ENV=production npm-run-all -p build-client && npm run build-server && npm run build-sass",
+    "build-client": "node ./scripts/build-client.js",
     "build-sass": "node ./scripts/build-sass.js",
-    "build-server": "rollup -c ./scripts/build-server.js"
+    "build-server": "node ./scripts/build-server.js",
+    "build-static": "cross-env NODE_ENV=development IS_MOCK=1 IS_LOCAL=1 IS_DEV=1 node ./scripts/build-client.js",
+    "build-local": "cross-env NODE_ENV=development IS_LOCAL=1 IS_DEV=1 node ./scripts/build-client.js"
   },
   "devDependencies": {
+    "cross-env": "^5.0.5",
+    "koa": "^2.3.0",
+    "koa-static": "^4.0.1",
     "node-sass": "^4.5.3",
+    "npm-run-all": "^4.1.1",
     "rollup-standalone": "^0.42.12",
     "sav-flux": "0.0.19",
     "vue": "^2.4.2",

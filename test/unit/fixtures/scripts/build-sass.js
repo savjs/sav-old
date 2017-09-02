@@ -26,11 +26,8 @@ fse.ensureDir(distCssDir).then(() => {
       includePaths
     }),
   ]).then(() => {
-    console.log('Build Sass Done.')
+    console.log('** build sass done **')
   })
-}).catch((err) => {
-  console.error(err)
-  process.exit(1)
 })
 
 function sassRenderAsync (opts) {
@@ -48,3 +45,9 @@ function sassRenderAsync (opts) {
     })
   })
 }
+
+process.on('unhandledRejection', (reason) => {
+  console.error(reason)
+  process.exit(1)
+})
+

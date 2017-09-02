@@ -7,7 +7,7 @@ import fs from 'fs-extra'
 const pkg = require('../package.json')
 
 export default {
-  entry: 'src/sav-cli/index.js',
+  entry: 'lib/sav-cli/cli.js',
   targets: [
     { dest: 'dist/sav-cli.js', format: 'cjs' }
   ],
@@ -17,7 +17,7 @@ export default {
   ],
   plugins: [
     includePaths({
-      paths: ['src']
+      paths: ['lib']
     }),
     json({
       preferConst: false // Default: false

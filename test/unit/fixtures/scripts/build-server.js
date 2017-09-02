@@ -7,8 +7,7 @@ const path = require('path')
 
 let IS_PROD = process.env.NODE_ENV === 'production'
 
-module.exports = executeRollup({
-  cli: true,
+executeRollup({
   entry: path.resolve(__dirname, '../views/server-entry.js'),
   dest: path.resolve(__dirname, '../server-entry.js'),
   format: 'cjs',
@@ -37,6 +36,8 @@ module.exports = executeRollup({
   replaces: {
     'process.env.NODE_ENV': IS_PROD ? '"production"' : '"development"'
   }
+}).then(() => {
+  console.log('** build server done **')
 })
 
 process.on('unhandledRejection', (reason) => {

@@ -11,58 +11,60 @@ const path = require('path')
 
 let IS_PROD = process.env.NODE_ENV === 'production'
 
-module.exports = executeRollup({
-  cli: true,
-  entry: path.resolve(__dirname, '../views/client-entry.js'),
-  dest: 'static/js/client-entry.js',
-  format: 'iife',
-  moduleName: 'app',
-  globals: {
-    'vue': 'Vue',
-    'vue-router': 'VueRouter'
-  },
-  external: [
-    'vue',
-    'vue-router'
-  ],
-  babelOptions: true,
-  vueOptions: true,
-  sourceMap: !IS_PROD,
-  // uglifyOptions: IS_PROD,
-  includeOptions: {
-    paths: [
-      // path.resolve(__dirname, 'src/')
-    ]
-  },
-  commonjsOptions: {
-    include: [
-      'node_modules/**',
-      'contract/**'
-    ]
-  },
-  resolveOptions: {
-    browser: true
-  },
-  defines: {
-    IS_MOCK: process.env.IS_MOCK,    // 是否使用MOCK数据
-    IS_LOCAL: process.env.IS_LOCAL,  // 是否本地环境
-    IS_DEV: !IS_PROD,                // 是否开发环境
-    IS_PROD: IS_PROD                 // 是否生产环境
-  },
-  replaces: {
-    'process.env.NODE_ENV': IS_PROD ? '"production"' : '"development"'
-  }
-})
-
-fse.ensureDir('static/js').then(() => {
-  return Promise.all([
-    fse.copy(require.resolve(IS_PROD
-      ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js'),
-      'static/js/vue.js'),
-    fse.copy(require.resolve(IS_PROD
-      ? 'vue-router/dist/vue-router.min.js' : 'vue-router/dist/vue-router.js'),
-      'static/js/vue-router.js')
-  ])
+Promise.all([
+  executeRollup({
+    entry: path.resolve(__dirname, '../views/client-entry.js'),
+    dest: 'static/js/client-entry.js',
+    format: 'iife',
+    moduleName: 'app',
+    globals: {
+      'vue': 'Vue',
+      'vue-router': 'VueRouter'
+    },
+    external: [
+      'vue',
+      'vue-router'
+    ],
+    babelOptions: true,
+    vueOptions: true,
+    sourceMap: !IS_PROD,
+    uglifyOptions: IS_PROD,
+    includeOptions: {
+      paths: [
+        // path.resolve(__dirname, 'src/')
+      ]
+    },
+    commonjsOptions: {
+      include: [
+        'node_modules/**',
+        'contract/**'
+      ]
+    },
+    resolveOptions: {
+      browser: true
+    },
+    defines: {
+      IS_MOCK: process.env.IS_MOCK,    // 是否使用MOCK数据
+      IS_LOCAL: process.env.IS_LOCAL,  // 是否本地环境
+      IS_DEV: !IS_PROD,                // 是否开发环境
+      IS_PROD: IS_PROD                 // 是否生产环境
+    },
+    replaces: {
+      'process.env.NODE_ENV': IS_PROD ? '"production"' : '"development"'
+    }
+  }),
+  fse.ensureDir('static/js').then(() => {
+    return Promise.all([
+      fse.copy(require.resolve(IS_PROD
+        ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js'),
+        'static/js/vue.js'),
+      fse.copy(require.resolve(IS_PROD
+        ? 'vue-router/dist/vue-router.min.js' : 'vue-router/dist/vue-router.js'),
+        'static/js/vue-router.js')
+    ])
+  })
+]).then(() => {
+  console.log('** build client done **')
 })
 
 process.on('unhandledRejection', (reason) => {

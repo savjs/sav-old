@@ -76,16 +76,14 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-re": "^1.0.1",
     "rollup-plugin-vue2": "^0.8.0",
+    "sav-schema": "0.0.17",
+    "sav-util": "^1.0.21",
     "standard": "^9.0.1",
     "supertest": "^3.0.0",
     "vue": "^2.2.4",
     "vue-router": "^2.3.0",
     "vue-server-renderer": "^2.2.4",
     "watch-cli": "^0.2.1"
-  },
-  "dependencies": {
-    "sav-schema": "0.0.17",
-    "sav-util": "^1.0.21"
   },
   "standard": {
     "parser": "babel-eslint",
