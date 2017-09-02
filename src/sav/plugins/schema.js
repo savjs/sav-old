@@ -1,66 +1,76 @@
+// Schema中间件
 import SavSchema from 'sav-schema'
-import {isObject, pascalCase} from '../util'
-
-let schemaMethods = ['req', 'res']
+import {isString, isObject, pascalCase} from 'sav-util'
 
 export function schemaPlugin (sav) {
   let schema = sav.config.get('schema') || SavSchema
   sav.use({
-    async payload ({prop}, next) {
-      prop('schema', schema)
-      await next()
+    name: 'schema',
+    prepare (payload, next) {
+      normalizeSchema(payload, schema)
+      next(schema.ready())
     },
-    route (route) {
-      let {props} = route
-      for (let type of schemaMethods) {
-        if (props[type]) {
-          createSchemaMiddleware(props[type], route.uri, schema)
+    setup ({prop, ctx}) {
+      prop({
+        schema,
+        async checkRequest (uri, inputData) {
+          let ref = ctx.uri(uri || ctx.route.uri)
+          let struct = schema[ref.request]
+          if (struct) {
+            struct.check(inputData || ctx.inputData)
+          }
+        },
+        async checkResponse (uri, renderData) {
+          let ref = ctx.uri(uri || ctx.route.uri)
+          let struct = schema[ref.response]
+          let data = renderData || ctx.renderData || ctx.state
+          if (struct) {
+            struct.check(data)
+          }
+          ctx.setData(data)
         }
-      }
+      })
     }
   })
 }
 
-function createSchemaMiddleware (route, uri, schema) {
-  let {name, props} = route
-  let struct
-  let getSchemaStruct = () => {
-    if (struct || (struct === null)) {
-      return struct
+export function normalizeSchema (payload, schema, isExport) {
+  for (let name in payload.schema) {
+    payload.schema[name].name = name
+    schema.declare(payload.schema[name])
+  }
+  let {uris} = payload
+  for (let uri in uris) {
+    let ret = uris[uri]
+    if (ret.isRoute) {
+      // 提取路由中的schema定义
+      extractSchema(ret, 'request', schema, isExport)
+      extractSchema(ret, 'response', schema, isExport)
     }
-    let schemaData = props
-    if (isObject(schemaData)) {
-      schemaData.name || (schemaData.name = pascalCase(`${name}_${uri}`.replace('.', '_')))
-      struct = schema.declare(schemaData)
+  }
+}
+
+const shortMaps = {
+  request: 'Req',
+  response: 'Res'
+}
+
+function extractSchema (ref, type, schema, isExport) {
+  let value = ref.props[type]
+  let structName = pascalCase((shortMaps[type] + '_' + ref.parent.name + '_' + ref.name).replace(/\./g, '_'))
+  // let structName = pascalCase((shortMaps[type] + '_' + uri.replace('page.', '')).replace(/\./g, '_'))
+  if (isString(value)) {
+    structName = value
+  } else if (isObject(value)) {
+    if (value.name) {
+      structName = value.name
     } else {
-      if (schemaData === null) {
-        schemaData = pascalCase(`${name}_${uri}`.replace('.', '_'))
-      }
-      struct = schema[schemaData]
+      value.name = structName
     }
-    if (!struct) {
-      struct = null
-    }
-    return struct
+    schema.declare(value)
   }
-  if (!getSchemaStruct()) {
-    struct = undefined
+  ref[type] = structName
+  if (isExport) {
+    ref[`${type}Schema`] = schema[structName]
   }
-  route.setMiddleware(async (ctx) => {
-    let struct = getSchemaStruct()
-    if (struct) {
-      if (name === 'req') {
-        let argv = {
-          ...ctx.query,
-          ...(ctx.request && ctx.request.body),
-          ...ctx.params
-        }
-        ctx.input = await struct.extractThen(argv)
-      } else if (name === 'res') {
-        // console.log('res', struct.extractThen(ctx.state))
-        // console.log('res', Object.keys(ctx.state))
-        ctx.setState(await struct.extractThen(ctx.state))
-      }
-    }
-  })
 }

@@ -1,4 +1,4 @@
-import {isObject, isArray} from './type.js'
+import {isObject, isArray, isFunction} from 'sav-util'
 
 export function unique (arr) {
   if (!Array.isArray(arr)) {
@@ -44,4 +44,31 @@ export function objectAssign (target, obj, excludes) {
       }
     }
   }
+}
+
+export function promiseNext () {
+  let promise = Promise.resolve()
+  let ret = (resolve, reject) => {
+    if (resolve || reject) {
+      promise = promise.then(resolve, reject)
+    }
+    return promise
+  }
+  return ret
+}
+
+let defaultFunction = [String, Number, Boolean, Array]
+
+export function convertFunctionToName (obj) {
+  if (isObject(obj)) {
+    for (let name in obj) {
+      let value = obj[name]
+      if (isFunction(value) && (defaultFunction.indexOf(value) !== -1)) {
+        obj[name] = value.name
+      } else if (isObject(value)) {
+        convertFunctionToName(value)
+      }
+    }
+  }
+  return obj
 }

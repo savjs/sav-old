@@ -41,3 +41,11 @@ test/unit/vue/fixtures/Routes.js
 test/unit/vue/fixtures/TestRoutes.js
 /examples/sav-koa-demo/static/js
 /examples/sav-koa-demo/static/css
+tmp
+/examples/sav-vue-demo/static/js/*.map
+/examples/sav-vue-demo/static/js/client-entry.js
+/examples/sav-vue-demo/static/js
+
+package-lock.json
+/examples/sav-vue-demo/server-entry.js
+/test/unit/fixtures/static

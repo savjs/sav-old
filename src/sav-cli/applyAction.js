@@ -1,52 +1,61 @@
 import acorn from 'acorn'
 import {resolve} from 'path'
 import {writeFileAsync, mkdirAsync, fileExistsAsync, readFileAsync} from './sav/util/file.js'
-import {createIndex, createRoot} from './applyContract.js'
+import {createIndex, createRoot} from './applyUtil.js'
+
+let actionGroups = {
+  api: true,
+  page: true
+}
+const applyTitle = '[  Action]'
 
 export async function applyAction (groups, program) {
-  await mkdirAsync(program.action)
+  let dir = program.actions
+  console.log(`${applyTitle}[ensure] `, dir)
+  await mkdirAsync(dir)
   let tasks = []
+  let indexs = {}
   for (let moduleGroup in groups) {
-    let group = groups[moduleGroup]
-    for (let moduleName in group) {
-      let module = group[moduleName]
-      tasks.push(createAction(moduleGroup, module, program.action))
+    if (actionGroups[moduleGroup]) {
+      indexs[moduleGroup] = true
+      let group = groups[moduleGroup]
+      for (let moduleName in group) {
+        let module = group[moduleName]
+        tasks.push(createAction(moduleGroup, module, moduleName, dir))
+      }
+      tasks.push(createIndex(moduleGroup, group, dir))
     }
-    tasks.push(createIndex(moduleGroup, group, program.action, true))
   }
-  tasks.push(createRoot(groups, program.action))
+  tasks.push(createRoot(indexs, dir))
   return Promise.all(tasks)
 }
 
-function createAction (groupDir, module, dest) {
+function createAction (groupDir, module, moduleName, dest) {
   return Promise.resolve().then(async () => {
     let dir = resolve(dest, groupDir)
     await mkdirAsync(dir)
-    let jsFile = resolve(dir, module.moduleName + '.js')
+    let jsFile = resolve(dir, moduleName + '.js')
     let exists = await fileExistsAsync(jsFile)
-    let methods = module.routes.map((it) => it.actionName)
-    if (String(module.moduleGroup).toLowerCase() === 'layout') {
-      methods.unshift('invoke')
-    }
+    let methods = Object.keys(module.routes)
     if (exists) {
       let jsData = (await readFileAsync(jsFile)).toString()
-      let parsed = parseClassModule(jsData, module.moduleName)
+      let parsed = parseClassModule(jsData, moduleName)
       if (parsed) {
         methods = methods.filter((method) => parsed.methods.indexOf(method) === -1)
         if (methods.length) {
           let attach = createMethods(methods)
           jsData = jsData.substr(0, parsed.end - 1) + attach + jsData.substr(parsed.end - 1)
+          console.log(`${applyTitle}[update] `, jsFile)
           await writeFileAsync(jsFile, jsData)
-          console.log('updateAction: ', jsFile)
         } else {
-          console.log('skipAction: ', jsFile)
+          console.log(`${applyTitle}[  skip] `, jsFile)
         }
       } else {
-        console.log('Can not sync methods to: ', jsFile)
+        console.log(`${applyTitle}[error] `, jsFile)
       }
     } else {
-      let jsData = createClassModule(module.moduleName, methods)
-      console.log('createAction: ', jsFile)
+      let jsData = createClassModule(moduleName, methods)
+      console.log(`${applyTitle}[create] `, jsFile)
       await writeFileAsync(jsFile, jsData)
     }
   })

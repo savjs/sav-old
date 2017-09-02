@@ -1,28 +1,20 @@
-import {makeVueRoute} from '../sav/middlewares'
 import {applyVue} from './applyVue.js'
 import {applyContract} from './applyContract.js'
-import {applySchemaApi} from './applySchemaApi.js'
+import {applyUri} from './applyUri.js'
 import {applyAction} from './applyAction.js'
-
-export async function prepareModules (groups) {
-  for (let modalGroup in groups) {
-    let group = groups[modalGroup]
-    for (let modalName in group) {
-      let module = group[modalName]
-      makeVueRoute(module)
-    }
-  }
-}
+import {applySass} from './applySass.js'
 
 export async function apply (groups, program) {
-  await prepareModules(groups)
+  applyUri(groups)
   let tasks = [applyContract(groups, program)]
-  if (program.view) {
-    tasks.push(applyVue(groups, program))
-    tasks.push(applySchemaApi(groups, program))
-  }
-  if (program.action) {
+  if (program.actions) {
     tasks.push(applyAction(groups, program))
+  }
+  if (program.views) {
+    tasks.push(applyVue(groups, program))
+  }
+  if (program.sass) {
+    tasks.push(applySass(groups, program))
   }
   return Promise.all(tasks)
 }

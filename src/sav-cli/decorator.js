@@ -1,12 +1,11 @@
-import * as decorators from './sav/decorator'
+import * as decorators from './sav/core/decorator'
 import babel from 'babel-standalone'
 import Module from 'module'
 import {readFileAsync} from '../sav/util/file.js'
 import {dirname} from 'path'
 
 export function exportSavDecorators () {
-  let SavDecorators = (global.SavDecorators || decorators)
-  global.SavDecorators = SavDecorators
+  exportModule('sav', decorators)
 }
 
 function interopDefault (ex) {
@@ -43,4 +42,20 @@ function requireFromString (code, filename, opts) {
   m.paths = [].concat(opts.prependPaths).concat(paths).concat(opts.appendPaths)
   m._compile(code, filename)
   return m.exports
+}
+
+let {_load} = Module
+let memoryModules = {}
+
+Module._load = function (request, parent, isMain) {
+  if (memoryModules[request]) {
+    return memoryModules[request].exports
+  }
+  return _load(request, parent, isMain)
+}
+
+function exportModule (name, data) {
+  memoryModules[name] = {
+    exports: data
+  }
 }

@@ -1,7 +1,8 @@
 import {resolve, extname, basename} from 'path'
 import {readdirAsync, readFileAsync} from '../sav/util/file.js'
+import {prop} from 'sav-util'
 import {decoratorFileAsync} from './decorator.js'
-import {Contract} from '../sav/contract'
+import {convertFunctionToName} from './sav/util/helper.js'
 
 export async function loadConstractDir (path) {
   let group = {}
@@ -15,9 +16,9 @@ export async function loadConstractDir (path) {
       if (baseName !== 'index') {
         let curr = modal[baseName] || (modal[baseName] = {})
         if (ext === '.js') {
-          curr.js = file
+          prop(curr, 'js', file)
         } else if (ext === '.json') {
-          curr.json = file
+          prop(curr, 'json', file)
         }
       }
     })
@@ -27,18 +28,18 @@ export async function loadConstractDir (path) {
 
 export async function loadConstractModals (path) {
   let groups = await loadConstractDir(path)
-  let contract = new Contract()
   for (let modalGroup in groups) {
     let group = groups[modalGroup]
     for (let modalName in group) {
       let modal = group[modalName]
       let content
       if (modal.js) { // 装饰器转成JSON
-        content = await decoratorFileAsync(modal.js)
+        // schema 中的函数转成函数名称
+        content = convertFunctionToName(await decoratorFileAsync(modal.js))
       } else if (modal.json) { // 直接读取json文件
         content = JSON.parse(await readFileAsync(modal.json))
       }
-      group[modalName] = contract.createModule(Object.assign({}, content, modal))
+      group[modalName] = Object.assign({}, content, modal)
     }
   }
   return groups
