@@ -6,7 +6,4 @@ deploy:
   email: 86287344@qq.com
   api_key:
     secure: JRWooTuRlqQQBGyrhZUnJ4/HG+jsCh4l4k2hSUWiBpBKgo3aBK/e77GtOtl3zYq+sUa0xyXfCNjp2Lsa9tzFTMkZP9joURrfJx7IsWS0ZiB5H/3P3df8JJ2XIimsbZXWhc9cdGm721fyfQNgiTVZp/y0hSy/cevqPPSktgF+IjmjXsAWj9g3MxZi4CSjBzjjcrSuuNpoiF93rvnAzZxwINY/MhDuG5uyRyPHlyyoPbJygRdFz2m0NMztECNMWmn6J1J19fSwdJjgW28Re9Bl8XXORAAn+w0AQzk8+mK4uOYBM+v7J9sLEZGzNqCk5I0s65PL1Ut9fjjmeh2z/fbUvMovWQH3Q0zlwlyQjkS8uRF1BKqZQsFLK/dSSke+gVFDjywMJhT87wfr65s6w1FfQlAZu+5ibj38DB2AlgVr7pZcv7EPyqCkNS+Pv6fnnIszEt/z7Nhx01B4ARblMn0UGgKHGIr3dML4zqfC7mBUlmZ07Zg8z5E3oO0tnaq9fb3gT00t3bXlxthx7peyDAAA9xVLyqiTALev9eHXoTxtKe5WskcBomC+3FGuY6NCKB0IfWelGsxqTNqH9r/TUrclhNmJuXW1UKTzaXfxDbpq8J/th+hQvlx4WbnL4ppHNId67rMsaYg+so3BLcopsEpMrwvoScAUpLkRi/yKyL1P6M4=
-  tag: v1
   skip_cleanup: true
-  on:
-    branch: v1
