@@ -1,7 +1,6 @@
 <template>
   <div class="home-index">
     <h2>HomeIndex</h2>
-    <router-view class="view-container"></router-view>
   </div>
 </template>
 <script>
@@ -10,6 +9,9 @@
     getters: [
     ],
     actions: [
-    ]
+    ],
+    payload () {
+      console.log(arguments.length)
+    }
   }
 </script>

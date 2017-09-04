@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <pre>{{$route}}</pre>
     <router-view class="page-container"></router-view>
   </div>
 </template>
@@ -9,6 +10,11 @@
     getters: [
     ],
     actions: [
-    ]
+    ],
+    watch: {
+      $route () {
+        console.log('route', this.$route)
+      }
+    }
   }
 </script>

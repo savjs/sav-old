@@ -10,6 +10,9 @@
     getters: [
     ],
     actions: [
-    ]
+    ],
+    payload () {
+      console.log('Home', arguments.length)
+    }
   }
 </script>
