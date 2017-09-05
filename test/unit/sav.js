@@ -56,7 +56,9 @@ test('Sav.basic', async (ava) => {
         index () {
           return {name: 'hello world'}
         },
-        async login (ctx, {input}) {
+        async login ({ctx, schema: {ReqHomeLogin, ResHomeLogin}}, {input}) {
+          expect(ReqHomeLogin).to.be.a('object')
+          expect(ResHomeLogin).to.be.a('object')
           let userId = 0
           switch (input.userName) {
             case 'x':
