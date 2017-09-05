@@ -9,9 +9,6 @@
     getters: [
     ],
     actions: [
-    ],
-    payload () {
-      console.log(arguments.length)
-    }
+    ]
   }
 </script>
