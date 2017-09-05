@@ -43,7 +43,10 @@ test.before(() => {
           component: {
             name: 'HomeAbout',
             template: '<h2>{{title}}</h2>',
-            getters: ['title']
+            getters: ['title'],
+            payload () {
+              return {path: '/home/about'}
+            }
           },
           name: 'HomeAbout',
           path: 'about'
@@ -52,7 +55,10 @@ test.before(() => {
           component: {
             name: 'HomeProfile',
             template: '<h2>{{name}}</h2>',
-            getters: ['name']
+            getters: ['name'],
+            payload ({params}) {
+              return {path: `/home/profile/${params.uid}`}
+            }
           },
           name: 'HomeProfile',
           path: 'profile/:uid'
@@ -95,7 +101,7 @@ test('api', async (ava) => {
         profile (_, {params}) {
           return {name: 'ProfileAction', params}
         },
-        info () {
+        info (_, route) {
           return {userId: 1}
         }
       }

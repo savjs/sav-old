@@ -165,3 +165,27 @@ test('router.removeModal', async (ava) => {
   router.removeModal('Home')
   expect(router.modals.Home).to.eql(undefined)
 })
+
+test('router.query', async (ava) => {
+  let router = new Router()
+  router.declare({
+    Home: {
+      routes: {
+        about: {},
+        users: {
+          path: '/users'
+        }
+      }
+    }
+  })
+  {
+    let mat = router.matchRoute('/home/about', 'GET')
+    expect(mat).to.be.a('object')
+    expect(mat.query).to.eql({})
+  }
+  {
+    let mat = router.matchRoute('/home/about?a=b&c=d', 'GET')
+    expect(mat).to.be.a('object')
+    expect(mat.query).to.eql({a: 'b', c: 'd'})
+  }
+})
