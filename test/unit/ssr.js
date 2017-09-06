@@ -44,8 +44,8 @@ test.before(() => {
             name: 'HomeAbout',
             template: '<h2>{{title}}</h2>',
             getters: ['title'],
-            payload () {
-              return {path: '/home/about'}
+            payload (route) {
+              return route
             }
           },
           name: 'HomeAbout',
@@ -56,9 +56,7 @@ test.before(() => {
             name: 'HomeProfile',
             template: '<h2>{{name}}</h2>',
             getters: ['name'],
-            payload ({params}) {
-              return {path: `/home/profile/${params.uid}`}
-            }
+            payload: true
           },
           name: 'HomeProfile',
           path: 'profile/:uid'
@@ -111,7 +109,13 @@ test('api', async (ava) => {
         view: true,
         routes: {
           about: {},
-          info: {},
+          info: {
+            response: {
+              props: {
+                userId: Number
+              }
+            }
+          },
           profile: {
             method: 'GET',
             path: 'profile/:uid'

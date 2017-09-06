@@ -106,7 +106,7 @@ test('Sav.basic', async (ava) => {
     let res = await st.post('/home/login')
       .accept('json')
       .send({userName: {}, password: ''})
-    expect(res.status).to.eql(403)
+    expect(res.status).to.eql(400)
     expect(res.body.error).to.be.a('object')
     expect(res.body.error.path).to.eql('userName')
   }
