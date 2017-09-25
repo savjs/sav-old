@@ -20,16 +20,21 @@ export default {
     json({
       preferConst: false // Default: false
     }),
+    resolve({
+      "jsnext:main": true,
+      main: true
+    }),
     babel({
       babelrc: false,
       externalHelpers: false,
-      exclude: ['node_modules/**'],
+      // exclude: ['node_modules/**'],
+      exclude: [],
+      include: ['node_modules/**'],
       plugins: [
         'transform-decorators-legacy',
         ['transform-object-rest-spread', { 'useBuiltIns': true }]
       ]
     }),
-    resolve(),
     commonjs({})
   ],
   onwarn (err) {

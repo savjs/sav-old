@@ -7,7 +7,7 @@
 // 区块宏 IS_MOCK    是否mock环境
 // 区块宏 IS_LOCAL   是否本地环境
 
-import {Vue, VueRouter, Flux, FluxVue} from './VueFlux.js'
+import {Vue, VueRouter, Flux, FluxVue} from './client-plugins.js'
 import routes from './routes.js'
 import App from './App.vue'
 

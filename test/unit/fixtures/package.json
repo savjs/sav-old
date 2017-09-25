@@ -7,7 +7,8 @@
     "build-sass": "node ./scripts/build-sass.js",
     "build-server": "node ./scripts/build-server.js",
     "build-static": "cross-env NODE_ENV=development IS_MOCK=1 IS_LOCAL=1 IS_DEV=1 node ./scripts/build-client.js",
-    "build-local": "cross-env NODE_ENV=development IS_LOCAL=1 IS_DEV=1 node ./scripts/build-client.js"
+    "build-local": "cross-env NODE_ENV=development IS_LOCAL=1 IS_DEV=1 node ./scripts/build-client.js",
+    "isav": "npm i sav@file:../../.."
   },
   "devDependencies": {
     "cross-env": "^5.0.5",
