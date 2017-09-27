@@ -5,6 +5,7 @@ import {
   writeContract,
   writeActions,
   writePhpActions,
+  writePhpContract,
   writeSass,
   writeVue,
   writeRollup,
@@ -20,13 +21,13 @@ test('api', async (ava) => {
   expect(writeRollup).to.be.a('Function')
   expect(writePackage).to.be.a('Function')
   expect(writePhpActions).to.be.a('Function')
+  expect(writePhpContract).to.be.a('Function')
 })
 
 test('convertInterface', async (ava) => {
   let modules = await loadInterface(path.resolve(__dirname, './fixtures/interface'))
-  await writeContract(path.resolve(__dirname, './fixtures/contract'), modules
-    // , {lang: ['php', 'js']}
-  )
+  await writeContract(path.resolve(__dirname, './fixtures/contract'), modules)
+  await writePhpContract(path.resolve(__dirname, './fixtures/php-contract'), modules)
   await writeActions(path.resolve(__dirname, './fixtures/actions'), modules.modals)
   await writePhpActions(path.resolve(__dirname, './fixtures/php-actions'), modules.modals)
   await writeSass(path.resolve(__dirname, './fixtures/sass'), modules.modals)
