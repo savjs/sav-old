@@ -21,7 +21,8 @@ export default {
       preferConst: false // Default: false
     }),
     resolve({
-      "jsnext:main": true,
+      "jsnext:main": false,
+      module: false,
       main: true
     }),
     babel({
