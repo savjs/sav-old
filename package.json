@@ -4,7 +4,7 @@
   "description": "sav",
   "main": "dist/sav.js",
   "scripts": {
-    "watch": "watch -p \"+(test|lib)/**/*.js\" -c \"npm run fix && npm run na\"",
+    "watch": "watch -p \"+(test|lib)/**/*.js\" -c \"npm run na\"",
     "wc": "watch -p \"+(lib)/**/*.js\" -c \"npm run build-cli && npm run test-cli\"",
     "wb": "watch -p \"+(lib)/**/*.js\" -c \"npm run build\"",
     "start": "node ./server",
