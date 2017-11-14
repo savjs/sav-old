@@ -17,7 +17,7 @@
     "cli": "node ./dist/sav-cli",
     "cv": "node ./dist/sav-cli.js -p ./test/unit/fixtures/interface -d ./test/unit/fixtures/contract -a ./test/unit/fixtures/action -v ./test/unit/fixtures/view",
     "na": "nyc ava ./test/unit/**",
-    "naw": "ava ./test/unit/cli.js",
+    "naw": "ava ./test/unit/sav.js",
     "ava": "ava ./test/unit/**",
     "pretest": "npm run lint",
     "test": "npm run na",

@@ -31,7 +31,7 @@ test.before(() => {
             template: '<header>header</header>',
             payload ({query}) {
               return [
-                {path: '/home/info', query}
+                {name: 'HomeInfo', query}
               ]
             }
           }
