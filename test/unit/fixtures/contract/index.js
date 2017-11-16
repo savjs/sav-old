@@ -3,7 +3,7 @@
 module.exports = {
 // #if IS_MOCK
   mocks: require('./mocks'),
-// #endif,
+// #endif
   modals: require('./modals'),
   schemas: require('./schemas')
 }
