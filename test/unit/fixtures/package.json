@@ -33,6 +33,7 @@
     "sav": "$$VERSION$$",
     "sav-flux": "0.0.19",
     "sav-schema": "^1.0.18",
+    "sav-util": "^1.0.25",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0",
     "vue-server-renderer": "^2.4.2",

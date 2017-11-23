@@ -17,22 +17,32 @@ export default [
       {
         component: ArticlePosts,
         name: "ArticlePosts",
-        path: "posts"
+        path: "posts",
+        meta: {
+          title: "文章列表"
+        }
       },
       {
         component: ArticleView,
         name: "ArticleView",
-        path: "/articles/:aid"
+        path: "/articles/:aid",
+        meta: {}
       },
       {
         component: ArticleModify,
         name: "ArticleModify",
-        path: "modify/:aid?"
+        path: "modify/:aid?",
+        meta: {
+          auth: true
+        }
       },
       {
         component: ArticleModify,
         name: "ArticleUpdate",
-        path: "update/:aid"
+        path: "update/:aid",
+        meta: {
+          auth: true
+        }
       }
     ]
   },
@@ -43,17 +53,24 @@ export default [
       {
         component: HomeIndex,
         name: "HomeIndex",
-        path: "/"
+        path: "/",
+        meta: {
+          title: "主页"
+        }
       },
       {
         component: HomeAbout,
         name: "HomeAbout",
-        path: "about"
+        path: "about",
+        meta: {
+          title: "关于我们"
+        }
       },
       {
         component: HomeProfile,
         name: "HomeProfile",
-        path: "profile/:uid"
+        path: "profile/:uid",
+        meta: {}
       }
     ]
   }

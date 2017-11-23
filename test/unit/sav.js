@@ -98,14 +98,14 @@ test('Sav.basic', async (ava) => {
   {
     let res = await st.post('/home/login')
       .accept('json')
-      .send({userName: 'x', password: ''})
+      .send({userName: 'x', password: 'x'})
     expect(res.status).to.eql(200)
     expect(res.body).to.eql({userId: 1})
   }
   {
     let res = await st.post('/home/login')
       .accept('json')
-      .send({userName: {}, password: ''})
+      .send({userName: {}, password: 'x'})
     expect(res.status).to.eql(400)
     expect(res.body.error).to.be.a('object')
     expect(res.body.error.path).to.eql('userName')
@@ -113,7 +113,7 @@ test('Sav.basic', async (ava) => {
   {
     let res = await st.post('/home/login')
       .accept('json')
-      .send({userName: '', password: ''})
+      .send({userName: 'y', password: 'x'})
     expect(res.status).to.eql(500)
     expect(res.body.error).to.be.a('object')
     expect(res.body.error.path).to.eql('userId')
