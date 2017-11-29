@@ -1,6 +1,6 @@
 {
   "name": "sav",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "sav",
   "main": "dist/sav.js",
   "scripts": {
