@@ -78,7 +78,7 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-re": "^1.0.1",
     "rollup-plugin-vue2": "^0.8.0",
-    "sav-schema": "^1.0.25",
+    "sav-schema": "next",
     "sav-util": "^1.0.25",
     "standard": "^9.0.1",
     "supertest": "^3.0.0",
