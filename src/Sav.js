@@ -20,10 +20,10 @@ export class Sav extends SavBase {
     this.invokeQueues = [this.invoke]
     this.composed = null
   }
-  before (fn) {
-    this.invokeQueues.shift(fn)
+  insert (fn) {
+    this.invokeQueues.unshift(fn)
   }
-  after (fn) {
+  append (fn) {
     this.invokeQueues.push(fn)
   }
   compose () {

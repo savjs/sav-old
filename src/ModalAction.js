@@ -1,14 +1,9 @@
-import {isFunction} from 'sav-util'
+import {isFunction, testAssign} from 'sav-util'
 
 export class ModalAction {
-  constructor (opts) {
-    this.opts = {}
-    this.setOptions(opts)
+  constructor () {
     this.modals = {}
     this.actions = {}
-  }
-  setOptions (opts) {
-    Object.assign(this.opts, opts)
   }
   declare (modals) {
     for (let modalName in modals) {
@@ -16,21 +11,9 @@ export class ModalAction {
     }
   }
   declareModal (modalName, modal) {
-    this.removeModal(modalName)
     let actions = this.modals[modalName] = classToObject(modal)
     for (let actionName in actions) {
       this.actions[`${modalName}.${actionName}`] = actions[actionName]
-    }
-  }
-  removeModal (modalName) {
-    if (this.modals[modalName]) {
-      delete this.modals[modalName]
-      modalName = modalName + '.'
-      for (let actionName in this.actions) {
-        if (actionName.indexOf(modalName) === 0) {
-          delete this.actions[actionName]
-        }
-      }
     }
   }
   getAction (actionName) {

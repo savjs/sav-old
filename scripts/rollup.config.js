@@ -5,7 +5,7 @@ import includePaths from 'rollup-plugin-includepaths'
 import json from 'rollup-plugin-json'
 
 export default {
-  entry: 'lib/index.js',
+  entry: 'src/index.js',
   targets: [
     { dest: 'dist/sav.js', format: 'cjs' }
   ],
@@ -15,7 +15,7 @@ export default {
   ],
   plugins: [
     includePaths({
-      paths: ['lib']
+      paths: ['src']
     }),
     json({
       preferConst: false // Default: false

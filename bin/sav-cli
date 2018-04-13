@@ -1,4 +1,0 @@
-#!/usr/bin/env node
-'use strict';
-process.bin = process.title = 'sav-cli';
-require('../dist/sav-cli.js');
