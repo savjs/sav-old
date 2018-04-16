@@ -4,7 +4,6 @@ import {Sav} from '../../src/Sav.js'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import supertest from 'supertest'
-import path from 'path'
 
 test('api', async (ava) => {
   expect(Sav).to.be.a('function')

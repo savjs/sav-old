@@ -1,14 +1,12 @@
 import {Exception, HttpError} from './Exception.js'
 import {testAssign, prop, compose, isFunction} from 'sav-util'
 import {HtmlRender} from './renders/HtmlRender.js'
-// import {VueRender} from './renders/VueRender.js'
 import {Contract} from './Contract.js'
 
 export class Sav {
   constructor (opts = {}) {
     this.opts = testAssign(opts, {
       rootPath: './',
-      ssr: false,
       modals: null,
       prod: process.env.NODE_ENV === 'production'
     })
@@ -57,12 +55,6 @@ export class Sav {
   render ({ctx, argv, sav}) {
     argv.state = argv.error ? {error: argv.error} : argv.output
     if (argv.view) {
-      if (sav.opts.ssr) {
-        let mat = sav.vueRender.match(ctx)
-        if (mat) {
-          return sav.vueRender.render(ctx, mat)
-        }
-      }
       return sav.htmlRender.render(ctx)
     }
     if (argv.error) {
