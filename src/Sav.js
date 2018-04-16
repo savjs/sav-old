@@ -1,16 +1,18 @@
 import {Exception, HttpError} from './Exception.js'
-import {testAssign, prop, compose} from 'sav-util'
-// import {HtmlRender} from './renders/HtmlRender.js'
+import {testAssign, prop, compose, isFunction} from 'sav-util'
+import {HtmlRender} from './renders/HtmlRender.js'
 // import {VueRender} from './renders/VueRender.js'
 import {Contract} from './Contract.js'
 
 export class Sav {
   constructor (opts = {}) {
     this.opts = testAssign(opts, {
+      rootPath: './',
       ssr: false,
       modals: null,
       prod: process.env.NODE_ENV === 'production'
     })
+    this.htmlRender = new HtmlRender(this.opts)
     this.invokeQueues = [this.invoke]
     this.invoker = null
     this.load()
@@ -36,19 +38,20 @@ export class Sav {
     return this.invoker(ctx)
   }
   prepare ({ctx, argv, sav}) {
-    let {route, input} = Object.assign(argv, ctx.contract.matchRoute(
-      ctx.path || ctx.originalUrl, ctx.method,
-      Object.assign({}, ctx.query, ctx.request && ctx.request.body)
+    let path = ctx.path || ctx.originalUrl
+    let data = Object.assign({}, ctx.query, ctx.request && ctx.request.body)
+    let {route, input} = Object.assign(argv, sav.contract.matchRoute(
+      path, ctx.method.toUpperCase(), data    
     ))
-    ctx.contract.checkInput(route, input)
-    argv.view = isClientView(route)
+    sav.contract.checkInput(route, input)
+    argv.isView = isClientView(route)
+    let modal = sav.modals[route.modal.name]
+    argv.invoker = modal ? modal[route.opts.name] : null
   }
   async invoke ({ctx, argv, sav}, next) {
     let {route} = argv
-    if (!argv.view) {
-      argv.output = await argv.invoker.call(sav, ctx, argv)
-      ctx.contract.checkOutput(route, argv.input)
-    }
+    argv.output = await argv.invoker.call(sav, ctx, argv)
+    sav.contract.checkOutput(route, argv.output)
     return next()
   }
   render ({ctx, argv, sav}) {
@@ -98,24 +101,26 @@ function stripError (error, sav) {
 }
 
 function isClientView (route) {
-  if (route.modal.view) {
-    return route.action.view || (route.action.view !== false)
+  if (route.modal.opts.view) {
+    return route.opts.view || (route.opts.view !== false)
   }
-  return !!route.action.view
+  return !!route.opts.view
 }
 
 function composeInvokes (sav) {
   let queues = compose(sav.invokeQueues)
-  let {schema} = sav
   return (ctx, next) => {
-    Object.assign(ctx, {ctx, sav, schema, Exception, HttpError, argv: {}})
+    Object.assign(ctx, {ctx, sav,
+      schema: sav.contract.schema,
+      router: sav.contract.router,
+      Exception, HttpError, argv: {}})
     return new Promise((resolve, reject) => {
       sav.prepare(ctx)
       return queues(ctx, () => {
         return sav.render(ctx)
       }).then(resolve).catch(reject)
     }).catch((err) => {
-      ctx.argv.error = stripError(err)
+      ctx.argv.error = stripError(err, sav)
       return sav.render(ctx)
     })
   }

@@ -10,11 +10,9 @@ export class VueRender {
       serverTemplate: './views/index.html',
       serverEntry: './server-entry.js'
     }
-    sav.shareOptions(this)
     this.require = require
     let payload = this.payload = new VuePayload()
     payload.process = processComponent
-    sav.shareOptions(payload)
   }
   async render ({ctx, argv, sav}, {route, payloads}) {
     let {vm, render, router} = this.ssr

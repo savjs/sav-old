@@ -5,9 +5,9 @@ import includePaths from 'rollup-plugin-includepaths'
 import json from 'rollup-plugin-json'
 
 export default {
-  entry: 'src/index.js',
-  targets: [
-    { dest: 'dist/sav.js', format: 'cjs' }
+  input: 'src/index.js',
+  output: [
+    { file: 'dist/sav.js', format: 'cjs' }
   ],
   external: [
     // 'sav-schema',
@@ -32,7 +32,6 @@ export default {
       exclude: [],
       include: ['node_modules/**'],
       plugins: [
-        'transform-decorators-legacy',
         ['transform-object-rest-spread', { 'useBuiltIns': true }]
       ]
     }),

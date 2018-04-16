@@ -8,12 +8,12 @@ import path from 'path'
 
 test('api', async (ava) => {
   expect(Sav).to.be.a('function')
+  ava.pass()
 })
 
 function createSavKoa () {
   let app = new Koa()
   let sav = new Sav({
-    rootPath: path.resolve(__dirname, './fixtures/'),
     prod: true
   })
   app.use(bodyParser())
@@ -27,31 +27,33 @@ function createSavKoa () {
 
 test('Sav.basic', async (ava) => {
   let {sav, st} = createSavKoa()
-  sav.declare({
-    modals: {
-      Home: {
-        routes: {
-          index: {
-            method: 'GET'
-          },
-          login: {
-            method: 'POST',
-            request: {
-              props: {
-                userName: String,
-                password: String
-              }
+  sav.load({
+    contract: {
+      modals: {
+        Home: {
+          routes: {
+            index: {
+              method: 'GET'
             },
-            response: {
-              props: {
-                userId: Number
+            login: {
+              method: 'POST',
+              request: {
+                props: {
+                  userName: String,
+                  password: String
+                }
+              },
+              response: {
+                props: {
+                  userId: Number
+                }
               }
             }
           }
         }
       }
     },
-    actions: {
+    modals: {
       Home: {
         index () {
           return {name: 'hello world'}
@@ -87,7 +89,7 @@ test('Sav.basic', async (ava) => {
     let res = await st.get('/404')
     expect(res.status).to.eql(404)
     expect(res.text).to.be.a('string')
-    expect(res.text.indexOf('&quot;status&quot;: 404')).to.be.not.eql(-1)
+    expect(res.text.indexOf('404')).to.be.not.eql(-1)
   }
   {
     let res = await st.get('/home/index')
@@ -118,4 +120,5 @@ test('Sav.basic', async (ava) => {
     expect(res.body.error).to.be.a('object')
     expect(res.body.error.path).to.eql('userId')
   }
+  ava.pass()
 })

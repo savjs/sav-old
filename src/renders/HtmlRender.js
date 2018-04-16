@@ -1,16 +1,16 @@
 import {readFileSync} from 'fs'
 import {resolve} from 'path'
-import {tmpl} from '../utils/tmpl.js'
+import {tmpl, testAssign} from 'sav-util'
 
 export class HtmlRender {
-  constructor (sav) {
-    this.opts = {
-      templatePath: './',
-      indexTemplate: './index.html',
-      errorTemplate: './error.html'
-    }
+  constructor (opts) {
+    this.opts = testAssign(opts, {
+      indexHtmlFile: null,
+      indexTemplate: '{%=JSON.stringify(state, null, 2)%}',
+      errorHtmlFile: null,
+      errorTemplate: '{%=state.error.status%}'
+    })
     this.templateMaps = {}
-    sav.shareOptions(this)
   }
   render ({ctx, argv: {error, state}, sav}) {
     let viewFunc = getTemplate(this, error)
@@ -23,11 +23,14 @@ export class HtmlRender {
 }
 
 function getTemplate ({templateMaps, opts}, error) {
-  let viewTemplate = error ? opts.errorTemplate : opts.indexTemplate
+  let viewTemplate = error ? opts.indexHtmlFile : opts.errorHtmlFile
+  let templateHtml
+  if (viewTemplate) {
+    templateHtml = readFileSync(resolve(opts.rootPath, viewTemplate)).toString()
+  } else {
+    templateHtml = error ? opts.errorTemplate : opts.indexTemplate
+  }
   let viewFunc = templateMaps[viewTemplate] || (
-    templateMaps[viewTemplate] = tmpl((
-      readFileSync(resolve(opts.rootPath, opts.templatePath, viewTemplate)
-    ).toString())
-  ))
+    templateMaps[viewTemplate] = tmpl(templateHtml))
   return viewFunc
 }
